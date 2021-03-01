@@ -96,7 +96,7 @@
         <div class="main-content__sidebar scroll">
         
             <div class="list-group list-group-flush" id="list-content">
-
+                {{#if value}}
                 <!-- DASHBOARD -->
                 <a href="#" class="list-group-item list-group-item-action bg-transparent text-light my-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Crear Dispositivos">
                     <svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" fill="currentColor" class="bi bi-speedometer iconos" viewBox="0 0 16 16">
@@ -105,7 +105,8 @@
                     </svg>
                     <b class="texto-iconos"> Dashboard</b>
                 </a>
-                
+                {{/if }}
+               
                 <!-- USUARIOS -->
                 <a href="#" class="list-group-item list-group-item-action bg-transparent text-light my-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Crear Dispositivos">
                     <svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" fill="currentColor" class="bi bi-people iconos" viewBox="0 0 16 16">
@@ -148,6 +149,7 @@
                         </a>
                     </li>
                 </ul>
+              
 
             </div>
         </div>

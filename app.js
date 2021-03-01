@@ -8,12 +8,16 @@ const PassportLocal = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
-const pool = require('./connection/database');
 
 
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/users');
+var APIRouter = require('./routes/API');
 var dashboardRouter = require('./routes/dashboard');
+
+const bcrypt = require('bcrypt');
+const pool = require('./connection/database');
+
 var app = express();
 
 // view engine setup
@@ -95,6 +99,7 @@ app.use('/materialize', express.static(__dirname + '/node_modules/materialize-cs
 
 app.use('/', indexRouter);
 app.use('/dashboard', dashboardRouter);
+app.use('/api', APIRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

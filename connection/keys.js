@@ -4,7 +4,7 @@ module.exports = {
         host: '34.230.28.13',
         user: 'factorb-iot',
         password: 'UEPyyRTUXpdMIsGN',
-        database: 'lukas_lok'
+        database: 'factorb_iot'
     }
 
 };
