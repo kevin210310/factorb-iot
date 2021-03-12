@@ -1,3 +1,4 @@
+
 <div class="nav-superior shadow rounded my-auto">
     
     <!--  BREADCRUMB  -->
@@ -8,12 +9,14 @@
     </ol>
     
 </div>
-
+<style>
+    
+</style>
 <div class="contenido-principal px-3">
     
     <div class="row" id="sensores"></div>
     <div class="row">
-        <div class="col-12">
+        <div class="col-12 rounded shadow">
             <table class="table table-striped bg-light text-center my-auto">
                 <thead>
                     <tr>
@@ -24,7 +27,13 @@
                         <th scope="col">CONTROL</th>
                     </tr>
                 </thead>
-                <tbody id="reles"></tbody>
+                <tbody id="reles">
+                    <th scope="row">2</th>
+                <td>RELE001</td>
+                <td>Iluminación patio A1</td>
+                <td>-</td>
+                <td class="text-center"><input type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger"></td>
+                </tbody>
             </table>     
         </div>
     </div>
@@ -53,7 +62,7 @@
 
         notification("success", `${res.data.data.length} sensores recuperados`);
 
-        let sensores = `<div class="row">`;
+        let sensores = '';
         let rele = '';
 
         for(let i = 0 ; i < res.data.data.length ; i ++) {
@@ -61,7 +70,7 @@
             if(res.data.data[i].type == "ANALOG" && res.data.data[i].mode == "INPUT") {
                  
                 sensores = sensores + `
-                    <div class="col-12 mb-3">
+                    <div class="col-12 mb-3 shadow rounded">
                         <div style="min-width:80vw;" id="grafico_${res.data.data[i].id}"></div>
                     </div>
                 `;
@@ -93,7 +102,6 @@
                                             
                     let index = 0;
                     socket.on("{{socket_name}}", sensores => {
-                        console.log("mensaje sensores: ", sensores);
                         data.addRow([index, sensores.${res.data.data[i].name}]);
                         chart.draw(data, options);
                         index++;
@@ -126,16 +134,35 @@
                         <th scope="row">${res.data.data[i].id}</th>
                         <td>${res.data.data[i].name}</td>
                         <td>${res.data.data[i].description}</td>
-                        <td>-</td>
+                        <td id='${res.data.data[i].name}${res.data.data[i].id}'></td>
                         <td class="text-center"><input type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger"></td>
                     </tr>
                 `;
+
+                let reles = new Function(`
+                    socket.on("{{socket_name}}", sensores => {
+
+                        let estado = '<span class="badge badge-danger"> Desactivado </span>';
+                        
+                        console.log(sensores.${res.data.data[i].name});
+
+                        if(sensores.${res.data.data[i].name} == 1) {
+                            estado = '<span class="badge badge-success"> Activado </span>';
+                        }
+                        document.getElementById('${res.data.data[i].name}${res.data.data[i].id}').innerHTML = estado;
+                    })
+                        
+                
+                `);
+                reles();
+
+
             }
 
             
         }
 
-        sensores = sensores + `</div>`;
+        sensores = sensores + ``;
         document.getElementById('sensores').innerHTML = sensores;
         document.getElementById('reles').innerHTML = rele;
     }).catch((err) => {
