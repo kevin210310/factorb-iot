@@ -115,23 +115,18 @@
 <script src="/axios/axios.min.js"></script>
 
 <script>
-    function new_data(){ 
-        let data = new Snackbar({
-            message: "Message Here"
-        });
-    };
     function acceso_plataforma(){
         let username = document.getElementById('email-login').value;
         let password = document.getElementById('password-login').value;
 
         console.log(username, password);
 
-        axios.post('http://127.0.0.1:3000/login', {
+        axios.post('{{url}}/login', {
             username,
             password
         }).then((data)=>{
           console.log("respuesta del servidor", data);
-          window.location.href = "http://127.0.0.1:3000/dashboard";
+          window.location.href = "{{url}}/dashboard";
           
         }).catch((err) =>{
           console.log("error de respuesta", err);
@@ -139,4 +134,3 @@
         });
     };
 </script>
-<script src="/libs/js-snackbar-master/src/js-snackbar.js"></script>

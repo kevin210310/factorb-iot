@@ -12,7 +12,8 @@ router.get('/', verify, (req, res) => {
             layout: 'dashboard_template', 
             value: false, 
             nombre: req.user.user.nombre,
-            rol: req.user.user.rol
+            rol: req.user.user.rol,
+            url: process.env.URL
         });
     }
     else if(req.user.user.rol == "cliente iot") {
@@ -20,7 +21,8 @@ router.get('/', verify, (req, res) => {
             layout: 'dashboard_template', 
             value: false,
             nombre: req.user.user.nombre,
-            rol: req.user.user.rol
+            rol: req.user.user.rol,
+            url: process.env.URL
         });
     }
 });
@@ -63,7 +65,8 @@ router.get('/control', function(req, res, next) {
         value: false, 
         nombre: "vin diesel",
         rol: "cliente iot",
-        id: 10
+        id: 10,
+        url: process.env.URL
     });
 });
 
@@ -86,10 +89,14 @@ router.get('/rutas', function(req, res, next) {
     res.render('test', {layout: 'dashboard_template'});
 });
 
-router.get('/device/:id', async (req, res) => {
-    const { id } = req.params;
-    console.log(id);
-    res.render('dashboard/device', {layout: 'dashboard_template', id: id});
+router.get('/device/:id/:socket_name', async (req, res) => {
+    const { id, socket_name } = req.params;
+    res.render('dashboard/device', {
+        layout: 'dashboard_template', 
+        id: id,
+        socket_name: socket_name, 
+        url: process.env.URL
+    });
 });
 
 module.exports = router;

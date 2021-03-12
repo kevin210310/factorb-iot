@@ -15,7 +15,6 @@ const cors = require('cors');
 
 
 var indexRouter = require('./routes/index');
-var userRouter = require('./routes/users');
 var APIRouter = require('./routes/API');
 var dashboardRouter = require('./routes/dashboard');
 
@@ -41,7 +40,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new PassportLocal(async function (username, password, done){
-    pool.query(
+  console.log(username, password);  
+  pool.query(
         {
           sql: "SELECT id, password, nombre, apellidos rol FROM users WHERE email=?",
           timeout: 30000,

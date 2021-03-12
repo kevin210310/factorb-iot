@@ -1,10 +1,4 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js" integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4=" crossorigin="anonymous"></script>
 <script src="/client-socket/socket.io.js"></script>
-<script>
-    const socket = io("http://127.0.0.1:3000", { 'forceNew': true });
-    const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
-    socket.emit('joinRoom', { username: "kevin", rol: "abarca", room: "server_factorbiot" }); 
-</script>
 <script src="/gridstack/gridstack-h5.js"></script>
 <link href="/gridstack/gridstack.min.css" rel="stylesheet"/>
 
@@ -271,7 +265,7 @@ setInterval(function() {
     axios(
       { 
           method: 'POST', 
-          url: 'http://127.0.0.1:3000/api/search_devices', 
+          url: '{{url}}/api/search_devices', 
           headers: {
               Authorization: "Bearer Token"
           }, 
@@ -295,7 +289,7 @@ setInterval(function() {
                 selected = selected + `<option value=${res.data.data[i].id} >${res.data.data[i].name}</option>`;
                 cant_devices = cant_devices + `
                     <div class="col-2">
-                            <button class="btn btn-primary btn-block" onclick="ver_dispositivo(${res.data.data[i].id})">${res.data.data[i].name}</button>
+                            <button class="btn btn-primary btn-block" onclick="ver_dispositivo(${res.data.data[i].id}, '${res.data.data[i].socket_name}')">${res.data.data[i].name}</button>
                     </div>`;
             }
         }
@@ -365,16 +359,7 @@ setInterval(function() {
         } 
     }       
 
-                              
-                        
-                              
-
-        function ver_dispositivo(id) {
-            console.log(id);
-
-            window.location.href = "/dashboard/device/" + id;
-
-        }   
-
-      
+    function ver_dispositivo(id, socket_name) {
+        window.location.href = "/dashboard/device/" + id + "/" + socket_name;
+    }   
 </script>
