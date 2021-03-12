@@ -1,14 +1,3 @@
-<script>
-    const options = {
-      style: {
-        main: {
-          background: "#000000",
-          color: "#fff",
-      },
-  },
-};
-iqwerty.toast.toast('Hello World!', options);
-</script>
 <style>
 
     html, body {
@@ -146,6 +135,7 @@ iqwerty.toast.toast('Hello World!', options);
           
         }).catch((err) =>{
           console.log("error de respuesta", err);
+          notification("error", "usuario incorrecto");
         });
     };
 </script>

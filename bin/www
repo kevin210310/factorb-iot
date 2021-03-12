@@ -27,60 +27,24 @@ const io = SocketIO(server);
 const botName = 'Server_factorbiot';
 
 io.on('connection', socket => {
-
-    //conexion a la sala "factorbiot_data"
-    socket.on('joinRoom', ({ username, rol, room }) => {
-
-        console.log("se conecto: ", username, rol, room, "a las: ");
-        //pool.query('INSERT INTO tiempos_usuarios SET nombre=?, f_in=?, f_out=?', [username, "2", "4"]);
-
-        const user = userJoin(socket.id, username, rol, room);
-
-        socket.join(user.room);
-
-        // Send users and room info
-        io.to(user.room).emit('roomUsers', {
-            room: user.room,
-            users: getRoomUsers(user.room)
-        });
-    });
-
-    //mensajes entre la sala
-    socket.on('chatMessage', msg => {
-        const user = getCurrentUser(socket.id);
-        io.to(user.room).emit('message', formatMessage(user.username, msg));
-        console.log("actualizo su estado: ",user.username);
-    });
-
-    // desconexion de algun usuario..
-    socket.on('disconnect', () => {
-    
-        const user = userLeave(socket.id);
-        
-        if (user) {
-            
-            io.to(user.room).emit(
-                'message',
-                formatMessage(botName, `${user.username} has left the chat`)
-            );
-            
-            console.log("se desconecto: ", user.username, "a las: ");
-
-            // Send users and room info
-            io.to(user.room).emit('roomUsers', {
-                room: user.room,
-                users: getRoomUsers(user.room)
-            });
-        }
-    });
     var messageHandler = function(message) {
-        console.log(moment().format('DD/MM/YYYY hh:mm:ss'));
-        console.log(moment().unix());
+        
         message.ack();
+        
         if(message.attributes.subFolder !== "events"){
-            let data = Buffer.from(message.data, 'base64').toString('ascii');+
-
-            console.log(data);
+            
+            let data = Buffer.from(message.data, 'base64').toString('ascii');
+            try {
+              
+                let obj = JSON.parse(data);
+                console.log(obj);
+                console.log("publicando en el topic: /", message.attributes.deviceId);
+                socket.emit(message.attributes.deviceId, obj);
+            }
+            catch(error) {
+              console.log("el paquete no es un json");
+            }
+            
 
         }
         else {
@@ -88,11 +52,6 @@ io.on('connection', socket => {
         }
     };
     subscription.on('message', messageHandler);
-    var a = 0;
-    setInterval(() => {
-      io.emit('test', {msg: 'data', value: a});
-      a = a + 1;
-    }, 5000);
 });
 
 

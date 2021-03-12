@@ -15,6 +15,8 @@
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
 
+    <!-- BOOTSTRAP "LUX" DESIGN -->
+    <!--<link rel="stylesheet" href="/stylesheets/bootstrap.min.css">-->
     <!-- ARCHIVOS CSS -->
     <link rel="stylesheet" href="/stylesheets/normalize.css">
     <link rel="stylesheet" href="/stylesheets/dashboard_template.css">
@@ -29,12 +31,17 @@
     <script src="/jquery/jquery.min.js"></script>
     <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
     <!-- ARCHIVOS DATATABLES -->
     <script src="/libs/DataTables/datatables.min.js"></script>
 
     <!-- MATERIALIZE -->
     <!--<link type="text/css" rel="stylesheet" href="/materialize/css/materialize.css"  media="screen,projection"/>
 --->
+    <!-- AXIOS JS-->
+    <script src="/axios/axios.min.js"></script>
     
     <!-- TEMPUS DOMINOUS -->
     
@@ -42,6 +49,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js" integrity="sha512-k6/Bkb8Fxf/c1Tkyl39yJwcOZ1P4cRrJu77p83zJjN2Z55prbFHxPs9vN7q3l3+tSMGPDdoH51AEU8Vgo1cgAA==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" integrity="sha512-3JRrEUwaCkFUBLK1N8HehwQgu8e23jTH4np5NHOmQOobuC4ROQxFwFgBLTnhcnQRMs84muMh0PnnwXlPq5MGjg==" crossorigin="anonymous" />
     
+    <!-- Toasts Js -->
+    <link rel="stylesheet" href="/toastr/toastr.css">
+    <script src="/toastr/toastr.min.js"></script>
+    <script src="/javascripts/notifications.js"></script>
+
+    <!-- Socket Client -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js" integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4=" crossorigin="anonymous"></script>
+    <script src="/client-socket/socket.io.js"></script>
+    <script>
+        const socket = io("http://127.0.0.1:3000");
+        const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
+        socket.emit('joinRoom', { username: "kevin", rol: "abarca", room: "server_factorbiot" }); 
+    </script>
+
 </head>
 <body>
     <div class="main-content">
@@ -63,8 +84,12 @@
             <div class="main-content__navbar__user">
                 <div class="usuario">
                     <div class="usuario__logo"><button type="button" class="btn btn-circle p-0" data-toggle="modal" data-target="#exampleModal"><img src="/images/user.png" alt="" height="45px"></button></div>
-                    <div class="usuario__rol"><b>ADMINISTRADOR PRINCIPAL</b></div>
-                    <div class="usuario__nombre"><p>Tommy Angelo</p></div>
+                    <div class="usuario__rol">
+                        <b style="text-transform: uppercase;">{{rol}}</b>
+                    </div>
+                    <div class="usuario__nombre">
+                        <p style="text-transform: capitalize;">{{nombre}}</p>
+                    </div>
 
                     <!-- Modal Cierre Sesion -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background: rgb(0,0,0);background: linear-gradient(360deg, rgba(0,0,0,1) 0%, rgba(0,0,19,1) 35%, rgba(0,19,23,0.8209033613445378) 100%);">
@@ -96,17 +121,52 @@
         <div class="main-content__sidebar scroll">
         
             <div class="list-group list-group-flush" id="list-content">
-                {{#if value}}
                 <!-- DASHBOARD -->
-                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light my-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Crear Dispositivos">
+                <a href="/dashboard" class="list-group-item list-group-item-action bg-transparent text-light my-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Tablero Principal">
                     <svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" fill="currentColor" class="bi bi-speedometer iconos" viewBox="0 0 16 16">
                         <path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2zM3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"/>
                         <path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"/>
                     </svg>
                     <b class="texto-iconos"> Dashboard</b>
                 </a>
-                {{/if }}
-               
+
+                <a href="#gps" class="list-group-item list-group-item-action bg-transparent text-light button-toggle" data-toggle="collapse" aria-expanded="false" data-bs-toggle="tooltip" data-bs-placement="right" title="Mapas">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.7em" height="1.7em" fill="currentColor" class="bi bi-map iconos" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103zM10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98l4-.8V1.11l-4 .8v12.98zm-6-.8V1.11l-4 .8v12.98l4-.8z"/>
+                    </svg>
+                    <b class="texto-iconos dropdown-toggle">Mapas</b>
+                </a>
+
+                <ul class="collapse list-group list-group-flush" id="gps">
+                    <li>
+                        <a href="/dashboard/gps" class="bg-transparent list-group-item list-group-item-action border-0 my-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1.7em" height="1.7em" fill="currentColor" class="bi bi-geo iconos" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z"/>
+                            </svg>
+                            <b class="texto-iconos">Posicionamiento</b>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="dashboard/rutas" class="bg-transparent list-group-item list-group-item-action border-0 my-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1.7em" height="1.7em" fill="currentColor" class="bi bi-compass iconos" viewBox="0 0 16 16">
+                                <path d="M8 16.016a7.5 7.5 0 0 0 1.962-14.74A1 1 0 0 0 9 0H7a1 1 0 0 0-.962 1.276A7.5 7.5 0 0 0 8 16.016zm6.5-7.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                <path d="M6.94 7.44l4.95-2.83-2.83 4.95-4.949 2.83 2.828-4.95z"/>
+                            </svg>
+                            <b class="texto-iconos">Rutas</b>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/trazabilidad" class="bg-transparent list-group-item list-group-item-action border-0 my-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1.7em" height="1.7em" fill="currentColor" class="bi bi-geo-alt iconos" viewBox="0 0 16 16">
+                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                            </svg>
+                            <b class="texto-iconos">Trazabilidad</b>
+                        </a>
+                    </li>
+                </ul>
+
+                {{#if value}}
                 <!-- USUARIOS -->
                 <a href="#" class="list-group-item list-group-item-action bg-transparent text-light my-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Crear Dispositivos">
                     <svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" fill="currentColor" class="bi bi-people iconos" viewBox="0 0 16 16">
@@ -122,6 +182,9 @@
                     </svg>
                     <b class="texto-iconos"> Dispositivos</b>
                 </a>
+                {{/if }}
+               
+                
 
 
                 <a href="#retcont" class="list-group-item list-group-item-action bg-transparent text-light button-toggle" data-toggle="collapse" aria-expanded="false">
@@ -164,6 +227,7 @@
 </body>
 
 </html>
+  
       <script type="text/javascript" src="/materialize/js/materialize.js"></script>
 
     <!-- ARCHIVOS JS -->

@@ -1,0 +1,200 @@
+ <!-- SOCKET CLIENT -->
+
+    
+<div class="nav-superior shadow rounded my-auto">
+    
+    <!--  BREADCRUMB  -->
+    <ol class="nav-superior__breadcrumb m-0 breadcrumb">        
+        <li class="breadcrumb-item"><a href="/dashboard">TABLERO</a></li>
+        <li class="breadcrumb-item"><a href="/dashboard/control">Control de dispositivos</a></li>
+        <li class="breadcrumb-item active" aria-current="page" id="device_name">dispositivo</li>
+    </ol>
+    
+</div>
+
+<div class="contenido-principal px-3">
+    
+    <div class="row" id="sensores">
+
+    </div>
+    <div class="row">
+        <div class="col-6">
+                    <table class="table table-striped bg-light text-center my-auto">
+                        <thead>
+                            <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">NOMBRE</th>
+                            <th scope="col">DESCRIPCIÓN</th>
+                            <th scope="col">VALORES</th>
+                            <th scope="col">CONTROL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reles">
+                        </tbody>
+                    </table>     
+                </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script>
+    
+    google.charts.load("current", {
+        packages: ["corechart", "line", "gauge"]
+    });
+    
+    
+
+    
+    axios(
+        {
+            method: 'POST',
+            url: 'http://127.0.0.1:3000/api/search_sensors',
+            headers: {
+                Authorization: "Bearer Token"
+            }, 
+            data: { 
+                id: {{id}}
+            }
+        }
+    ).then((res) => {
+                
+        console.log(res.data);
+        document.getElementById('device_name').innerText = "dispositivo 123";
+        notification("success", `${res.data.data.length} sensores recuperados`);
+
+        let sensores = `<div class="row">`;
+        let rele = '';
+        for(let i = 0 ; i < res.data.data.length ; i ++) {
+
+            if(res.data.data[i].type == "ANALOG" && res.data.data[i].mode == "INPUT") {
+                 
+                sensores = sensores + `
+                    <div class="col-6 mb-3">
+                        <div style="min-width=3em;" id="grafico_${res.data.data[i].id}"></div>
+                    </div>
+                `;
+
+                let settings_chart = new Function(`
+        
+                    let data = google.visualization.arrayToDataTable([
+                        ["Year", "CPU Usage"],
+                        [0, 0]
+                    ]);
+                                            
+                                        
+                    let options = {
+                        title: "Sensor de ${res.data.data[i].name}",
+                        hAxis: {
+                            title: ""
+                        },
+                        vAxis: {
+                            title: "${res.data.data[i].name}"
+                        }
+                    };
+                        
+                    // draw chart on load
+                    let chart = new google.visualization.LineChart(
+                        document.getElementById("grafico_${res.data.data[i].id}")
+                    );
+                            
+                    chart.draw(data, options);
+                                            
+                    let index = 0;
+                    socket.on("factorb-iot-0001", sensores => {
+                        console.log("mensaje sensores: ", sensores);
+                        data.addRow([index, sensores.${res.data.data[i].name}]);
+                        chart.draw(data, options);
+                        index++;
+                    });           
+                `);
+
+                google.charts.setOnLoadCallback(settings_chart);
+
+            }
+            else if(res.data.data[i].type == "DIGITAL" && res.data.data[i].mode == "INPUT") {
+                //luz indicadora
+                sensores = sensores + `
+                <div class="col">
+                    DIGITAL INPUT
+                </div>
+            `;
+            }
+            else if(res.data.data[i].type == "ANALOG" && res.data.data[i].mode == "OUTPUT") {
+                //no usada
+                sensores = sensores + `
+                <div class="col">
+                    ANALOG OUTPUT
+                </div>
+            `;
+            }
+            else if(res.data.data[i].type == "DIGITAL" && res.data.data[i].mode == "OUTPUT") {
+                
+                rele = rele + `
+                    <tr>
+                        <th scope="row">${res.data.data[i].id}</th>
+                        <td>${res.data.data[i].name}</td>
+                        <td>${res.data.data[i].description}</td>
+                        <td>-</td>
+                        <td class="text-center"><input type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger"></td>
+                    </tr>
+                `;
+            }
+
+            
+        }
+
+        sensores = sensores + `</div>`;
+        document.getElementById('sensores').innerHTML = sensores;
+        document.getElementById('reles').innerHTML = rele;
+    }).catch((err) => {
+                
+        console.log(err);
+    });
+</script>
+
+<!--<script>
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+                                    
+                        // create data object with default value
+        let data = google.visualization.arrayToDataTable([
+            ["Year", "CPU Usage"],
+            [0, 0]
+        ]);
+                                            
+                                        
+                        // create options object with titles, colors, etc.
+        let options = {
+            title: "CPU Usage",
+            hAxis: {
+                title: "Tiempo"
+            },
+            vAxis: {
+                title: "Variable"
+            }
+        };
+                        
+                        // draw chart on load
+        let chart = new google.visualization.LineChart(
+            document.getElementById("grafico")
+        );
+                            
+        chart.draw(data, options);
+                                
+        let index = 0;
+                    
+        setInterval(function() {
+            // instead of this random, you can make an ajax call for the current cpu usage or what ever data you want to display
+                    
+            let random = Math.random() * 30 + 20;
+            
+            data.addRow([index, random]);
+            chart.draw(data, options);
+            index++;
+        }, 500);
+    }    
+</script>-->

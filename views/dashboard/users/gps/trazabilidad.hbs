@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Polylines</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <style type="text/css">
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 80vh;
+      }
+
+      /* Optional: Makes the sample page fill the window. */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script>
+      // This example creates a 2-pixel-wide red polyline showing the path of
+      // the first trans-Pacific flight between Oakland, CA, and Brisbane,
+      // Australia which was made by Charles Kingsford Smith.
+      function initMap() {
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 3,
+          center: { lat: 0, lng: -180 },
+          mapTypeId: "terrain",
+        });
+        const flightPlanCoordinates = [
+          { lat: -33.457198789, lng: -70.416465878 },
+          { lat: -33.457898789, lng: -70.426465978 },
+          { lat: -33.457298889, lng: -70.436465878 },
+          { lat: -33.457898789, lng: -70.436461078 },
+          { lat: -33.457398989, lng: -70.446465878 },
+          { lat: -33.457898789, lng: -70.446461178 },
+          { lat: -33.457491089, lng: -70.456465878 },
+          { lat: -33.457898789, lng: -70.456461278 },
+          { lat: -33.457591189, lng: -70.466465878 },
+          { lat: -33.457898789, lng: -70.466461378 },
+          { lat: -33.457691289, lng: -70.476465878 },
+          { lat: -33.457898789, lng: -70.476461478 },
+          { lat: -33.457791389, lng: -70.486465878 },
+          { lat: -33.457898789, lng: -70.4864651578 },
+          { lat: -33.457891489, lng: -70.496465878 },
+          { lat: -33.457898789, lng: -70.496465168 },
+          { lat: -33.457991589, lng: -70.506465878 },
+          { lat: -33.457898789, lng: -70.506465178 },
+          { lat: -33.451091689, lng: -70.516465878 },
+        ];
+        const flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: true,
+          strokeColor: "#FF0000",
+          strokeOpacity: 1.0,
+          strokeWeight: 2,
+        });
+        flightPath.setMap(map);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi_GipB4VPaAcH_U0YSvypCM5VqQv69x4&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+  </body>
+</html>

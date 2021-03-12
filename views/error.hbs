@@ -1,3 +1,23 @@
-<h1>{{message}}</h1>
-<h2>{{error.status}}</h2>
-<pre>{{error.stack}}</pre>
+<style>
+    .btn-danger {
+        background-color: rgba(255, 77, 14, 1);
+        border: 1px solid rgba(255, 77, 14, 1);
+    }
+    .btn-danger:hover {
+        background-color: rgba(255, 77, 14, 0.8);
+        border: 1px solid rgba(255, 77, 14, 1);
+    }
+    .btn-danger:selected {
+        background-color: rgba(255, 77, 14, 0.5);
+        border: 1px solid rgba(255, 77, 14, 1);
+    }
+
+</style>
+<div class="error-box" style="display: flex; justify-content:center; align-content:center;margin-top:8em;">
+    <div class="error-body text-center ">
+        <h1 class="error-title" style="font-size:10em;color:rgba(255, 77, 14, 1);">404</h1>
+        <h3 class="text-uppercase error-subtitle">OPS! PAGE NOT FOUND !</h3>
+        <p class="text-muted mt-4 mb-4">LA PAGINA QUE SOLICITASTE NO EXISTE O NO CUENTAS CON LOS PERMISOS REQUERIDOS.</p>
+        <a href="/dashboard" class="btn btn-danger btn-rounded waves-effect waves-light mb-5 text-white">VOLVER A CASA</a>
+    </div>
+</div>

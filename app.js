@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV !== 'production'){
+  require('dotenv').config();
+}
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -37,31 +41,36 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new PassportLocal(async function (username, password, done){
-    
-    if(username == "test@factorb.cl" && password == "1234"){
-      console.log("usuario: test@factorb.cl, se ha logueado exitosamente");
-        return done(null, {id: 1, nombre: "FactorB", rol: "Administrador"});
-    }
-    else if(username == "user@factorb.cl" && password == "1234"){
-      console.log("usuario: user@factorb.cl, se ha logueado exitosamente");
-      return done(null, {id: 4, nombre: "User001", rol: "Cliente IoT"});
-    }
-    else {
-        return done(null, false);
-    }
-  
-    /*var email = username;
-    var datos = await pool.query('SELECT id, password, nombre, rol FROM users WHERE email=?', [email]);
-    if(datos.length == 0){
-      return done(null, false);
-    }
-    else{
-      if(password == datos[0].password){
-        console.log("el usuario: ", datos[0].nombre, "se ha logueado a las ", (new Date()));
-        return done(null, {id: datos[0].id, nombre: datos[0].nombre, rol: datos[0].rol});
-      }
-      return done(null, false);
-    }*/
+    pool.query(
+        {
+          sql: "SELECT id, password, nombre, apellidos rol FROM users WHERE email=?",
+          timeout: 30000,
+        },
+        [username],
+        (error, results, fields) => {
+            if(error) {
+              return done(null, false);
+            }
+            else {
+                if(results.length == 0){
+
+                  return done(null, false);
+                }
+                else {
+                    bcrypt.compare(password, results[0].password, function(err, result) {
+                      
+                        if(result) {
+                          console.log("no hay problemas");
+                            return done(null, {id: results[0].id, nombre: results[0].nombre + " " + results[0].apellidos, rol: results[0].rol});
+                        }
+                        else {
+                            return done(null, false);
+                        }                
+                    });
+                }
+            } 
+        }
+    );
 }));
 
 passport.serializeUser(function(user, done){
@@ -69,13 +78,17 @@ passport.serializeUser(function(user, done){
 });
 
 passport.deserializeUser(async function(id, done){
-  //let datos = await pool.query('SELECT nombre, rol FROM users WHERE id=?', [id]);
-  if(id == 1){
-    done(null, {user: {nombre: "FactorB", rol: "Administrador"}});
-  }
-  else if(id == 4){
-    done(null, {user: {nombre: "User001", rol:"Cliente IoT"}});
-  }
+    pool.query(
+        {
+          sql: "SELECT nombre, apellidos, rol FROM users WHERE id=?",
+          timeout: 30000,
+        },
+        [id],
+        (error, results, fields) => {
+            console.log("aqui tampoco");
+            done(null, {user: {nombre: results[0].nombre + " " + results[0].apellidos, rol: results[0].rol}});
+        }
+    );
 });
 
 
@@ -95,7 +108,9 @@ app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'
 app.use('/axios', express.static(__dirname + '/node_modules/axios/dist/'));
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/materialize', express.static(__dirname + '/node_modules/materialize-css/dist/'));
-
+app.use('/client-socket', express.static(__dirname + '/node_modules/socket.io-client/dist/'));
+app.use('/toastr', express.static(__dirname + '/node_modules/toastr/build/'));
+app.use('/gridstack', express.static(__dirname + '/node_modules/gridstack/dist/'));
 
 app.use('/', indexRouter);
 app.use('/dashboard', dashboardRouter);

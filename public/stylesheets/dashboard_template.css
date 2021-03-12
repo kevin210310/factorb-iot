@@ -249,4 +249,5 @@ border: 1px solid rgba(37, 42, 134, 1);
 .contenido-principal {
     grid-column: 1;
     grid-row: 2;
+
 }

@@ -15,8 +15,10 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
     "express": "~4.16.1",
     "express-session": "^1.17.1",
+    "gridstack": "^3.3.0",
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
     "jquery": "^3.5.1",
@@ -28,6 +30,8 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "socket.io": "^3.1.1",
+    "socket.io-client": "^3.1.2",
+    "toastr": "^2.1.4",
     "ua-parser-js": "^0.7.23"
   },
   "devDependencies": {
