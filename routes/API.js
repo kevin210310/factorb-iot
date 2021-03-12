@@ -710,39 +710,41 @@ router.post('/get_devices', async (req, res) => {
 });
 
 router.post('/send_command', async (req, res)=>{
-  console.log(req.body);
-  const {commandMessage, deviceId} = req.body;
-  const cloudRegion = 'us-central1';
-  // const deviceId = 'my-device';
-  // const commandMessage = 'message for device';
-  const projectId = 'lukas-lok';
-  const registryId = 'factorb-iot';
 
-const iotClient = new iot.v1.DeviceManagerClient({
-  // optional auth parameters.
-});
+    const { commandMessage, deviceId } = req.body;
+    const cloudRegion = 'us-central1';
+    const projectId = 'lukas-lok';
+    const registryId = 'factorb-iot';
 
-const formattedName = iotClient.devicePath(
-  projectId,
-  cloudRegion,
-  registryId,
-  deviceId
-);
-const binaryData = Buffer.from(commandMessage);
-const request = {
-  name: formattedName,
-  binaryData: binaryData,
-};
+    const iotClient = new iot.v1.DeviceManagerClient({
+      // optional auth parameters.
+    });
 
-try {
-  const responses = await iotClient.sendCommandToDevice(request);
+    const formattedName = iotClient.devicePath(
+        projectId,
+        cloudRegion,
+        registryId,
+        deviceId
+    );
 
-  console.log('Sent command: ', responses[0]);
-  res.json(responses[0]);
-} catch (err) {
-  console.error('Could not send command:', err);
-  res.json(err);
-}
+    const binaryData = Buffer.from(commandMessage);
+    
+    const request = {
+        name: formattedName,
+        binaryData: binaryData,
+    };
+
+    try {
+        
+        const responses = await iotClient.sendCommandToDevice(request);
+
+        console.log('Sent command: ', responses[0]);
+        res.json(responses[0]);
+    } catch (err) {
+      
+        console.error('Could not send command:', err);
+        res.json(err);
+    }
 });
 
 module.exports = router;
