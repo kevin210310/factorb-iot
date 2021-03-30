@@ -34,6 +34,7 @@ io.on('connection', socket => {
         if(message.attributes.subFolder !== "events"){
             
             let data = Buffer.from(message.data, 'base64').toString('ascii');
+            
             try {
               
                 let obj = JSON.parse(data);

@@ -12,7 +12,7 @@ const PassportLocal = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
-
+require('./config/mongoose/index');
 
 var indexRouter = require('./routes/index');
 var APIRouter = require('./routes/API');
