@@ -6,6 +6,7 @@ mongoose.connect('mongodb://localhost/auth', {
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true
-  });
+  }
+);
 
 module.exports = mongoose;
