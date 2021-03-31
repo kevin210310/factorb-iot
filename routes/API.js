@@ -1,14 +1,18 @@
 var express = require('express');
 var router = express.Router();
+const iot = require('@google-cloud/iot');
 const passport = require('passport');
 
 const { verify } = require('../lib/verify_user');
 
 const bcrypt = require('bcrypt');
 const pool = require('../connection/database');
+const { suppressDeprecationWarnings } = require('moment');
 
 const saltRounds = 10;
 
+const multer = require('multer');
+const upload = multer({dest: './archivos'});
 router.post('/create_user', async (req, res) => {
     
     const { nombre, apellidos, email, password, rol} = req.body;
@@ -712,6 +716,7 @@ router.post('/get_devices', async (req, res) => {
 router.post('/send_command', async (req, res)=>{
 
     const { commandMessage, deviceId } = req.body;
+    console.log(req.body);
     const cloudRegion = 'us-central1';
     const projectId = 'lukas-lok';
     const registryId = 'factorb-iot';
@@ -741,10 +746,71 @@ router.post('/send_command', async (req, res)=>{
         console.log('Sent command: ', responses[0]);
         res.json(responses[0]);
     } catch (err) {
-      
+
         console.error('Could not send command:', err);
         res.json(err);
     }
 });
 
+router.post('/gps_send', (req, res) => {
+  res.json({msg:"ok"});
+  //res.status(401);
+  /*const {latitude, longitude, speed, grade, time} = req.body;
+
+  pool.query(
+    {
+        sql: 'INSERT INTO gps SET latitude=?, longitude=?, speed=?, grade=?, time=?',
+        timeout: 30000, 
+    },
+    [latitude, longitude, speed, grade, time],
+    (error, results, fields) => {
+
+        if(error) {
+          res.json({msg: "error insertando datos", status: false});
+        }
+        else {
+          res.json({msg: "datos correctos", status: true});  
+        }
+    }
+  );*/
+});
+router.post('/gps_multiple_send', (req, res) => {
+    //console.log(req.body);
+    res.json({msg:"ok"});
+    //res.status(401);
+    /*let data_nodemcu = req.body.data;
+    let data = [];
+    for(let i = 0 ; i < data_nodemcu.length-1 ; i ++){
+      data.push([
+        data_nodemcu[i].latitude, 
+        data_nodemcu[i].longitude,
+        data_nodemcu[i].speed, 
+        data_nodemcu[i].grade,
+        data_nodemcu[i].time
+      ]);
+      }
+
+    console.log(data);
+    
+    pool.query(
+      {
+          sql: 'INSERT INTO gps (latitude, longitude, speed, grade, time) VALUES ?',
+          timeout: 30000, 
+      },
+      [data],
+      (error, results, fields) => {
+  
+          if(error) {
+            res.json({msg: "error insertando datos", status: false});
+          }
+          else {
+            res.json({msg: "datos correctos", status: true});  
+          }
+      }
+    );*/
+});
+router.post('/send_file', upload.single('archivo'), (req, res) => {
+  console.log(req.file);
+  res.send("archivo recibido");
+});
 module.exports = router;
