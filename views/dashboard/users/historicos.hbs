@@ -114,13 +114,13 @@
             let dateCurr = new Date();
             $(function () {
                 $('#datetimepicker1').datetimepicker({
-                    format: 'YYYY-MM-DD',
+                    format: 'YYYY-MM-DD hh:mm:ss',
                     maxDate: dateCurr,
                 });
             });
             $(function () {
                 $('#datetimepicker2').datetimepicker({
-                    format: 'YYYY-MM-DD',
+                    format: 'YYYY-MM-DD hh:mm:ss',
                     maxDate: dateCurr,
                 });
             });
@@ -136,7 +136,7 @@
                 axios(
                     { 
                         method: 'POST', 
-                        url: '{{url}}/api/search_devices', 
+                        url: 'http://localhost:3000/api/historicos', 
                         headers: {
                             Authorization: "Bearer Token"
                         }, 
