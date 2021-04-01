@@ -13,6 +13,23 @@ const saltRounds = 10;
 
 const multer = require('multer');
 const upload = multer({dest: './archivos'});
+
+router.post('/historicos', async (req, res) => {
+  const { fecha_desde, fecha_hasta} = req.body;
+  console.log(req.body);
+  pool.query(
+    {
+        sql: 'SELECT temp, time FROM gps WHERE time BETWEEN ? AND ?',
+        timeout: 30000, 
+    },
+    [fecha_desde, fecha_hasta],
+    (error, results, fields) => {
+
+       res.json({data: results});
+    }
+);
+
+});
 router.post('/create_user', async (req, res) => {
     
     const { nombre, apellidos, email, password, rol} = req.body;
