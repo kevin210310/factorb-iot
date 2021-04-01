@@ -1,3 +1,4 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <div class="nav-superior shadow rounded my-auto">
     <ol class="nav-superior__breadcrumb m-0 breadcrumb">        
         <li class="breadcrumb-item"><a href="/dashboard">TABLERO</a></li>
@@ -128,7 +129,8 @@
             function query_data(){
                 //let fecha_desde = document.getElementById('desde').value;
                 //let fecha_hasta = document.getElementById('hasta').value;
-                let
+                let fecha_desde = "2021-04-01T15:00:00Z";
+                let fecha_hasta = "2021-04-01T15:30:00Z";
                 console.log(fecha_desde, fecha_hasta);
 
                 axios(
@@ -145,7 +147,7 @@
                     }
     ).then((res) => {
         
-        console.log(res.data);
+        console.log(res.data.data);
 
     }).catch((err) => {
         
