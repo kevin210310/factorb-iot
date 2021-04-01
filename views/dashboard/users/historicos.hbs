@@ -11,8 +11,8 @@
             <div class="col">
                 <label for="exampleFormControlSelect1">Seleccionar Dispositivo</label>
                 <select class="form-control" id="exampleFormControlSelect1">
-                    <option>Temperatura</option>
-                    <option>Velocidad</option>
+                    <option selected>Temperatura</option>
+                   
                 </select>
             </div>
             <div class="col">
@@ -35,7 +35,7 @@
             </div>
             <div class="col-2">
                 <label for="consulta_historico" style="visibility:hidden">Label for button</label>
-                <button type="button" class="btn btn-primary d-block" id="consulta_historico">Enviar consulta</button>
+                <button type="button" class="btn btn-primary d-block" id="consulta_historico" onclick="query_data()">Enviar consulta</button>
             </div>
             
         </div>
@@ -111,9 +111,21 @@
 </div>
 <script type="text/javascript">
             $(function () {
-                $('#datetimepicker1').datetimepicker();
+                $('#datetimepicker1').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                });
             });
             $(function () {
-                $('#datetimepicker2').datetimepicker();
+                $('#datetimepicker2').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                });
             });
-        </script>
+
+
+            function query_data(){
+                let fecha_desde = document.getElementById('datetimepicker1').value;
+                let fecha_hasta = document.getElementById('datetimepicker2').value;
+
+                console.log(fecha_desde, fecha_hasta);
+            };
+</script>

@@ -11,5 +11,9 @@ router.post('/savetodb', async (req, res) => {
     await Users.save();
     res.json({msg: "welcome to the test"});
 });
+router.post('/readtodb', async (req, res) => {
+    const Users = await user.find();
+    res.json({Users});
+});
 
 module.exports = router;
