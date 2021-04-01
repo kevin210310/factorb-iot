@@ -126,9 +126,9 @@
 
 
             function query_data(){
-                let fecha_desde = document.getElementById('desde').value;
-                let fecha_hasta = document.getElementById('hasta').value;
-
+                //let fecha_desde = document.getElementById('desde').value;
+                //let fecha_hasta = document.getElementById('hasta').value;
+                let
                 console.log(fecha_desde, fecha_hasta);
 
                 axios(
@@ -139,7 +139,8 @@
                             Authorization: "Bearer Token"
                         }, 
                         data: { 
-                            id: 10 
+                            fecha_desde,
+                            fecha_hasta
                         }
                     }
     ).then((res) => {
