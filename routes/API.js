@@ -753,16 +753,14 @@ router.post('/send_command', async (req, res)=>{
 });
 
 router.post('/gps_send', (req, res) => {
-  res.json({msg:"ok"});
-  //res.status(401);
-  /*const {latitude, longitude, speed, grade, time} = req.body;
+  const {latitude, longitude, speed, temp, grade, time} = req.body;
 
   pool.query(
     {
-        sql: 'INSERT INTO gps SET latitude=?, longitude=?, speed=?, grade=?, time=?',
+        sql: 'INSERT INTO gps SET latitude=?, longitude=?, speed=?, temp=?, grade=?, time=?',
         timeout: 30000, 
     },
-    [latitude, longitude, speed, grade, time],
+    [latitude, longitude, speed, temp, grade, time],
     (error, results, fields) => {
 
         if(error) {
@@ -772,19 +770,17 @@ router.post('/gps_send', (req, res) => {
           res.json({msg: "datos correctos", status: true});  
         }
     }
-  );*/
+  );
 });
 router.post('/gps_multiple_send', (req, res) => {
-    //console.log(req.body);
-    res.json({msg:"ok"});
-    //res.status(401);
-    /*let data_nodemcu = req.body.data;
+    let data_nodemcu = req.body.data;
     let data = [];
     for(let i = 0 ; i < data_nodemcu.length-1 ; i ++){
       data.push([
         data_nodemcu[i].latitude, 
         data_nodemcu[i].longitude,
-        data_nodemcu[i].speed, 
+        data_nodemcu[i].speed,
+        data_nodemcu[i].temp,
         data_nodemcu[i].grade,
         data_nodemcu[i].time
       ]);
@@ -794,7 +790,7 @@ router.post('/gps_multiple_send', (req, res) => {
     
     pool.query(
       {
-          sql: 'INSERT INTO gps (latitude, longitude, speed, grade, time) VALUES ?',
+          sql: 'INSERT INTO gps (latitude, longitude, speed, temp, grade, time) VALUES ?',
           timeout: 30000, 
       },
       [data],
@@ -807,7 +803,7 @@ router.post('/gps_multiple_send', (req, res) => {
             res.json({msg: "datos correctos", status: true});  
           }
       }
-    );*/
+    );
 });
 router.post('/send_file', upload.single('archivo'), (req, res) => {
   console.log(req.file);
