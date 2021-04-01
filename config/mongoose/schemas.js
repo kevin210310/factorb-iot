@@ -1,7 +1,7 @@
 'use strict';
 
 const moongose = require('mongoose');
-const Schema = mongoose.Schema;
+const Schema = moongose.Schema;
 
 const userSchema = new Schema({
         nombre: {type: String},
