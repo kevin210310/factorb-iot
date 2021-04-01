@@ -11,7 +11,9 @@ router.post('/', (req, res) => {
     res.json({msg: "welcome to the test"});
 });
 
-router.post('/savetodb', (req, res) => {
+router.post('/savetodb', async (req, res) => {
+    const Users = new user(req.body);
+    await Users.save();
     res.json({msg: "welcome to the test"});
 });
 
