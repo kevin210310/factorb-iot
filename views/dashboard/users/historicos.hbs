@@ -18,7 +18,7 @@
             <div class="col">
                 <label for="datetimepicker1">Desde: </label>
                 <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" id="desde"/>
                     <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
@@ -27,7 +27,7 @@
             <div class="col">
                 <label for="datetimepicker2">Hasta: </label>
                 <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2"/>
+                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2" id="hasta"/>
                     <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
@@ -123,8 +123,8 @@
 
 
             function query_data(){
-                let fecha_desde = document.getElementById('datetimepicker1').value;
-                let fecha_hasta = document.getElementById('datetimepicker2').value;
+                let fecha_desde = document.getElementById('desde').value;
+                let fecha_hasta = document.getElementById('hasta').value;
 
                 console.log(fecha_desde, fecha_hasta);
             };
