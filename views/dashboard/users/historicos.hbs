@@ -1,3 +1,4 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <div class="nav-superior shadow rounded my-auto">
     <ol class="nav-superior__breadcrumb m-0 breadcrumb">        
         <li class="breadcrumb-item"><a href="/dashboard">TABLERO</a></li>
@@ -126,11 +127,18 @@
 
 
             function query_data(){
+<<<<<<< HEAD
                 let fecha_desde2 = document.getElementById('desde').value;
                 let fecha_hasta2 = document.getElementById('hasta').value;
                 let fecha_desde = moment(fecha_desde2, 'YYYY-MM-DD').toISOString();
                 let fecha_hasta = moment(fecha_hasta2, 'YYYY-MM-DD').toISOString();
 
+=======
+                //let fecha_desde = document.getElementById('desde').value;
+                //let fecha_hasta = document.getElementById('hasta').value;
+                let fecha_desde = "2021-04-01T15:00:00Z";
+                let fecha_hasta = "2021-04-01T15:30:00Z";
+>>>>>>> f33f3ac489cf0155c901a4bfbe10c13a115ef625
                 console.log(fecha_desde, fecha_hasta);
 
                 axios(
@@ -141,12 +149,13 @@
                             Authorization: "Bearer Token"
                         }, 
                         data: { 
-                            id: 10 
+                            fecha_desde,
+                            fecha_hasta
                         }
                     }
     ).then((res) => {
         
-        console.log(res.data);
+        console.log(res.data.data);
 
     }).catch((err) => {
         
