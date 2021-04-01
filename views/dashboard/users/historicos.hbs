@@ -127,18 +127,15 @@
 
 
             function query_data(){
-<<<<<<< HEAD
                 let fecha_desde2 = document.getElementById('desde').value;
                 let fecha_hasta2 = document.getElementById('hasta').value;
                 let fecha_desde = moment(fecha_desde2, 'YYYY-MM-DD').toISOString();
                 let fecha_hasta = moment(fecha_hasta2, 'YYYY-MM-DD').toISOString();
 
-=======
                 //let fecha_desde = document.getElementById('desde').value;
                 //let fecha_hasta = document.getElementById('hasta').value;
-                let fecha_desde = "2021-04-01T15:00:00Z";
-                let fecha_hasta = "2021-04-01T15:30:00Z";
->>>>>>> f33f3ac489cf0155c901a4bfbe10c13a115ef625
+                let fecha_desde1 = "2021-04-01T15:00:00Z";
+                let fecha_hasta1 = "2021-04-01T15:30:00Z";
                 console.log(fecha_desde, fecha_hasta);
 
                 axios(
@@ -149,8 +146,8 @@
                             Authorization: "Bearer Token"
                         }, 
                         data: { 
-                            fecha_desde,
-                            fecha_hasta
+                            fecha_desde: fecha_desde1,
+                            fecha_hasta: fecha_desde2
                         }
                     }
     ).then((res) => {
