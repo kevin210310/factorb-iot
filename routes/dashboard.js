@@ -106,5 +106,10 @@ router.get('/d', async (req, res) => {
         layout: 'template_dashboard'
     });
 });
+router.get('/maquinas', async (req, res) => {
+    res.render('maquinas', {
+        layout: 'template_dashboard'
+    });
+});
 
 module.exports = router;
