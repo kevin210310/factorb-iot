@@ -15,5 +15,9 @@ router.post('/readtodb', async (req, res) => {
     const Users = await user.find();
     res.json({Users});
 });
+router.post('/updatetodb', async (req, res) => {
+    user.updateOne({'usuarios._id': "606c9fbaf06e2a1a188363a4"}, {$push: { "permisos": {"parmiso1": false}}}).exec();
+    res.json({msg: "Update success"});
+});
 
 module.exports = router;
