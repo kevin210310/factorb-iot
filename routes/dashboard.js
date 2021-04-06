@@ -99,4 +99,12 @@ router.get('/device/:id/:socket_name', async (req, res) => {
     });
 });
 
+
+
+router.get('/d', async (req, res) => {
+    res.render('dashboard', {
+        layout: 'template_dashboard'
+    });
+});
+
 module.exports = router;
