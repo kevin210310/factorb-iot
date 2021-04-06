@@ -790,7 +790,7 @@ router.post('/gps_send', (req, res) => {
   );
 });
 router.post('/gps_multiple_send', (req, res) => {
-    let data_nodemcu = req.body.data;
+    /*let data_nodemcu = req.body.data;
     let data = [];
     for(let i = 0 ; i < data_nodemcu.length-1 ; i ++){
       data.push([
@@ -820,7 +820,9 @@ router.post('/gps_multiple_send', (req, res) => {
             res.json({msg: "datos correctos", status: true});  
           }
       }
-    );
+    );*/
+    console.log(req.body);
+    res.json({msg: "ok"});
 });
 router.post('/send_file', upload.single('archivo'), (req, res) => {
   console.log(req.file);
