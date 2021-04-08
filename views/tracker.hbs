@@ -1,64 +1,27 @@
 <script>
-    axios({ 
-        
-        method: 'POST',   
-        url: '{{url}}/api/find_machinestracker', 
-        headers: {
-            Authorization: "Bearer Token"
-        }, 
-        data: { 
-            id: "{{id_user}}",
-            id_machine: "{{id_machine}}"
-        }
-    
-    }).then((res) => {
-
-        document.getElementById('nombre_machine').innerHTML = res.data.data2[0].nombre;
-        document.getElementById('nombre_device').innerHTML = res.data.data[0].name;
-        document.getElementById('descripcion').innerHTML = res.data.data2[0].descripcion;
-        document.getElementById('image_tracker').innerHTML = `<img src="/images/machines/${res.data.data2[0].url}" class="img-fluid" alt="logo" style="height: 150px;">`;
-
-    }).catch((err) => {
-      
-        console.log(err);
-    });
-
-    axios({
-
-        method: 'POST',   
-        url: '{{url}}/api/find_datadevicetracker', 
-        headers: {
-            Authorization: "Bearer Token"
-        }, 
-        data: { 
-            id: "{{id_user}}",
-            id_machine: "{{id_machine}}"
-        }
-    }).then((res) =>{
-        console.log(res);
-    }).catch((err) =>{
-        console.log(err);
-    });
-</script>
-<style type="text/css">
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        min-height: 300px;
-        width: 100%;
-      }
-
-    </style>
-    <script>
-      // This example creates a 2-pixel-wide red polyline showing the path of
-      // the first trans-Pacific flight between Oakland, CA, and Brisbane,
-      // Australia which was made by Charles Kingsford Smith.
-      function initMap() {
+    function initMap() {
         const map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 3,
-          center: { lat: 0, lng: -180 },
-          mapTypeId: "terrain",
+            center: { lat: 40.76, lng: -73.983 },
+            zoom: 15,
+            mapTypeId: "satellite",
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.TOP_CENTER,
+            },
+            zoomControl: true,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.LEFT_CENTER,
+            },
+            scaleControl: true,
+            streetViewControl: true,
+            streetViewControlOptions: {
+                position: google.maps.ControlPosition.LEFT_TOP,
+            },
+            fullscreenControl: true,
         });
+        map.setTilt(45);
+
         const flightPlanCoordinates = [
           { lat: 37.772, lng: -122.214 },
           { lat: 21.291, lng: -157.821 },
@@ -73,7 +36,66 @@
           strokeWeight: 2,
         });
         flightPath.setMap(map);
+   
+        axios({ 
+            
+            method: 'POST',   
+            url: '{{url}}/api/find_machinestracker', 
+            headers: {
+                Authorization: "Bearer Token"
+            }, 
+            data: { 
+                id: "{{id_user}}",
+                id_machine: "{{id_machine}}"
+            }
+        
+        }).then((res) => {
+
+            document.getElementById('nombre_machine').innerHTML = res.data.data2[0].nombre;
+            document.getElementById('nombre_device').innerHTML = res.data.data[0].name;
+            document.getElementById('descripcion').innerHTML = res.data.data2[0].descripcion;
+            document.getElementById('image_tracker').innerHTML = `<img src="/images/machines/${res.data.data2[0].url}" class="img-fluid" alt="logo" style="height: 150px;">`;
+
+            axios({
+
+                method: 'POST',   
+                url: '{{url}}/api/find_datadevicetracker', 
+                headers: {
+                    Authorization: "Bearer Token"
+                }, 
+                data: { 
+                    name: res.data.data[0].name
+                }
+                }).then((res) =>{
+                    console.log(res.data.data[0].data[0].lat);
+                   
+
+
+                    
+                }).catch((err) =>{
+                    console.log(err);
+                });
+        }).catch((err) => {
+        
+            console.log(err);
+        });
+
+    } 
+</script>
+<style type="text/css">
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        min-height: 300px;
+        width: 100%;
       }
+
+    </style>
+    <script>
+      // This example creates a 2-pixel-wide red polyline showing the path of
+      // the first trans-Pacific flight between Oakland, CA, and Brisbane,
+      // Australia which was made by Charles Kingsford Smith.
+      
     </script>
 <div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
     <div class="row mt-3 mx-0 mx-md-3">
@@ -126,7 +148,7 @@
         </div>
 
 
-        <script>
+        <!--<script>
             var options = {
           series: [{
           data: [
@@ -534,7 +556,7 @@
       })
       
     
-        </script>
+        </script>-->
     </div>
 </div>
 <script
