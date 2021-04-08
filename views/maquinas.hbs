@@ -1,1 +1,90 @@
-aqui va la lista de maquinas
+<div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
+    <div class="row mt-3 mx-0 mx-md-3">
+        <div class="col-12 rounded py-auto shadow-sm bg-body">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb my-3">
+                    <li class="breadcrumb-item"><a href="#">INICIO</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">MAQUINAS</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="row mt-3 px-3">
+    </div>
+    <div class="row mt-3 px-3" id="machine_cards">
+
+    </div>
+</div>
+
+
+
+<script>
+    function redirect(id_machine){
+
+        window.location.href = `/dashboard/` + id_machine;
+    }
+    axios({ 
+        
+        method: 'POST',   
+        url: '{{url}}/api/find_machines', 
+        headers: {
+            Authorization: "Bearer Token"
+        }, 
+        data: { 
+            id: "{{id_user}}"
+        }
+    
+    }).then((res) => {
+        
+        console.log(res.data.data);
+        console.log(res.data.data.length, "maquinas disponibles");
+        let maquinas = res.data.data;
+        let cards_maquinas = [];
+
+
+        if(maquinas.length == 0) {
+            notification("error", "0 dispositivos asociados");
+        } else {
+            //notification("success", "Recuperación de Datos Exitosa.");
+            let tracker = "";
+            
+            for(let i = 0 ; i < maquinas.length ; i ++) {
+                if(maquinas[i].tracker){
+                    tracker = `<button class="btn btn-warning" onclick="redirect('tracker/${maquinas[i]._id}')">Seguimiento</button>`;
+                }
+
+                cards_maquinas = cards_maquinas + `
+                    <div class="col-12 col-sm-6 h-100">
+                        <div class="card mb-3">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src="/images/machines/${maquinas[i].url}" alt="${maquinas[i].nombre}" class="img-fluid">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${maquinas[i].nombre}<span class="float-end">${maquinas[i].ubicacion} <i class="fas fa-map-marker-alt"></i></span></h5>
+                                        <p class="card-text">${maquinas[i].descripcion}</p>
+                                        <p class="card-text">
+                                            <button class="btn btn-warning" onclick="redirect('devices/${maquinas[i]._id}')"> dispositivos</button>
+                                            <button class="btn btn-warning" onclick="redirect('historicos/${maquinas[i]._id}')"> historicos</button> 
+                                            ${tracker} </p>
+                                        <p class="card-text"><small class="text-muted">${maquinas[i].creado}</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `; 
+            }
+            console.log(cards_maquinas);
+            document.getElementById('machine_cards').innerHTML = cards_maquinas;
+
+        }
+        //notification("info", `${maquinas} maquinas recuperadas`);
+        
+    }).catch((err) => {
+        
+        console.log(err);
+    
+    });
+</script>

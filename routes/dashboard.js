@@ -108,7 +108,19 @@ router.get('/d', async (req, res) => {
 });
 router.get('/maquinas', async (req, res) => {
     res.render('maquinas', {
-        layout: 'template_dashboard'
+        layout: 'template_dashboard',
+        url: process.env.URL,
+        id_user: "606db3fa1282c834d0c9651d"
+    });
+});
+
+
+router.get('/tracker/:id', async (req,res) =>{
+    res.render('tracker', {
+        layout: 'template_dashboard',
+        url: process.env.URL,
+        id_user: "606db3fa1282c834d0c9651d",
+        id_machine: req.params.id
     });
 });
 

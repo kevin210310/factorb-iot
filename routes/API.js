@@ -13,6 +13,8 @@ const saltRounds = 10;
 
 const multer = require('multer');
 const upload = multer({dest: './archivos'});
+const machines = require('../config/mongoose/maquinas');
+const devices = require('../config/mongoose/device');
 
 router.post('/historicos', async (req, res) => {
   const { fecha_desde, fecha_hasta} = req.body;
@@ -769,63 +771,168 @@ router.post('/send_command', async (req, res)=>{
     }
 });
 
-router.post('/gps_send', (req, res) => {
-  const {latitude, longitude, speed, temp, grade, time} = req.body;
 
-  pool.query(
-    {
-        sql: 'INSERT INTO gps SET latitude=?, longitude=?, speed=?, temp=?, grade=?, time=?',
-        timeout: 30000, 
-    },
-    [latitude, longitude, speed, temp, grade, time],
-    (error, results, fields) => {
 
-        if(error) {
-          res.json({msg: "error insertando datos", status: false});
-        }
-        else {
-          res.json({msg: "datos correctos", status: true});  
-        }
-    }
-  );
-});
-router.post('/gps_multiple_send', (req, res) => {
-    /*let data_nodemcu = req.body.data;
-    let data = [];
-    for(let i = 0 ; i < data_nodemcu.length-1 ; i ++){
-      data.push([
-        data_nodemcu[i].latitude, 
-        data_nodemcu[i].longitude,
-        data_nodemcu[i].speed,
-        data_nodemcu[i].temp,
-        data_nodemcu[i].grade,
-        data_nodemcu[i].time
-      ]);
-      }
-
-    console.log(data);
-    
-    pool.query(
-      {
-          sql: 'INSERT INTO gps (latitude, longitude, speed, temp, grade, time) VALUES ?',
-          timeout: 30000, 
-      },
-      [data],
-      (error, results, fields) => {
-  
-          if(error) {
-            res.json({msg: "error insertando datos", status: false});
-          }
-          else {
-            res.json({msg: "datos correctos", status: true});  
-          }
-      }
-    );*/
-    console.log(req.body);
-    res.json({msg: "ok"});
-});
 router.post('/send_file', upload.single('archivo'), (req, res) => {
   console.log(req.file);
   res.send("archivo recibido");
+});
+
+
+
+
+
+
+//PROYECTO USANDO MONGO
+
+router.post('/find_machines', async (req, res) =>{
+  const { id } = req.body;
+  await machines.find({usuarios_permitidos: id}, function(err, response) {
+    if(err){
+        res.status(400).json({msg: "error en la peticion", status: false});
+    }
+    else {
+        if(response == null){
+            res.json({ msg: "no hay maquinas asociadas", status: false });
+        }
+        else {
+            res.json({data: response, status: true});
+        } 
+    }
+  });
+});
+
+router.post('/find_machinestracker', async (req, res) =>{
+
+    const { id, id_machine } = req.body;
+
+    await machines.where({usuarios_permitidos: id, tracker: true, _id: id_machine}).find( async function(err, response) {
+        if(err){
+            res.status(400).json({msg: "error en la peticion", status: false});
+        }
+        else {
+            if(response == null){
+                res.json({ msg: "no hay maquinas asociadas", status: false });
+            }
+            else {
+              
+                let id_device2 = "";
+                for(let i = 0 ; i < response[0].dispositivos.length ; i ++ ){
+                    if(response[0].dispositivos[i].gps){
+                        //console.log(response[0].dispositivos[i].id_device);
+                        id_device2 = response[0].dispositivos[i].id_device;
+                        //console.log(id_device);
+                    }
+                }
+
+                console.log(id_device2);
+                await devices.where({_id: id_device2}).find( function(err, response2) {
+                    console.log(response2);
+                    res.json({data: response2, data2: response, status: true});
+                });
+                
+            } 
+        }
+    });
+});
+
+router.post('/gps_multiple_send', (req, res) => {
+  let data_nodemcu = req.body.data;
+  console.log(data_nodemcu);
+  console.log(req.body.name_device);
+
+  let data = [];
+  for(let i = 0 ; i < data_nodemcu.length-1 ; i ++){
+    data.push({
+      lat: data_nodemcu[i].latitude,
+      lng: data_nodemcu[i].longitude,
+      bat: data_nodemcu[i].battery,
+      wifi: data_nodemcu[i].wifi,
+      degree: data_nodemcu[i].degree,
+      temp: data_nodemcu[i].temp,
+      status_gps: data_nodemcu[i].status_gps,
+      ignicion: data_nodemcu[i].ignicion,
+      time: data_nodemcu[i].time 
+    });
+  }
+
+  console.log(data);
+  devices.updateMany(
+    {name: "factorb-iot-0000" },
+    {$push: {'data': data}},
+    (err, response3) => {
+      if(err) {
+        console.log(err);
+      }
+      else {
+        console.log(response3);
+        res.json({msg: "ok", data: response3});
+      }
+    }
+  );
+});
+router.post('/gps_send', async (req, res) => {
+  const {latitude, name_device, longitude, speed, temp, degree, wifi, battery, status_gps, ignicion, time} = req.body;
+  const data_gps = {
+    lat: latitude,
+    lng: longitude,
+    bat: battery,
+    wifi: wifi,
+    degree: degree,
+    temp: temp,
+    status_gps: status_gps,
+    ignicion: ignicion,
+    time: "2021-01-01T10:46:00.000+00:00"
+  };
+
+  devices.updateOne(
+    {name: "factorb-iot-0000" },
+    {$push: {'data': data_gps}},
+    (err, response3) => {
+      if(err) {
+        console.log(err);
+      }
+      else {
+        console.log(response3);
+        res.json({msg: "ok", data: response3});
+      }
+    }
+  );
+
+
+  // create a comment
+//parent.children.push({ name: 'Liesl' });
+//const subdoc = parent.children[0];
+//console.log(subdoc) // { _id: '501d86090d371bab2c0341c5', name: 'Liesl' }
+//subdoc.isNew; // true
+/*
+parent.save(function (err) {
+  if (err) return handleError(err)
+  console.log('Success!');
+});
+  
+  await devices.updateOne({name: name_device}, { $push: {data: data_gps} }, 
+  });*/
+
+  
+});
+
+router.post('/find_datadevicetracker', async (req, res) =>{
+
+  const { name } = req.body;
+
+  await devices.where({name: name}).find( async function(err, response) {
+      if(err){
+          res.status(400).json({msg: "error en la peticion", status: false});
+      }
+      else {
+          if(response == null){
+              res.json({ msg: "no hay maquinas asociadas", status: false });
+          }
+          else {
+              res.json({data: response, status: true});
+          } 
+      }
+  });
 });
 module.exports = router;
