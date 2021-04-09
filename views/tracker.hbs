@@ -575,12 +575,24 @@
                 name: res.data.data[0].name
             }
             }).then((res) =>{
+              console.log(res.data.data);
                 let trazabilidad = [];
+                let wifi = [];
+                let battery = [];
+                let fechas = [];
                 let tracker = res.data.data[0].data;
                 
 
                 for(let t = 0 ; t < tracker.length ; t ++) {
                     trazabilidad.push({lat: tracker[t].lat, lng: tracker[t].lng});
+                    
+                    if(t >= tracker.length - 60){
+                      wifi.push(tracker[t].wifi);
+                      battery.push(tracker[t].bat);
+                    fechas.push(tracker[t].time);
+
+                    }
+                    
                 }
                 console.log(trazabilidad);
 
@@ -599,11 +611,11 @@
                 // grafico bateria y wifi
                 var options = {
                     series: [{
-                        name: 'series1',
-                        data: [31, 40, 28, 51, 42, 109, 100]
+                        name: 'señal Wi-Fi',
+                        data: wifi
                     }, {
-                        name: 'series2',
-                        data: [11, 32, 45, 32, 34, 52, 41]
+                        name: 'Señal Bateria',
+                        data: battery
                     }],
                     chart: {
           height: 350,
@@ -617,11 +629,11 @@
         },
         xaxis: {
           type: 'datetime',
-          categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+          categories: fechas
         },
         tooltip: {
           x: {
-            format: 'dd/MM/yy HH:mm'
+            format: 'dd/MM/yy HH:mm:ss'
           },
         },
         };
