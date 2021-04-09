@@ -837,56 +837,59 @@ router.post('/find_machinestracker', async (req, res) =>{
 });
 
 router.post('/gps_multiple_send', (req, res) => {
-  let data_nodemcu = req.body.data;
-  console.log(data_nodemcu);
-  console.log(req.body.name_device);
-
-  let data = [];
-  for(let i = 0 ; i < data_nodemcu.length-1 ; i ++){
-    data.push({
-      lat: data_nodemcu[i].latitude,
-      lng: data_nodemcu[i].longitude,
-      bat: data_nodemcu[i].battery,
-      wifi: data_nodemcu[i].wifi,
-      degree: data_nodemcu[i].degree,
-      temp: data_nodemcu[i].temp,
-      status_gps: data_nodemcu[i].status_gps,
-      ignicion: data_nodemcu[i].ignicion,
-      time: data_nodemcu[i].time 
-    });
-  }
-
-  console.log(data);
-  devices.updateMany(
-    {name: "factorb-iot-0000" },
-    {$push: {'data': data}},
-    (err, response3) => {
-      if(err) {
-        console.log(err);
-      }
-      else {
-        console.log(response3);
-        res.json({msg: "ok", data: response3});
-      }
+  
+  try {
+    console.log("data", req.body);
+    let data_nodemcu = req.body.data;
+    let name_device = req.body.name_device;
+    let data = [];
+    for(let i = 0 ; i < data_nodemcu.length-1 ; i ++){
+      data.push({
+          lat: data_nodemcu[i].latitude,
+          lng: data_nodemcu[i].longitude,
+          bat: data_nodemcu[i].battery,
+          wifi: data_nodemcu[i].wifi,
+          grade: data_nodemcu[i].degree,
+          speed: data_nodemcu[i].speed,
+          status_gps: data_nodemcu[i].status_gps,
+          time: data_nodemcu[i].time 
+      });
     }
-  );
+
+    console.log(data);
+    devices.updateMany(
+      {name: name_device },
+      {$push: {'data': data}},
+      (err, response3) => {
+        if(err) {
+          res.statsu(404).json({msg: "error db"})
+        }
+        else {
+          console.log(response3);
+          res.json({msg: "ok", data: response3});
+        }
+      }
+    );
+  }
+  catch(err){
+    res.status(401).json({msg: "error"});
+  }
 });
 router.post('/gps_send', async (req, res) => {
-  const {latitude, name_device, longitude, speed, temp, degree, wifi, battery, status_gps, ignicion, time} = req.body;
+  const {latitude, name_device, longitude, battery, speed, grade, wifi, status_gps, time} = req.body;
   const data_gps = {
     lat: latitude,
     lng: longitude,
+    speed: speed,
     bat: battery,
     wifi: wifi,
-    degree: degree,
-    temp: temp,
+    grade: grade,
     status_gps: status_gps,
-    ignicion: ignicion,
-    time: "2021-01-01T10:46:00.000+00:00"
+    time: time
   };
 
   devices.updateOne(
-    {name: "factorb-iot-0000" },
+    {name: name_device },
     {$push: {'data': data_gps}},
     (err, response3) => {
       if(err) {

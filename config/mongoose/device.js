@@ -6,10 +6,9 @@ const dataSchema = new Schema({
     lng: {type: Number},
     bat: {type: Number},
     wifi: {type: Number},
-    degree: {type: Number},
-    temp: {type: Number},
+    grade: {type: Number},
+    speed: {type: Number},
     status_gps: {type: Boolean},
-    ignicion: {type: Boolean},
     time: {type: Date}
 });
 
