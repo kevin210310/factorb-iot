@@ -873,6 +873,9 @@ router.post('/gps_multiple_send', (req, res) => {
 });
 router.post('/gps_send', async (req, res) => {
   const {latitude, name_device, longitude, speed, temp, degree, wifi, battery, status_gps, ignicion, time} = req.body;
+
+  var registro = Date.now();
+  console.log(registro);
   const data_gps = {
     lat: latitude,
     lng: longitude,
