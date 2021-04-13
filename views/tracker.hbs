@@ -29,64 +29,77 @@
         </div>
     </div>
     
-    <div class="row px-3 mt-3 g-3">
+    <div class="row px-3 my-3 g-3">
+
+        <!-- DATOS PERSONALES DISPOSITIVO -->
         <div class="col-12 col-sm-4" >
-        <div class="card" style="height: 300px;">
-            <h5 class="card-header">Dispositivo GPS</h5>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-6">
-                        <h4 class="card-title" >Maquina asociada :</h4>
-                        <h4 class="card-title" >Nombre Dispositivo :</h4>
-                        
+            <div class="card" style="height: 300px;">
+                <h5 class="card-header">Dispositivo GPS</h5>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <h4 class="card-title" >Maquina asociada :</h4>
+                            <h4 class="card-title" >Nombre Dispositivo :</h4>
+                            
+                        </div>
+                        <div class="col-6">
+                            <h4 class="card-title" id="nombre_machine" ></h4>
+                            <h4 class="card-title" id="nombre_device" ></h4>
+                            
+                        </div>
                     </div>
-                    <div class="col-6">
-                        <h4 class="card-title" id="nombre_machine" ></h4>
-                        <h4 class="card-title" id="nombre_device" ></h4>
-                         
+                    <div class="row">
+                        <div class="col-6">
+                            <h4 class="card-title" >Descripción:</h4>
+                            <h4 class="card-title" >Ultima Actualización :</h4>
+                        </div>
+                        <div class="col-6">
+                            <h5 class="card-text" id="descripcion" ></h5>
+                            <h5 class="card-text"><small class="text-muted">2021-04-08 17:05:23</small></h5>
+                        </div>
                     </div>
+                    <div class="d-grid gap-2 mt-2">
+                        <button class="btn btn-primary" type="button">Ver datos dinamicos</button>
+                        <button class="btn btn-primary" type="button">Ver historicos</button>
+                    </div> 
                 </div>
-                <div class="row">
-                    <div class="col-6">
-                        <h4 class="card-title" >Descripción:</h4>
-                        <h4 class="card-title" >Ultima Actualización :</h4>
-                    </div>
-                    <div class="col-6">
-                        <h5 class="card-text" id="descripcion" ></h5>
-                         <h5 class="card-text"><small class="text-muted">2021-04-08 17:05:23</small></h5>
-                    </div>
-                </div>
-                <div class="d-grid gap-2 mt-2">
-                    <button class="btn btn-primary" type="button">Ver datos dinamicos</button>
-                    <button class="btn btn-primary" type="button">Ver historicos</button>
-                </div> 
             </div>
         </div>
-    </div>
-    <div class="col-12 col-sm-8" style="height: 300px;">
-        <div class="card p-0">
-            <div class="card-body p-0">
-                <div id="map"></div>
-            </div>
-        </div>            
-    </div>
-    <div class="col-6" >
-        <div class="card" style="min-height: 300px;">
-            <h5 class="card-header">Grafico bateria y señal wi-fi <small class="text-muted float-end">ultimos 10 minutos</small></h5>
-            <div class="card-body">
-                <div id="chart"></div>
+
+        <!-- MAPA GOOGLE -->
+        <div class="col-12 col-sm-8" style="height: 300px;">
+            <div class="card p-0">
+                <div class="card-body p-0">
+                    <div id="map"></div>
+                </div>
+            </div>            
+        </div>
+
+        <!-- MAPA LEAFLET -->
+        <div class="col-12 col-sm-8" style="height: 300px;">
+            <div class="card p-0">
+                <div class="card-body p-0">
+                    <div id="map-leaflet"></div>
+                </div>
+            </div>            
+        </div>
+        <div class="col-12 col-sm-6" >
+            <div class="card" style="min-height: 300px;">
+                <h5 class="card-header">Grafico bateria y señal wi-fi <small class="text-muted float-end">ultimos 10 minutos</small></h5>
+                <div class="card-body">
+                    <div id="chart"></div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-6" >
+    <div class="col-12 col-sm-6" >
         <div class="card" style="min-height: 300px;">
-            <h5 class="card-header">Grafico temperatura <small class="text-muted float-end">ultimos 10 minutos</small></h5>
+            <h5 class="card-header">Grafico Velocidad <small class="text-muted float-end">ultimos 10 minutos</small></h5>
             <div class="card-body">
                 <div id="chart-temp"></div>
             </div>
         </div>
     </div>
-    <div class="col-2">
+    <div class="col-6 col-sm-3">
         <div class="card" style="min-height: 300px;">
             <h5 class="card-header">Bateria</h5>
             <div class="card-body">
@@ -575,21 +588,26 @@
                 name: res.data.data[0].name
             }
             }).then((res) =>{
-              console.log(res.data.data);
+                console.log(res.data.data);
                 let trazabilidad = [];
                 let wifi = [];
                 let battery = [];
                 let fechas = [];
                 let tracker = res.data.data[0].data;
+                let speed = [];
                 
 
                 for(let t = 0 ; t < tracker.length ; t ++) {
+
+                    if(tracker[t].lat != 0 || tracker[t].lng != 0)
                     trazabilidad.push({lat: tracker[t].lat, lng: tracker[t].lng});
                     
                     if(t >= tracker.length - 60){
-                      wifi.push(tracker[t].wifi);
-                      battery.push(tracker[t].bat);
-                    fechas.push(tracker[t].time);
+                        wifi.push(tracker[t].wifi);
+                        battery.push(tracker[t].bat);
+                        fechas.push(tracker[t].time);
+
+                        speed.push({x: tracker[t].time, y: tracker[t].speed});
 
                     }
                     
@@ -611,100 +629,72 @@
                 // grafico bateria y wifi
                 var options = {
                     series: [{
-                        name: 'señal Wi-Fi',
+                        name: 'Señal Wi-Fi [dbm]',
                         data: wifi
                     }, {
-                        name: 'Señal Bateria',
+                        name: 'Señal Bateria [V]',
                         data: battery
                     }],
                     chart: {
-          height: 350,
-          type: 'area'
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'smooth'
-        },
-        xaxis: {
-          type: 'datetime',
-          categories: fechas
-        },
-        tooltip: {
-          x: {
-            format: 'dd/MM/yy HH:mm:ss'
-          },
-        },
-        };
+                        height: 350,
+                        type: 'area'
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      type: 'datetime',
+                      categories: fechas
+                    },
+                    tooltip: {
+                      x: {
+                        format: 'dd/MM/yy HH:mm:ss'
+                      },
+                    },
+                };
 
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
+                var chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
 
-        var optionsTemp = {
-          series: [{
-          name: "STOCK ABC",
-          data: [
-            {
-            x: "02-10-2017 GMT",
-            y: 34
-            },
-            {
-            x: "02-11-2017 GMT",
-            y: 43
-            },
-            {
-            x: "02-12-2017 GMT",
-            y: 31
-            },
-            {
-            x: "02-13-2017 GMT",
-            y: 43
-            },
-            {
-            x: "02-14-2017 GMT",
-            y: 33
-            },
-            {
-            x: "02-15-2017 GMT",
-            y: 52
-            }
-      ]
-                                
-        }],
-          chart: {
-          type: 'area',
-          height: 350,
-          zoom: {
-            enabled: false
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'straight'
-        },
-    
-       
-        xaxis: {
-          type: 'datetime',
-        },
-        yaxis: {
-          opposite: true
-        },
-        legend: {
-          horizontalAlign: 'left'
-        }
-        };
+                var optionsTemp = {
+                    series: [{
+                        name: "Velocidad [km/h]",
+                        data: speed           
+                    }],
+                    chart: {
+                        type: 'area',
+                        height: 350,
+                        zoom: {
+                          enabled: false
+                        }
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      type: 'datetime',
+                    },
+                    yaxis: {
+                      opposite: true
+                    },
+                    legend: {
+                      horizontalAlign: 'bottom'
+                    }
+                };
 
-        var chartTemp = new ApexCharts(document.querySelector("#chart-temp"), optionsTemp);
-        chartTemp.render();
+                var chartTemp = new ApexCharts(document.querySelector("#chart-temp"), optionsTemp);
+                chartTemp.render();
 
                 
-                }).catch((err) =>{
-                    console.log(err);
-                });
+            }).catch((err) =>{
+                console.log(err);
+            });
     }).catch((err) => {
     
         console.log(err);

@@ -47,11 +47,21 @@
         } else {
             //notification("success", "Recuperación de Datos Exitosa.");
             let tracker = "";
+            let devices_button = "";
             
             for(let i = 0 ; i < maquinas.length ; i ++) {
                 if(maquinas[i].tracker){
                     tracker = `<button class="btn btn-warning" onclick="redirect('tracker/${maquinas[i]._id}')">Seguimiento</button>`;
                 }
+
+                if(maquinas[i].dispositivos.length != 0) {
+                    button = `<button class="btn btn-warning" onclick="redirect('dispositivos/${maquinas[i]._id}')">Ver ${maquinas[i].dispositivos.length} dispositivos</button>`;
+                }
+                else {
+                    button = `<button class="btn btn-warning" onclick="redirect('dispositivos/${maquinas[i]._id}')" disabled> Sin dispositivos</button>`;
+                }
+
+                console.log(maquinas[i].dispositivos.length);
 
                 cards_maquinas = cards_maquinas + `
                     <div class="col-12 col-sm-6 h-100">
@@ -65,7 +75,7 @@
                                         <h5 class="card-title">${maquinas[i].nombre}<span class="float-end">${maquinas[i].ubicacion} <i class="fas fa-map-marker-alt"></i></span></h5>
                                         <p class="card-text">${maquinas[i].descripcion}</p>
                                         <p class="card-text">
-                                            <button class="btn btn-warning" onclick="redirect('devices/${maquinas[i]._id}')"> dispositivos</button>
+                                            ${button}
                                             <button class="btn btn-warning" onclick="redirect('historicos/${maquinas[i]._id}')"> historicos</button> 
                                             ${tracker} </p>
                                         <p class="card-text"><small class="text-muted">${maquinas[i].creado}</small></p>
@@ -76,7 +86,6 @@
                     </div>
                 `; 
             }
-            console.log(cards_maquinas);
             document.getElementById('machine_cards').innerHTML = cards_maquinas;
 
         }

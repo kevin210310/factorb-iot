@@ -23,11 +23,12 @@ console.log("servidor corriendo en el puerto", port);
 
 var server = http.createServer(app);
 
-/*const io = SocketIO(server);
+const io = SocketIO(server);
 const botName = 'Server_factorbiot';
 
 io.on('connection', socket => {
-    var messageHandler = function(message) {
+  console.log("Nuevo Usuario Conectado");
+    /*var messageHandler = function(message) {
         
         message.ack();
         
@@ -52,8 +53,8 @@ io.on('connection', socket => {
           console.log("dispositivo conectado ==> ", message.attributes.deviceId);
         }
     };
-    subscription.on('message', messageHandler);
-});*/
+    subscription.on('message', messageHandler);*/
+});
 
 
 server.listen(port);

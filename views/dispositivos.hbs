@@ -1,0 +1,215 @@
+<div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
+    <div class="row mt-3 mx-0 mx-md-3">
+        <div class="col-12 rounded py-auto shadow-sm bg-body">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb my-3">
+                    <li class="breadcrumb-item"><a href="#">INICIO</a></li>
+                    <li class="breadcrumb-item"><a href="#">MAQUINAS</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">DISPOSITIVOS</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+          <style>
+              .contenedor {
+                  display: grid;
+                  grid-template-columns: 1fr 1fr 1fr;
+                  grid-template-rows: auto;
+              }
+              .contenedor-1 {
+                  justify-self: center;
+                  grid-row: 1;
+                  grid-column: 1;
+              }
+              .contenedor-2 {
+                  justify-self: center;
+                  grid-row: 1;
+                  grid-column: 2;
+              }
+              .contenedor-3 {
+                  justify-self: center;
+                  grid-row: 1;
+                  grid-column: 3;
+              }
+          </style>
+    <div class="row mt-3 px-0 px-sm-3" id="devices_cards">
+    </div>
+</div>
+
+
+<script>
+  function datadevice(id_device, id_machine){
+    window.location.href = "{{url}}/dashboard/datadevice/" + id_device + "/" + id_machine;
+  }
+  axios({ 
+        
+        method: 'POST',   
+        url: '{{url}}/api/find_OneMachine', 
+        headers: {
+            Authorization: "Bearer Token"
+        }, 
+        data: { 
+            id_machine: "{{id_machine}}"
+        }
+    
+    }).then((res) => {
+        if(res.data.status) {
+            console.log(res.data.data[0].dispositivos);
+
+            let card_devices = "";
+            if(res.data.data[0].dispositivos.length > 0) {
+
+              for(let d = 0 ; d < res.data.data[0].dispositivos.length ; d ++){
+                  card_devices += `
+                      <div class="col-12 col-sm-3 mb-3">
+                          <div class="card bg-dark text-white" >
+                              <img src="/images/machines/${res.data.data[0].url}" class="card-img" alt="..." >
+                              <div class="card-img-overlay" style="background-color: rgba(0,0,0,0.5);">
+                                  <h5 class="card-title text-center">FACTORB-IOT-0000</h5>
+                                  <p class="card-title text-center">RENGO</p>
+                                  <hr class="mb-4">
+                                  <div class="card-text text-center mb-3">Sensor de temperatura ambiental y control automatizado</div>
+                                  <div class="card-text text-center mb-3"></div>
+                                  <div class="contenedor">
+                                      <div class="contenedor-1">
+                                          <div id="chart-77"></div>
+                                          <div class="card-text text-center">4 AI</div>
+                                      </div>
+                                      <div class="contenedor-2">
+                                          <div id="chart-88"></div>
+                                          <div class="card-text text-center">0 DI</div>
+                                      </div>
+                                      <div class="contenedor-3">
+                                          <div id="chart-99"></div>
+                                          <div class="card-text text-center"> 1 DO</div>
+                                      </div>
+                                  </div>
+                                  <p class="card-text text-center mt-2"><small class="card-text ">Ultima actualizacion hace 3 minutos.</small></p>
+                                  <div class="text-center mt-4">
+                                      <button class="btn btn-danger" onclick="datadevice('${res.data.data[0].dispositivos[d].id_device}', '{{id_machine}}')">Ver datos en tiempo real</button>
+                                  </div>
+                    
+                </div>
+            </div>
+        </div>
+                  
+                  
+                  
+                  
+                  `;
+              }
+
+              document.getElementById('devices_cards').innerHTML = card_devices;
+            }
+        }
+        else {
+            console.log(res.data.msg);
+        }      
+    }).catch((err) => {   
+        console.log(err);
+    });
+
+</script>
+
+{{id_machine}}
+
+
+
+
+<!--<script>
+                                    var options77 = {
+          series: [45],
+          chart: {
+          type: 'radialBar',
+          width: 50,
+          height: 50,
+          sparkline: {
+            enabled: true
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        plotOptions: {
+          radialBar: {
+            hollow: {
+              margin: 0,
+              size: '50%'
+            },
+            track: {
+              margin: 0
+            },
+            dataLabels: {
+              show: false
+            }
+          }
+        }
+        };
+
+        var chart77 = new ApexCharts(document.querySelector("#chart-77"), options77);
+        chart77.render();
+
+         var options88 = {
+          series: [45],
+          chart: {
+          type: 'radialBar',
+          width: 50,
+          height: 50,
+          sparkline: {
+            enabled: true
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        plotOptions: {
+          radialBar: {
+            hollow: {
+              margin: 0,
+              size: '50%'
+            },
+            track: {
+              margin: 0
+            },
+            dataLabels: {
+              show: false
+            }
+          }
+        }
+        };
+
+        var chart88 = new ApexCharts(document.querySelector("#chart-88"), options88);
+        chart88.render();
+
+         var options99 = {
+          series: [45],
+          chart: {
+          type: 'radialBar',
+          width: 50,
+          height: 50,
+          sparkline: {
+            enabled: true
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        plotOptions: {
+          radialBar: {
+            hollow: {
+              margin: 0,
+              size: '50%'
+            },
+            track: {
+              margin: 0
+            },
+            dataLabels: {
+              show: false
+            }
+          }
+        }
+        };
+
+        var chart99 = new ApexCharts(document.querySelector("#chart-99"), options99);
+        chart99.render();
+                        </script>-->

@@ -1,0 +1,235 @@
+
+<!-- SCRIPTS NECESARIOS -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
+    <div class="row mt-3 mx-0 mx-md-3">
+        <div class="col-12 rounded py-auto shadow-sm bg-body">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb my-3">
+                    <li class="breadcrumb-item"><a href="#">INICIO</a></li>
+                    <li class="breadcrumb-item"><a href="#">MAQUINAS</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">DISPOSITIVOS</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="row m-3" id="sensors_cards">
+
+    </div>
+</div>
+
+
+<script>
+    google.charts.load("current", {
+        packages: ["corechart", "line", "gauge"]
+    });
+
+    axios({ 
+        
+        method: 'POST',   
+        url: '{{url}}/api/find_OneDevice', 
+        headers: {
+            Authorization: "Bearer Token"
+        }, 
+        data: { 
+            id_machine: "{{id_machine}}",
+            id_device: "{{id_device}}"
+        }
+    
+    }).then((res) => {
+        if(res.data.status) {
+            for(let device = 0 ; device < res.data.data[0].dispositivos.length ; device++){
+                
+                if(res.data.data[0].dispositivos[device].id_device == "{{id_device}}") {
+                    console.log(res.data.data[0].dispositivos[device].sensores);
+                    let sensors_cards = "";
+                    for(let s = 0 ; s < res.data.data[0].dispositivos[device].sensores.length ; s++){
+                        if(res.data.data[0].dispositivos[device].sensores[s].type == "AI"){
+                            sensors_cards += `
+                            <div class="col-12 mb-3 mx-0 px-0 shadow rounded">
+                                <div style="min-width:100%;" id="grafico_${s}"></div>
+                            </div>
+                            `;
+
+                            let settings_chart = new Function(`
+        
+                            let data = google.visualization.arrayToDataTable([
+                                ["Year", "medida"],
+                                [0, 0]
+                            ]);
+                                            
+                                        
+                            let options = {
+                                title: "Sensor de nombre",
+                                hAxis: {
+                                    title: ""
+                                },
+                                vAxis: {
+                                    title: "nombre"
+                                }
+                            };
+                        
+                            // draw chart on load
+                            let chart = new google.visualization.LineChart(
+                                document.getElementById("grafico_${s}")
+                            );
+                            
+                            chart.draw(data, options);
+                                            
+                            let index = 0;
+                            socket.on("{{socket_name}}", sensores => {
+                                data.addRow([index, sensores.a]);
+                                chart.draw(data, options);
+                                index++;
+                            });           
+                        `);
+
+                        google.charts.setOnLoadCallback(settings_chart);
+                           
+                        }
+                        else if(res.data.data[0].dispositivos[device].sensores[s].type == "DO"){
+                            sensors_cards += `
+                            <div class="col-12"> SALIDA DIGITAL </div>
+                            `;
+                        }
+                        else if(res.data.data[0].dispositivos[device].sensores[s].type == "DI"){
+                            sensors_cards += `<div class="col-12"> ENTRADA DIGITAL </div>`;
+                        }
+                    }
+
+                    document.getElementById('sensors_cards').innerHTML = sensors_cards;
+                     let settings_chart = new Function(`
+        
+                             var lastDate = 0;
+  var data = []
+  var TICKINTERVAL = 86400000
+  let XAXISRANGE = 777600000
+  function getDayWiseTimeSeries(baseval, count, yrange) {
+    var i = 0;
+    while (i < count) {
+      var x = baseval;
+      var y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
+  
+      data.push({
+        x, y
+      });
+      lastDate = baseval
+      baseval += TICKINTERVAL;
+      i++;
+    }
+  }
+  
+  getDayWiseTimeSeries(new Date('11 Feb 2017 GMT').getTime(), 10, {
+    min: 10,
+    max: 90
+  })
+  
+  function getNewSeries(baseval, yrange) {
+    var newDate = baseval + TICKINTERVAL;
+    lastDate = newDate
+  
+    for(var i = 0; i< data.length - 10; i++) {
+      // IMPORTANT
+      // we reset the x and y of the data which is out of drawing area
+      // to prevent memory leaks
+      data[i].x = newDate - XAXISRANGE - TICKINTERVAL
+      data[i].y = 0
+    }
+  
+    data.push({
+      x: newDate,
+      y: Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min
+    })
+  }
+  
+  function resetData(){
+    // Alternatively, you can also reset the data at certain intervals to prevent creating a huge series 
+    data = data.slice(data.length - 10, data.length);
+  }
+  
+
+
+
+    var options = {
+          series: [{
+          data: data.slice()
+        }],
+          chart: {
+          id: 'realtime',
+          height: 350,
+          type: 'line',
+          animations: {
+            enabled: true,
+            easing: 'linear',
+            dynamicAnimation: {
+              speed: 1000
+            }
+          },
+          toolbar: {
+            show: false
+          },
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        title: {
+          text: 'Dynamic Updating Chart',
+          align: 'left'
+        },
+        markers: {
+          size: 0
+        },
+        xaxis: {
+          type: 'datetime',
+          range: XAXISRANGE,
+        },
+        yaxis: {
+          max: 100
+        },
+        legend: {
+          show: false
+        },
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart-rt"), options);
+        chart.render();
+      
+      
+        window.setInterval(function () {
+        getNewSeries(lastDate, {
+          min: 10,
+          max: 90
+        })
+      
+        chart.updateSeries([{
+          data: data
+        }])
+      }, 1000);
+                `);
+                }
+            }
+        }
+        else {
+            console.log(res.data.msg);
+        }      
+    }).catch((err) => {   
+        console.log(err);
+    });
+
+
+
+ 
+      
+    
+</script>
+
+{{id_device}}
+
+{{id_machine}}
