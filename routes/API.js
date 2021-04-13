@@ -862,7 +862,7 @@ router.post('/gps_multiple_send', (req, res) => {
       {$push: {'data': data}},
       (err, response3) => {
         if(err) {
-          res.statsu(404).json({msg: "error db"})
+          res.status(404).json({msg: "error db"})
         }
         else {
           console.log(response3);
@@ -872,7 +872,7 @@ router.post('/gps_multiple_send', (req, res) => {
     );
   }
   catch(err){
-    res.status(401).json({msg: "error"});
+    res.status(401).json({msg: "error "});
   }
 });
 router.post('/gps_send', async (req, res) => {
