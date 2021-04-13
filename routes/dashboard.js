@@ -114,6 +114,15 @@ router.get('/maquinas', async (req, res) => {
     });
 });
 
+router.get('/dispositivos/:id_machine', (req, res) => {
+    res.render('dispositivos', {
+        layout: 'template_dashboard',
+        url: process.env.URL,
+        id_machine: req.params.id_machine,
+        hola: "hola mundo"
+    });
+});
+
 
 router.get('/tracker/:id', async (req,res) =>{
     res.render('tracker', {
@@ -121,6 +130,16 @@ router.get('/tracker/:id', async (req,res) =>{
         url: process.env.URL,
         id_user: "606db3fa1282c834d0c9651d",
         id_machine: req.params.id
+    });
+});
+
+router.get('/datadevice/:id_device/:id_machine', async (req,res) =>{
+    res.render('datadevice', {
+        layout: 'template_dashboard',
+        url: process.env.URL,
+        id_user: "606db3fa1282c834d0c9651d",
+        id_machine: req.params.id_machine,
+        id_device: req.params.id_device
     });
 });
 

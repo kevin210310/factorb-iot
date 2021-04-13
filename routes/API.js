@@ -802,6 +802,41 @@ router.post('/find_machines', async (req, res) =>{
   });
 });
 
+router.post('/find_OneMachine', async (req, res) =>{
+  const { id_machine } = req.body;
+  await machines.find({_id: id_machine}, function(err, response) {
+    if(err){
+        res.status(400).json({msg: "error en la peticion", status: false});
+    }
+    else {
+        if(response == null){
+            res.json({ msg: "no hay maquinas asociadas", status: false });
+        }
+        else {
+            res.json({data: response, status: true});
+        } 
+    }
+  });
+});
+
+router.post('/find_OneDevice', async (req, res) =>{
+  const { id_machine, id_device } = req.body;
+  await machines.find({_id: id_machine, 'dispositivos.id_device': id_device}, "dispositivos", function(err, response) {
+    if(err){
+        res.status(400).json({msg: "error en la peticion", status: false});
+    }
+    else {
+        if(response == null){
+            res.json({ msg: "no hay maquinas asociadas", status: false });
+        }
+        else {
+            console.log(response);
+            res.json({data: response, status: true});
+        } 
+    }
+  });
+});
+
 router.post('/find_machinestracker', async (req, res) =>{
 
     const { id, id_machine } = req.body;
@@ -924,7 +959,11 @@ router.post('/find_datadevicetracker', async (req, res) =>{
 
   const { name } = req.body;
 
-  await devices.where({name: name}).find( async function(err, response) {
+  await devices.where(
+      {
+        name: name
+      }).find( 
+        async function(err, response) {
       if(err){
           res.status(400).json({msg: "error en la peticion", status: false});
       }
@@ -936,6 +975,7 @@ router.post('/find_datadevicetracker', async (req, res) =>{
               res.json({data: response, status: true});
           } 
       }
-  });
+  }).sort({'data.time': 1});
+
 });
 module.exports = router;

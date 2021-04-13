@@ -1,87 +1,4 @@
-<script>
-    function initMap() {
-        const map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: 40.76, lng: -73.983 },
-            zoom: 15,
-            mapTypeId: "satellite",
-            mapTypeControl: true,
-            mapTypeControlOptions: {
-                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-                position: google.maps.ControlPosition.TOP_CENTER,
-            },
-            zoomControl: true,
-            zoomControlOptions: {
-                position: google.maps.ControlPosition.LEFT_CENTER,
-            },
-            scaleControl: true,
-            streetViewControl: true,
-            streetViewControlOptions: {
-                position: google.maps.ControlPosition.LEFT_TOP,
-            },
-            fullscreenControl: true,
-        });
-        map.setTilt(45);
-
-        const flightPlanCoordinates = [
-          { lat: 37.772, lng: -122.214 },
-          { lat: 21.291, lng: -157.821 },
-          { lat: -18.142, lng: 178.431 },
-          { lat: -27.467, lng: 153.027 },
-        ];
-        const flightPath = new google.maps.Polyline({
-          path: flightPlanCoordinates,
-          geodesic: true,
-          strokeColor: "#FF0000",
-          strokeOpacity: 1.0,
-          strokeWeight: 2,
-        });
-        flightPath.setMap(map);
-   
-        axios({ 
-            
-            method: 'POST',   
-            url: '{{url}}/api/find_machinestracker', 
-            headers: {
-                Authorization: "Bearer Token"
-            }, 
-            data: { 
-                id: "{{id_user}}",
-                id_machine: "{{id_machine}}"
-            }
-        
-        }).then((res) => {
-
-            document.getElementById('nombre_machine').innerHTML = res.data.data2[0].nombre;
-            document.getElementById('nombre_device').innerHTML = res.data.data[0].name;
-            document.getElementById('descripcion').innerHTML = res.data.data2[0].descripcion;
-            document.getElementById('image_tracker').innerHTML = `<img src="/images/machines/${res.data.data2[0].url}" class="img-fluid" alt="logo" style="height: 150px;">`;
-
-            axios({
-
-                method: 'POST',   
-                url: '{{url}}/api/find_datadevicetracker', 
-                headers: {
-                    Authorization: "Bearer Token"
-                }, 
-                data: { 
-                    name: res.data.data[0].name
-                }
-                }).then((res) =>{
-                    console.log(res.data.data[0].data[0].lat);
-                   
-
-
-                    
-                }).catch((err) =>{
-                    console.log(err);
-                });
-        }).catch((err) => {
-        
-            console.log(err);
-        });
-
-    } 
-</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 <style type="text/css">
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -98,54 +15,98 @@
       
     </script>
 <div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
+    
+    <!-- BREADCRUMB -->
     <div class="row mt-3 mx-0 mx-md-3">
         <div class="col-12 rounded py-auto shadow-sm bg-body">
-            <nav aria-label="breadcrumb">
+            <nav aria-label="breadcrumb d-inline">
                 <ol class="breadcrumb my-3">
-                    <li class="breadcrumb-item"><a href="#">INICIO</a></li>
+                    <li class="breadcrumb-item"><a href="/dashboard/d">MAQUINAS</a></li>
                     <li class="breadcrumb-item active" aria-current="page">SEGUIMIENTO</li>
                     <li class="breadcrumb-item active" aria-current="page">ID: {{id_machine}}</li>
                 </ol>
             </nav>
         </div>
     </div>
-    <div class="row px-3 mt-3 g-3">
-        <div class="col-8" style="height: 300px;">
+    
+    <div class="row px-3 my-3 g-3">
+
+        <!-- DATOS PERSONALES DISPOSITIVO -->
+        <div class="col-12 col-sm-4" >
+            <div class="card" style="height: 300px;">
+                <h5 class="card-header">Dispositivo GPS</h5>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <h4 class="card-title" >Maquina asociada :</h4>
+                            <h4 class="card-title" >Nombre Dispositivo :</h4>
+                            
+                        </div>
+                        <div class="col-6">
+                            <h4 class="card-title" id="nombre_machine" ></h4>
+                            <h4 class="card-title" id="nombre_device" ></h4>
+                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h4 class="card-title" >Descripción:</h4>
+                            <h4 class="card-title" >Ultima Actualización :</h4>
+                        </div>
+                        <div class="col-6">
+                            <h5 class="card-text" id="descripcion" ></h5>
+                            <h5 class="card-text"><small class="text-muted">2021-04-08 17:05:23</small></h5>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 mt-2">
+                        <button class="btn btn-primary" type="button">Ver datos dinamicos</button>
+                        <button class="btn btn-primary" type="button">Ver historicos</button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+
+        <!-- MAPA GOOGLE -->
+        <div class="col-12 col-sm-8" style="height: 300px;">
             <div class="card p-0">
                 <div class="card-body p-0">
                     <div id="map"></div>
                 </div>
-            </div>
-            
+            </div>            
         </div>
-        <div class="col-4">
-            <div class="card" >
-                <div id="image_tracker"></div>
-                
-                <div class="card-body ">
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+
+        <!-- MAPA LEAFLET -->
+        <div class="col-12 col-sm-8" style="height: 300px;">
+            <div class="card p-0">
+                <div class="card-body p-0">
+                    <div id="map-leaflet"></div>
                 </div>
-            </div>
+            </div>            
         </div>
-        <div class="col-4" >
-            <div class="card" style="height: 300px;">
-                <h5 class="card-header">DISPOSITIVO GPS</h5>
-                <div class="card-body">
-                    <h4 class="card-title" id="nombre_machine" >Nombre de la maquina</h4>
-                    <h5 class="card-title" id="nombre_device" >Nombre del dispositivo</h5>
-                    <p class="card-text" id="descripcion" >With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-6" >
+        <div class="col-12 col-sm-6" >
             <div class="card" style="min-height: 300px;">
-                <h5 class="card-header">Grafico bateria y señal wi-fi</h5>
+                <h5 class="card-header">Grafico bateria y señal wi-fi <small class="text-muted float-end">ultimos 10 minutos</small></h5>
                 <div class="card-body">
-                    <div id="chart-timeline"></div>
+                    <div id="chart"></div>
                 </div>
             </div>
         </div>
+    <div class="col-12 col-sm-6" >
+        <div class="card" style="min-height: 300px;">
+            <h5 class="card-header">Grafico Velocidad <small class="text-muted float-end">ultimos 10 minutos</small></h5>
+            <div class="card-body">
+                <div id="chart-temp"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-sm-3">
+        <div class="card" style="min-height: 300px;">
+            <h5 class="card-header">Bateria</h5>
+            <div class="card-body">
+                <div id="chart-temp"></div>
+            </div>
+        </div>
+    </div>
 
 
         <!--<script>
@@ -563,3 +524,180 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi_GipB4VPaAcH_U0YSvypCM5VqQv69x4&callback=initMap&libraries=&v=weekly"
       async
     ></script>
+
+
+<script>
+    let map;
+
+    //inicializacion mapa
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { 
+                lat: 40.76, 
+                lng: -73.983 
+            },
+            zoom: 8,
+            mapTypeId: "satellite",
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.TOP_CENTER,
+            },
+            zoomControl: true,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.LEFT_CENTER,
+            },
+            scaleControl: true,
+            streetViewControl: true,
+            streetViewControlOptions: {
+                position: google.maps.ControlPosition.LEFT_TOP,
+            },
+            fullscreenControl: true,
+        });
+        map.setTilt(45);
+
+    }
+
+    //peticion de maquinas con gps
+    axios({ 
+        
+        method: 'POST',   
+        url: '{{url}}/api/find_machinestracker', 
+        headers: {
+            Authorization: "Bearer Token"
+        }, 
+        data: { 
+            id: "{{id_user}}",
+            id_machine: "{{id_machine}}"
+        }
+    
+    }).then((res) => {
+
+        document.getElementById('nombre_machine').innerHTML = res.data.data2[0].nombre;
+        document.getElementById('nombre_device').innerHTML = res.data.data[0].name;
+        document.getElementById('descripcion').innerHTML = res.data.data2[0].descripcion;
+        
+        axios({
+
+            method: 'POST',   
+            url: '{{url}}/api/find_datadevicetracker', 
+            headers: {
+                Authorization: "Bearer Token"
+            }, 
+            data: { 
+                name: res.data.data[0].name
+            }
+            }).then((res) =>{
+                console.log(res.data.data);
+                let trazabilidad = [];
+                let wifi = [];
+                let battery = [];
+                let fechas = [];
+                let tracker = res.data.data[0].data;
+                let speed = [];
+                
+
+                for(let t = 0 ; t < tracker.length ; t ++) {
+
+                    if(tracker[t].lat != 0 || tracker[t].lng != 0)
+                    trazabilidad.push({lat: tracker[t].lat, lng: tracker[t].lng});
+                    
+                    if(t >= tracker.length - 60){
+                        wifi.push(tracker[t].wifi);
+                        battery.push(tracker[t].bat);
+                        fechas.push(tracker[t].time);
+
+                        speed.push({x: tracker[t].time, y: tracker[t].speed});
+
+                    }
+                    
+                }
+                console.log(trazabilidad);
+
+                map.setCenter({lng: tracker[0].lng, lat: tracker[0].lat}, 2);
+                const flightPath = new google.maps.Polyline({
+                    path: trazabilidad,
+                    geodesic: true,
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2,
+                });
+                flightPath.setMap(map);
+
+
+
+                // grafico bateria y wifi
+                var options = {
+                    series: [{
+                        name: 'Señal Wi-Fi [dbm]',
+                        data: wifi
+                    }, {
+                        name: 'Señal Bateria [V]',
+                        data: battery
+                    }],
+                    chart: {
+                        height: 350,
+                        type: 'area'
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      type: 'datetime',
+                      categories: fechas
+                    },
+                    tooltip: {
+                      x: {
+                        format: 'dd/MM/yy HH:mm:ss'
+                      },
+                    },
+                };
+
+                var chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+
+                var optionsTemp = {
+                    series: [{
+                        name: "Velocidad [km/h]",
+                        data: speed           
+                    }],
+                    chart: {
+                        type: 'area',
+                        height: 350,
+                        zoom: {
+                          enabled: false
+                        }
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      type: 'datetime',
+                    },
+                    yaxis: {
+                      opposite: true
+                    },
+                    legend: {
+                      horizontalAlign: 'bottom'
+                    }
+                };
+
+                var chartTemp = new ApexCharts(document.querySelector("#chart-temp"), optionsTemp);
+                chartTemp.render();
+
+                
+            }).catch((err) =>{
+                console.log(err);
+            });
+    }).catch((err) => {
+    
+        console.log(err);
+    });
+    
+</script>
