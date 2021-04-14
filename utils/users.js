@@ -1,13 +1,12 @@
-//variable usuarios
 const users = [];
 
-// unir usuarios al chat
+// Join user to chat
 function userJoin(id, username, rol, room) {
-  
-    const user = { id, username, rol,  room };
-    users.push(user);
-    
-    return user;
+  const user = { id, username, rol,  room };
+
+  users.push(user);
+
+  return user;
 }
 
 // Get current user

@@ -2,7 +2,7 @@ var app = require('../app');
 var debug = require('debug')('factorb-iot:server');
 var http = require('http');
 const SocketIO = require('socket.io');
-const moment = require('moment');/*
+const moment = require('moment');
 const { PubSub } = require(`@google-cloud/pubsub`);
 const formatMessage = require('../utils/messages');
 const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('../utils/users');
@@ -15,7 +15,7 @@ var pubsub = new PubSub({
 });
 
 var subscription = pubsub.subscription('projects/' + projectId + '/subscriptions/' + stateSubscriber);
-*/
+
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
@@ -26,36 +26,92 @@ var server = http.createServer(app);
 const io = SocketIO(server);
 const botName = 'Server_factorbiot';
 
+// Run when client connects
 io.on('connection', socket => {
-  console.log("Nuevo Usuario Conectado");
-    /*var messageHandler = function(message) {
-        
-        message.ack();
-        
-        if(message.attributes.subFolder !== "events"){
-            
-            let data = Buffer.from(message.data, 'base64').toString('ascii');
-            
-            try {
-              
-                let obj = JSON.parse(data);
-                //console.log(obj);
-                console.log("publicando en el topic: /", message.attributes.deviceId);
-                socket.emit(message.attributes.deviceId, obj);
-            }
-            catch(error) {
-              console.log("el paquete no es un json");
-            }
-            
 
+  //conexion a la sala "alertas-mimbral"
+  socket.on('joinRoom', ({ username, rol, room }) => {
+    
+    console.log("se conecto: ", username, rol, room);
+    const user = userJoin(socket.id, username, rol, room);
+    socket.join(user.room);
+
+    // Welcome current user
+    socket.emit('message', formatMessage(botName, 'Welcome to ChatCord!'));
+
+    // Broadcast when a user connects
+    socket.broadcast
+      .to(user.room)
+      .emit(
+        'message',
+        formatMessage(botName, `${user.username} has joined the chat`)
+      );
+
+    // Send users and room info
+    io.to(user.room).emit('roomUsers', {
+      room: user.room,
+      users: getRoomUsers(user.room)
+    });
+  });
+
+  //mensajes entre la sala
+  socket.on('chatMessage', msg => {
+    const user = getCurrentUser(socket.id);
+    
+    io.to(user.room).emit('message', formatMessage(user.username, msg));
+    console.log("actualizo su estado: ",user.username, "a las: ", moment().format('MMMM Do YYYY, h:mm:ss a'));
+  });
+
+  // desconexion de algun usuario..
+  socket.on('disconnect', () => {
+    const user = userLeave(socket.id);
+
+    if (user) {
+      io.to(user.room).emit(
+        'message',
+        formatMessage(botName, `${user.username} has left the chat`)
+      );
+      console.log("se desconecto: ", user.username);
+
+      // Send users and room info
+      io.to(user.room).emit('roomUsers', {
+        room: user.room,
+        users: getRoomUsers(user.room)
+      });
+    }
+  });
+
+
+
+  var messageHandler = function(message) {
+        
+    message.ack();
+    
+    if(message.attributes.subFolder !== "events"){
+        
+        let data = Buffer.from(message.data, 'base64').toString('ascii');
+        
+        try {
+          
+            let obj = JSON.parse(data);
+            //console.log(obj);
+            console.log("publicando en el topic: /", message.attributes.deviceId);
+            socket.emit(message.attributes.deviceId, obj);
         }
-        else {
-          console.log("dispositivo conectado ==> ", message.attributes.deviceId);
+        catch(error) {
+          console.log("el paquete no es un json");
         }
-    };
-    subscription.on('message', messageHandler);*/
+        
+
+    }
+    else {
+      console.log("dispositivo conectado ==> ", message.attributes.deviceId);
+    }
+};
+subscription.on('message', messageHandler);
+
+
 });
-
 
 server.listen(port);
 server.on('error', onError);

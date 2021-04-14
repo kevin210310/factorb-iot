@@ -55,18 +55,18 @@
                             let settings_chart = new Function(`
         
                             let data = google.visualization.arrayToDataTable([
-                                ["Year", "medida"],
+                                ["Year", "${res.data.data[0].dispositivos[device].sensores[s].measurement}"],
                                 [0, 0]
                             ]);
                                             
                                         
                             let options = {
-                                title: "Sensor de nombre",
+                                title: "sensor de ${res.data.data[0].dispositivos[device].sensores[s].variable}",
                                 hAxis: {
                                     title: ""
                                 },
                                 vAxis: {
-                                    title: "nombre"
+                                    title: "${res.data.data[0].dispositivos[device].sensores[s].variable}"
                                 }
                             };
                         
@@ -78,8 +78,9 @@
                             chart.draw(data, options);
                                             
                             let index = 0;
-                            socket.on("{{socket_name}}", sensores => {
-                                data.addRow([index, sensores.a]);
+                            socket.on("${res.data.data[0].dispositivos[device].sensores[s].name}", sensores => {
+                                console.log(sensores);
+                                data.addRow([index, sensores.nivel]);
                                 chart.draw(data, options);
                                 index++;
                             });           
@@ -90,7 +91,11 @@
                         }
                         else if(res.data.data[0].dispositivos[device].sensores[s].type == "DO"){
                             sensors_cards += `
-                            <div class="col-12"> SALIDA DIGITAL </div>
+                            <div class="col-3 rounded shadow p-5" style="background-color: rgb(255,255,255);">
+                                <button class="btn btn-success" onclick="send_command('factorb-iot-0003', 'rel1')">ON</button>
+                                <button class="btn btn-danger" onclick="send_command('factorb-iot-0003', 'rel0')">OFF</button>
+                                <p class="float-end text-muted">${res.data.data[0].dispositivos[device].sensores[s].name}</p>
+                            </div>
                             `;
                         }
                         else if(res.data.data[0].dispositivos[device].sensores[s].type == "DI"){
@@ -224,7 +229,31 @@
     });
 
 
+    function send_command(device, command){
+        console.log(device, command);
+        axios(
+            { 
+                method: 'POST', 
+                url: '{{url}}/api/send_command', 
+                headers: {
+                    Authorization: "Bearer Token"
+                }, 
+                data: { 
+                    commandMessage: command,
+                    deviceId: device 
+                }
+            }
+        ).then((res) => {
+        
+            console.log(res.data);
 
+        }).catch((err) => {
+            
+            console.log(err);
+
+        });
+
+    }
  
       
     
