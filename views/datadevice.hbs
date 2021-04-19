@@ -14,6 +14,130 @@
             </nav>
         </div>
     </div>
+    <div class="row m-3 g-2">
+      <div id="chart"></div>
+      <script>
+    var lastDate = 0;
+    var data = [];
+    var TICKINTERVAL = 86400000;
+    let XAXISRANGE = 777600000;
+    console.log(data);
+    data = [
+      {x: "2018-09-19T00:00:00.000Z", y: 52},
+
+    ];
+    /*data = [
+      {x: 1486857600000, y: 74}, 
+      {x: 1486944000000, y: 41},
+      {x: 1487030400000, y: 72},
+      {x: 1487116800000, y: 35},
+      {x: 1487203200000, y: 30},
+      {x: 1487289600000, y: 38},
+      {x: 1487376000000, y: 50},
+      {x: 1487462400000, y: 51},
+      {x: 1487548800000, y: 52},
+      {x: 1487635200000, y: 79},
+      {x: 1487721600000, y: 45},
+      {x: 1487808000000, y: 69},
+      {x: 1487894400000, y: 22},
+      {x: 1487980800000, y: 66},
+      {x: 1488067200000, y: 52},
+      {x: 1488153600000, y: 43},
+      {x: 1488240000000, y: 29},
+      {x: 1488326400000, y: 69},
+      {x: 1488412800000, y: 79}
+    ];*/
+    function getNewSeries(baseval, yrange) {
+        var newDate = baseval + TICKINTERVAL;
+        lastDate = newDate;
+
+        for(var i = 0; i< data.length - 15; i++) {
+            // IMPORTANT
+            // we reset the x and y of the data which is out of drawing area
+            // to prevent memory leaks
+            data[i].x = newDate - XAXISRANGE - TICKINTERVAL;
+            data[i].y = 0
+        }
+
+        data.push({
+            x: newDate,
+            y: Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min
+        })
+
+        console.log(data.length);
+
+    }
+
+    function resetData(){
+        // Alternatively, you can also reset the data at certain intervals to prevent creating a huge series
+        data = data.slice(data.length - 20, data.length);
+    }
+
+    var options = {
+        chart: {
+            height: 350,
+            type: 'area',
+            animations: {
+                enabled: true,
+                easing: 'linear',
+                dynamicAnimation: {
+                    speed: 1000
+                }
+            },
+            toolbar: {
+                show: false
+            },
+            zoom: {
+                enabled: false
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'straight'
+        },
+        series: [{
+            data: data
+        }],
+        title: {
+            text: 'Dynamic Updating Chart',
+            align: 'center'
+        },
+        markers: {
+            size: 0
+        },
+        xaxis: {
+            type: 'datetime',
+            range: XAXISRANGE,
+        },
+        yaxis: {
+            max: 100,
+            min: 0
+        },
+        legend: {
+            show: false
+        },
+    };
+
+    var chart = new ApexCharts(
+        document.querySelector("#chart"),
+        options
+    );
+
+    chart.render();
+
+    window.setInterval(function () {
+        getNewSeries(lastDate, {
+            min: 10,
+            max: 90
+        });
+        chart.updateSeries([{
+            data: data
+        }])
+    }, 4000)
+</script>
+    </div>
     <div class="row m-3 g-2" id="sensors_cards">
 
     </div>
@@ -79,8 +203,8 @@
                                             
                             let index = 0;
                             socket.on("${res.data.data[0].dispositivos[device].sensores[s].name}", sensores => {
-                                console.log(sensores);
-                                data.addRow([index, sensores.nivel]);
+                              
+                                data.addRow([index, sensores.${res.data.data[0].dispositivos[device].sensores[s].id_variable}]);
                                 chart.draw(data, options);
                                 index++;
                             });           
@@ -92,8 +216,8 @@
                         else if(res.data.data[0].dispositivos[device].sensores[s].type == "DO"){
                             sensors_cards += `
                             <div class="col-3 rounded shadow p-5" style="background-color: rgb(255,255,255);">
-                                <button class="btn btn-success" onclick="send_command('factorb-iot-0003', 'rel1')">ON</button>
-                                <button class="btn btn-danger" onclick="send_command('factorb-iot-0003', 'rel0')">OFF</button>
+                                <button class="btn btn-success" onclick="send_command('${res.data.data[0].dispositivos[device].name}', 'rel1')">ON</button>
+                                <button class="btn btn-danger" onclick="send_command('${res.data.data[0].dispositivos[device].name}', 'rel0')">OFF</button>
                                 <p class="float-end text-muted">${res.data.data[0].dispositivos[device].sensores[s].name}</p>
                             </div>
                             `;

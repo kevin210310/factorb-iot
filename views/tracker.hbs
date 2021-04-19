@@ -588,7 +588,9 @@
                 name: res.data.data[0].name
             }
             }).then((res) =>{
-                console.log(res.data.data);
+                console.log(res.data.data[0].data.length);
+                let inicio = [];
+                let fin = [];
                 let trazabilidad = [];
                 let wifi = [];
                 let battery = [];
@@ -599,20 +601,50 @@
 
                 for(let t = 0 ; t < tracker.length ; t ++) {
 
-                    if(tracker[t].lat != 0 || tracker[t].lng != 0)
-                    trazabilidad.push({lat: tracker[t].lat, lng: tracker[t].lng});
+                    if(tracker[t].lat != 0 || tracker[t].lng != 0){
+
+                      if(t == 0){
+                        trazabilidad.push({lat: tracker[t].lat, lng: tracker[t].lng});
+                        inicio.push({lat: tracker[t].lat, lng: tracker[t].lng});
+                      }
+                      else {
+                        let data;
+                        var R = 6372.795477598;
+                      
+                        var latA = trazabilidad[trazabilidad.length-1].lat;
+                        var lngA = trazabilidad[trazabilidad.length-1].lng;
+                        
+                        var latB = tracker[t].lat;
+                        var lngB = tracker[t].lng;
+                        data = R * Math.acos( ( Math.sin(latA) * Math.sin(latB) ) + ( Math.cos(latA) * Math.cos(latB) * Math.cos(lngA-lngB) ) );
+                        data = (data * Math.PI)/180;
+
+
+                        if(data > 1){
+                          trazabilidad.push({lat: tracker[t].lat, lng: tracker[t].lng});
+                        }
+
+                        if(t == tracker.length-1){
+                          trazabilidad.push({lat: tracker[t].lat, lng: tracker[t].lng});
+                          fin.push({lat: tracker[t].lat, lng: tracker[t].lng});
+                        
+                        }                        
+                      }
+
+
                     
-                    if(t >= tracker.length - 60){
-                        wifi.push(tracker[t].wifi);
-                        battery.push(tracker[t].bat);
-                        fechas.push(tracker[t].time);
+                    
+                      if(t >= tracker.length - 60){
+                          wifi.push(tracker[t].wifi);
+                          battery.push(tracker[t].bat);
+                          fechas.push(tracker[t].time);
 
-                        speed.push({x: tracker[t].time, y: tracker[t].speed});
+                          speed.push({x: tracker[t].time, y: tracker[t].speed});
 
+                      }
                     }
                     
                 }
-                console.log(trazabilidad);
 
                 map.setCenter({lng: tracker[0].lng, lat: tracker[0].lat}, 2);
                 const flightPath = new google.maps.Polyline({
