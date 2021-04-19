@@ -910,6 +910,12 @@ router.post('/gps_multiple_send', (req, res) => {
     res.status(401).json({msg: "error "});
   }
 });
+
+router.post('/gps_send2', async (req, res) => {  
+  console.log(req.body);
+  res.json({msg: 'wena qlo!'})
+  }
+);
 router.post('/gps_send', async (req, res) => {
   const {latitude, name_device, longitude, battery, speed, grade, wifi, status_gps, time} = req.body;
   const data_gps = {
