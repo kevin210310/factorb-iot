@@ -884,7 +884,7 @@ router.post('/gps_multiple_send', (req, res) => {
           lng: data_nodemcu[i].longitude,
           bat: data_nodemcu[i].battery,
           wifi: data_nodemcu[i].wifi,
-          grade: data_nodemcu[i].degree,
+          grade: data_nodemcu[i].grade,
           speed: data_nodemcu[i].speed,
           status_gps: data_nodemcu[i].status_gps,
           time: data_nodemcu[i].time 
