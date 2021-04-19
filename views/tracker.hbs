@@ -536,7 +536,7 @@
                 lat: 40.76, 
                 lng: -73.983 
             },
-            zoom: 8,
+            zoom: 18,
             mapTypeId: "satellite",
             mapTypeControl: true,
             mapTypeControlOptions: {
@@ -572,6 +572,7 @@
         }
     
     }).then((res) => {
+        console.log(res.data);
 
         document.getElementById('nombre_machine').innerHTML = res.data.data2[0].nombre;
         document.getElementById('nombre_device').innerHTML = res.data.data[0].name;
@@ -588,7 +589,7 @@
                 name: res.data.data[0].name
             }
             }).then((res) =>{
-                console.log(res.data.data[0].data.length);
+                console.log(res.data);
                 let inicio = [];
                 let fin = [];
                 let trazabilidad = [];
@@ -628,7 +629,9 @@
                           trazabilidad.push({lat: tracker[t].lat, lng: tracker[t].lng});
                           fin.push({lat: tracker[t].lat, lng: tracker[t].lng});
                         
-                        }                        
+                        }   
+
+                          console.log(trazabilidad);                     
                       }
 
 
