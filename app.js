@@ -23,7 +23,7 @@ const bcrypt = require('bcrypt');
 const pool = require('./connection/database');
 
 var app = express();
-
+require('events').EventEmitter.prototype._maxListeners = 0;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');

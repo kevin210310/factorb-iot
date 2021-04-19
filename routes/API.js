@@ -862,7 +862,7 @@ router.post('/find_machinestracker', async (req, res) =>{
 
                 console.log(id_device2);
                 await devices.where({_id: id_device2}).find( function(err, response2) {
-                    console.log(response2);
+                  
                     res.json({data: response2, data2: response, status: true});
                 });
                 
@@ -966,23 +966,30 @@ router.post('/find_datadevicetracker', async (req, res) =>{
   const { name } = req.body;
 
   
-  await devices.where(
-      {
-        name: name
-      }).find( 
-        async function(err, response) {
-      if(err){
-          res.status(400).json({msg: "error en la peticion", status: false});
-      }
-      else {
-          if(response == null){
-              res.json({ msg: "no hay maquinas asociadas", status: false });
-          }
-          else {
-              res.json({data: response, status: true});
-          } 
-      }
-  }).sort({'data.time': 1});
+  await 
+  devices
+  .find( 
+    { 
+      name: name
+    },{
+      data: { $slice: -100 }
+    }
+  ).sort(
+    {
+      time: 1
+    }
+  ).exec(async function(err, response) {
+    if(err){
+        res.status(400).json({msg: "error en la peticion", status: false});
+    }
+    else {
+        if(response == null){
+            res.json({ msg: "no hay maquinas asociadas", status: false });
+        }
+        else {
+            res.json({data: response, status: true});
+        } 
+    }});
 
 });
 module.exports = router;
