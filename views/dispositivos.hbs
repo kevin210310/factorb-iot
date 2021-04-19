@@ -55,7 +55,7 @@
     }).then((res) => {
         if(res.data.status) {
             console.log(res.data.data[0].dispositivos);
-
+            notification("success", `${res.data.data[0].dispositivos.length} dispositivos recuperados`);
             let card_devices = "";
             if(res.data.data[0].dispositivos.length > 0) {
 
@@ -89,13 +89,9 @@
                                       <button class="btn btn-danger" onclick="datadevice('${res.data.data[0].dispositivos[d].id_device}', '{{id_machine}}')">Ver datos en tiempo real</button>
                                   </div>
                     
-                </div>
-            </div>
-        </div>
-                  
-                  
-                  
-                  
+                              </div>
+                          </div>
+                      </div>
                   `;
               }
 

@@ -41,6 +41,7 @@
         let maquinas = res.data.data;
         let cards_maquinas = [];
 
+        notification("success", `${maquinas.length} maquinas recuperadas`);
 
         if(maquinas.length == 0) {
             notification("error", "0 dispositivos asociados");
@@ -62,7 +63,7 @@
                 }
 
                 console.log(maquinas[i].dispositivos.length);
-
+                
                 cards_maquinas = cards_maquinas + `
                     <div class="col-12 col-sm-6 h-100">
                         <div class="card mb-3">

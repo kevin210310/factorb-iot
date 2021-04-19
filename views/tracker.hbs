@@ -1,13 +1,34 @@
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <style type="text/css">
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        min-height: 300px;
+        min-height: 350px;
         width: 100%;
       }
 
     </style>
+    <style>
+              .contenedor {
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  grid-template-rows: auto;
+                  justify-content: center;
+        
+                  justify-items: center;
+              }
+              .contenedor-1 {
+                
+                  grid-row: 1;
+                  grid-column: 1;
+              }
+              .contenedor-2 {
+                
+                  grid-row: 1;
+                  grid-column: 2;
+              }
+          </style>
     <script>
       // This example creates a 2-pixel-wide red polyline showing the path of
       // the first trans-Pacific flight between Oakland, CA, and Brisbane,
@@ -29,57 +50,107 @@
         </div>
     </div>
     
-    <div class="row px-3 my-3 g-3">
-
+    <div class="row px-3 my-3 g-2">
         <!-- DATOS PERSONALES DISPOSITIVO -->
-        <div class="col-12 col-sm-4" >
-            <div class="card" style="height: 300px;">
-                <h5 class="card-header">Dispositivo GPS</h5>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-6">
-                            <h4 class="card-title" >Maquina asociada :</h4>
-                            <h4 class="card-title" >Nombre Dispositivo :</h4>
-                            
-                        </div>
-                        <div class="col-6">
-                            <h4 class="card-title" id="nombre_machine" ></h4>
-                            <h4 class="card-title" id="nombre_device" ></h4>
-                            
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <h4 class="card-title" >Descripción:</h4>
-                            <h4 class="card-title" >Ultima Actualización :</h4>
-                        </div>
-                        <div class="col-6">
-                            <h5 class="card-text" id="descripcion" ></h5>
-                            <h5 class="card-text"><small class="text-muted">2021-04-08 17:05:23</small></h5>
-                        </div>
-                    </div>
-                    <div class="d-grid gap-2 mt-2">
-                        <button class="btn btn-primary" type="button">Ver datos dinamicos</button>
-                        <button class="btn btn-primary" type="button">Ver historicos</button>
-                    </div> 
-                </div>
-            </div>
-        </div>
+        <div class="col-12 col-sm-3 mb-3">
+                          <div class="card bg-dark text-white" >
+                              <img src="/images/machines/pexels-maarten-van-den-heuvel-2676842.jpg" class="card-img" alt="..." >
+                              <div class="card-img-overlay" style="background-color: rgba(0,0,0,0.5);">
+                                  <h5 class="card-title text-center" id="nombre_machine" style="text-transform: uppercase;">maquina</h5>
+                                  <p class="card-title text-center" id="nombre_device" style="text-transform: uppercase;">Dispositivo</p>
+                                  <hr class="mb-4">
+                                  <div class="card-text text-center mb-3" id="descripcion" style="text-transform: uppercase;">Descripcion</div>
+                                  <div class="card-text text-center mb-3"></div>
+                                  <div class="contenedor">
+                                      <div class="contenedor-1">
+                                          <div id="chart-77" class="mx-auto px-auto"></div>
+                                          <div class="card-text text-center">3 ANALOGAS</div>
+                                      </div>
+                                      <div class="contenedor-2">
+                                          <div id="chart-88"></div>
+                                          <div class="card-text text-center">1 DIGITALES</div>
+                                      </div>
+                                  </div>
+                                  <script>
+                                    var options77 = {
+                                        series: [45],
+                                        chart: {
+                                        type: 'radialBar',
+                                        width: 50,
+                                        height: 50,
+                                        sparkline: {
+                                          enabled: true
+                                        }
+                                      },
+                                      dataLabels: {
+                                        enabled: false
+                                      },
+                                      plotOptions: {
+                                        radialBar: {
+                                          hollow: {
+                                            margin: 0,
+                                            size: '50%'
+                                          },
+                                          track: {
+                                            margin: 0
+                                          },
+                                          dataLabels: {
+                                            show: false
+                                          }
+                                        }
+                                      }
+                                      };
+
+                                    var chart77 = new ApexCharts(document.querySelector("#chart-77"), options77);
+                                    chart77.render();
+
+                                    var options88 = {
+                                      series: [45],
+                                      chart: {
+                                      type: 'radialBar',
+                                      width: 50,
+                                      height: 50,
+                                      sparkline: {
+                                        enabled: true
+                                      }
+                                    },
+                                    dataLabels: {
+                                      enabled: false
+                                    },
+                                    plotOptions: {
+                                      radialBar: {
+                                        hollow: {
+                                          margin: 0,
+                                          size: '50%'
+                                        },
+                                        track: {
+                                          margin: 0
+                                        },
+                                        dataLabels: {
+                                          show: false
+                                        }
+                                      }
+                                    }
+                                    };
+
+                                    var chart88 = new ApexCharts(document.querySelector("#chart-88"), options88);
+                                    chart88.render();
+                                  </script>
+                                  <p class="card-text text-center mt-2"><small class="card-text " >Ultima actualización <b id="timeNow"></b></small></p>
+                                  <div class="text-center mt-4">
+                                      <button class="btn btn-danger" type="button" disabled>Ver datos dinamicos</button>
+                                      <button class="btn btn-danger" type="button" disabled>Ver historicos</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+        
 
         <!-- MAPA GOOGLE -->
-        <div class="col-12 col-sm-8" style="height: 300px;">
+        <div class="col-12 col-sm-9 rounded shadpw" style="height: 350px;">
             <div class="card p-0">
                 <div class="card-body p-0">
                     <div id="map"></div>
-                </div>
-            </div>            
-        </div>
-
-        <!-- MAPA LEAFLET -->
-        <div class="col-12 col-sm-8" style="height: 300px;">
-            <div class="card p-0">
-                <div class="card-body p-0">
-                    <div id="map-leaflet"></div>
                 </div>
             </div>            
         </div>
@@ -94,14 +165,6 @@
     <div class="col-12 col-sm-6" >
         <div class="card" style="min-height: 300px;">
             <h5 class="card-header">Grafico Velocidad <small class="text-muted float-end">ultimos 10 minutos</small></h5>
-            <div class="card-body">
-                <div id="chart-temp"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-sm-3">
-        <div class="card" style="min-height: 300px;">
-            <h5 class="card-header">Bateria</h5>
             <div class="card-body">
                 <div id="chart-temp"></div>
             </div>
@@ -178,103 +241,104 @@
                 name: res.data.data[0].name
             }
             }).then((res) =>{
-               
-                let inicio = [];
-                let fin = [];
-                let trazabilidad = [];
-                let trazabilidad2 = [];
-                let wifi = [];
-                let battery = [];
-                let fechas = [];
-                let tracker = res.data.data[0].data;
-                let speed = [];
-                
 
-                for(let t = 0 ; t < tracker.length ; t ++) {
-                    console.log(tracker[t].time)
-                    if(tracker[t].lat != 0 || tracker[t].lng != 0){
-                      trazabilidad2.push({lat: tracker[t].lat, lng: tracker[t].lng, time: new Date(tracker[t].time) });
-                      if(t == 0){
-                        trazabilidad.push({lat: tracker[t].lat, lng: tracker[t].lng});
-                        inicio.push({lat: tracker[t].lat, lng: tracker[t].lng});
+                
+                let datos = res.data.data[0].data;
+                let info = [];
+                let trazar = [];
+                let data_wifi = [];
+                let data_battery = [];
+                let data_fechas = [];
+                let data_speed = [];
+
+                for(let d = 0 ; d < datos.length ; d ++) {
+                    info.push(
+                      {
+                        lat: datos[d].lat, 
+                        lng: datos[d].lng,
+                        bat: datos[d].bat,
+                        speed: datos[d].speed,
+                        wifi: datos[d].wifi,
+                        grade: datos[d].grade,
+                        time: new Date(datos[d].time)
                       }
-                      else {
+                    );
+                }
+
+                //ordenar datos por tiempo de recepcion
+                let info_ordenado = info.sort((a, b) => a.time - b.time);
+                console.log(info_ordenado);
+
+
+                document.getElementById('timeNow').innerText = moment(info_ordenado[info_ordenado.length-1].time).fromNow();
+
+                for(let o = 0 ; o < info_ordenado.length ; o ++) {
+                  if(info_ordenado[o].lat != 0 || info_ordenado[o].lng != 0) {
+
+                      if(o > 1){
                         let data;
                         var R = 6372.795477598;
-                      
-                        var latA = trazabilidad[trazabilidad.length-1].lat;
-                        var lngA = trazabilidad[trazabilidad.length-1].lng;
                         
-                        var latB = tracker[t].lat;
-                        var lngB = tracker[t].lng;
+                        var latA = trazar[trazar.length-1].lat;
+                        var lngA = trazar[trazar.length-1].lng;
+                          
+                        var latB = info_ordenado[o].lat;
+                        var lngB = info_ordenado[o].lng;
                         data = R * Math.acos( ( Math.sin(latA) * Math.sin(latB) ) + ( Math.cos(latA) * Math.cos(latB) * Math.cos(lngA-lngB) ) );
-                        data = (data * Math.PI)/180;
+                        data = ((data * Math.PI)/180) * 1000;
 
-                        trazabilidad.push({lat: tracker[t].lat, lng: tracker[t].lng});
+                        console.log(data, " metros");
 
-                        /*if(data > 1){
-                          trazabilidad.push({lat: tracker[t].lat, lng: tracker[t].lng});
+                        // puntos entre dos metros
+                        if(data > 2) {
+                          trazar.push({
+                              lat: info_ordenado[o].lat, 
+                              lng: info_ordenado[o].lng
+                          });
+
                         }
 
-                        if(t == tracker.length-1){
-                          trazabilidad.push({lat: tracker[t].lat, lng: tracker[t].lng});
-                          fin.push({lat: tracker[t].lat, lng: tracker[t].lng});
-                        
-                        }   */
-
-                                             
                       }
-
-
-                    
-                    
-                      if(t >= tracker.length - 60){
-                          wifi.push(tracker[t].wifi);
-                          battery.push(tracker[t].bat);
-                          fechas.push(tracker[t].time);
-
-                          speed.push({x: tracker[t].time, y: tracker[t].speed});
+                      else {
+                        trazar.push({
+                            lat: info_ordenado[o].lat, 
+                            lng: info_ordenado[o].lng
+                        });
 
                       }
-                    }
-                    
+                      
+
+                      
+
+
+                      if(o >= info_ordenado.length - 60){
+                          data_wifi.push(info_ordenado[o].wifi);
+                          data_battery.push(info_ordenado[o].bat);
+                          data_fechas.push(moment(info_ordenado[o].time).subtract(4, 'hours').format('YYYY-MM-DD HH:mm:ss'));
+                          data_speed.push({x: (moment(info_ordenado[o].time).subtract(4, 'hours').format('YYYY-MM-DD HH:mm:ss')), y: info_ordenado[o].speed});
+
+                      }
+                  }
                 }
 
-                map.setCenter({lng: tracker[0].lng, lat: tracker[0].lat}, 2);
-                let ordenado = trazabilidad2.sort((a, b) => a.time - b.time)
-                console.log(ordenado)
-                let a = []
-
-                for(let t = 0 ; t < ordenado.length ; t ++) {
-                  a.push({lat: ordenado[t].lat, lng: ordenado[t].lng})
-
-                  if(ordenado[t] == 0){
-
-                    let inicioTraza = { lat: ordenado[0].lat, lng: ordenado[0].lng };
               
-                    let infowindow = new google.maps.InfoWindow();
-                    infowindow.setContent("Inicio");
-                    let marker = new google.maps.Marker({ map, position: inicioTraza });
-                    marker.addListener("click", () => {
-                        infowindow.open(map, marker);
-                    });
+                //punto incio 
+                new google.maps.Marker({
+                  position: trazar[0],
+                  map,
+                  icon: "/images/start.png",
+                  title: "Punto Inicial",
+                });
 
-                  }
-                  else if(ordenado[t] == ordenado.length-1){
-                    let finTraza = { lat: ordenado[ordenado.length-1].lat, lng: ordenado[ordenado.length-1].lng };
-        
-                    let infowindow = new google.maps.InfoWindow();
-                    infowindow.setContent("Fin");
-                    let marker = new google.maps.Marker({ map, position: finTraza });
-                    marker.addListener("click", () => {
-                        infowindow.open(map, marker);
-                    });
-                    marker.setMap(map);
-                  }
-                }
-
+                //punto fin
+                new google.maps.Marker({
+                  position: trazar[trazar.length-1],
+                  map,
+                  title: "Punto Final",
+                });
+                // incluir traza a mapa
                 const flightPath = new google.maps.Polyline({
-                    path: a,
+                    path: trazar,
                     geodesic: true,
                     strokeColor: "#FF0000",
                     strokeOpacity: 1.0,
@@ -282,16 +346,16 @@
                 });
                 flightPath.setMap(map);
 
-
+                map.setCenter({lng: info_ordenado[info_ordenado.length-1].lng, lat: info_ordenado[info_ordenado.length-1].lat}, 10);    
 
                 // grafico bateria y wifi
                 var options = {
                     series: [{
                         name: 'Señal Wi-Fi [dbm]',
-                        data: wifi
+                        data: data_wifi
                     }, {
-                        name: 'Señal Bateria [V]',
-                        data: battery
+                        name: 'Bateria [V]',
+                        data: data_battery
                     }],
                     chart: {
                         height: 350,
@@ -305,7 +369,7 @@
                     },
                     xaxis: {
                       type: 'datetime',
-                      categories: fechas
+                      categories: data_fechas
                     },
                     tooltip: {
                       x: {
@@ -320,7 +384,7 @@
                 var optionsTemp = {
                     series: [{
                         name: "Velocidad [km/h]",
-                        data: speed           
+                        data: data_speed           
                     }],
                     chart: {
                         type: 'area',
@@ -329,6 +393,7 @@
                           enabled: false
                         }
                     },
+                    legend: {enabled: true},
                     dataLabels: {
                       enabled: false
                     },
@@ -337,6 +402,11 @@
                     },
                     xaxis: {
                       type: 'datetime',
+                    },
+                    tooltip: {
+                      x: {
+                        format: 'dd/MM/yy HH:mm:ss'
+                      },
                     },
                     yaxis: {
                       opposite: true
@@ -349,6 +419,9 @@
                 var chartTemp = new ApexCharts(document.querySelector("#chart-temp"), optionsTemp);
                 chartTemp.render();
 
+
+
+                
                 
             }).catch((err) =>{
                 console.log(err);

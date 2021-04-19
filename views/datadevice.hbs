@@ -41,6 +41,7 @@
         }
     
     }).then((res) => {
+        
 
         var resultados = res.data;
         let chart_apex;
@@ -51,7 +52,7 @@
                 if(resultados.data[0].dispositivos[device].id_device == "{{id_device}}") {
                     
                     console.log(resultados.data[0]._id);
-                    
+                    notification("success", `${res.data.data[0].dispositivos[device].sensores.length} sensores recuperados`);
                     let rele_socket;
                     let sensors_cards = "";
                     let reles_cards = `
