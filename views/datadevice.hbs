@@ -14,334 +14,216 @@
             </nav>
         </div>
     </div>
-    <div class="row m-3 g-2">
-      <div id="chart"></div>
-      <script>
-    var lastDate = 0;
-    var data = [];
-    var TICKINTERVAL = 86400000;
-    let XAXISRANGE = 777600000;
-    console.log(data);
-    data = [
-      {x: "2018-09-19T00:00:00.000Z", y: 52},
-
-    ];
-    /*data = [
-      {x: 1486857600000, y: 74}, 
-      {x: 1486944000000, y: 41},
-      {x: 1487030400000, y: 72},
-      {x: 1487116800000, y: 35},
-      {x: 1487203200000, y: 30},
-      {x: 1487289600000, y: 38},
-      {x: 1487376000000, y: 50},
-      {x: 1487462400000, y: 51},
-      {x: 1487548800000, y: 52},
-      {x: 1487635200000, y: 79},
-      {x: 1487721600000, y: 45},
-      {x: 1487808000000, y: 69},
-      {x: 1487894400000, y: 22},
-      {x: 1487980800000, y: 66},
-      {x: 1488067200000, y: 52},
-      {x: 1488153600000, y: 43},
-      {x: 1488240000000, y: 29},
-      {x: 1488326400000, y: 69},
-      {x: 1488412800000, y: 79}
-    ];*/
-    function getNewSeries(baseval, yrange) {
-        var newDate = baseval + TICKINTERVAL;
-        lastDate = newDate;
-
-        for(var i = 0; i< data.length - 15; i++) {
-            // IMPORTANT
-            // we reset the x and y of the data which is out of drawing area
-            // to prevent memory leaks
-            data[i].x = newDate - XAXISRANGE - TICKINTERVAL;
-            data[i].y = 0
-        }
-
-        data.push({
-            x: newDate,
-            y: Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min
-        })
-
-        console.log(data.length);
-
-    }
-
-    function resetData(){
-        // Alternatively, you can also reset the data at certain intervals to prevent creating a huge series
-        data = data.slice(data.length - 20, data.length);
-    }
-
-    var options = {
-        chart: {
-            height: 350,
-            type: 'area',
-            animations: {
-                enabled: true,
-                easing: 'linear',
-                dynamicAnimation: {
-                    speed: 1000
-                }
-            },
-            toolbar: {
-                show: false
-            },
-            zoom: {
-                enabled: false
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            curve: 'straight'
-        },
-        series: [{
-            data: data
-        }],
-        title: {
-            text: 'Dynamic Updating Chart',
-            align: 'center'
-        },
-        markers: {
-            size: 0
-        },
-        xaxis: {
-            type: 'datetime',
-            range: XAXISRANGE,
-        },
-        yaxis: {
-            max: 100,
-            min: 0
-        },
-        legend: {
-            show: false
-        },
-    };
-
-    var chart = new ApexCharts(
-        document.querySelector("#chart"),
-        options
-    );
-
-    chart.render();
-
-    window.setInterval(function () {
-        getNewSeries(lastDate, {
-            min: 10,
-            max: 90
-        });
-        chart.updateSeries([{
-            data: data
-        }])
-    }, 4000)
-</script>
-    </div>
-    <div class="row m-3 g-2" id="sensors_cards">
+    <div class="row gx-2 m-3" id="sensors_cards">
 
     </div>
 </div>
 
 
-<script>
-    google.charts.load("current", {
-        packages: ["corechart", "line", "gauge"]
-    });
 
+
+
+
+<script>
     axios({ 
         
         method: 'POST',   
         url: '{{url}}/api/find_OneDevice', 
         headers: {
+
             Authorization: "Bearer Token"
+
         }, 
         data: { 
+
             id_machine: "{{id_machine}}",
             id_device: "{{id_device}}"
         }
     
     }).then((res) => {
-        if(res.data.status) {
-            for(let device = 0 ; device < res.data.data[0].dispositivos.length ; device++){
+
+        var resultados = res.data;
+        let chart_apex;
+        if(resultados.status) {
+            
+            for(let device = 0 ; device < resultados.data[0].dispositivos.length ; device++){
                 
-                if(res.data.data[0].dispositivos[device].id_device == "{{id_device}}") {
-                    console.log(res.data.data[0].dispositivos[device].sensores);
+                if(resultados.data[0].dispositivos[device].id_device == "{{id_device}}") {
+                    
+                    console.log(resultados.data[0]._id);
+                    
+                    let rele_socket;
                     let sensors_cards = "";
-                    for(let s = 0 ; s < res.data.data[0].dispositivos[device].sensores.length ; s++){
-                        if(res.data.data[0].dispositivos[device].sensores[s].type == "AI"){
+                    let reles_cards = `
+                      <div class="col-12 shadow rounded" style="background-color: #fff;">
+                          <table class="table table-hover p-5 text-center">
+                              <thead>
+                                  <tr>
+                                      <th scope="col">Nombre</th>
+                                      <th scope="col">Descripción</th>
+                                      <th scope="col">Estado</th>
+                                      <th scope="col">Controles</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                    `;
+                    
+                    for(let s = 0 ; s < resultados.data[0].dispositivos[device].sensores.length ; s++){
+                        
+                        if(resultados.data[0].dispositivos[device].sensores[s].type == "AI"){
+                            
                             sensors_cards += `
-                            <div class="col-12 mb-3 mx-0 px-0 shadow rounded">
-                                <div style="min-width:100%;" id="grafico_${s}"></div>
-                            </div>
+                                <div class="col-12 shadow rounded mb-3" style="background-color: #fff;">
+                                  <div id="chart_${s}" class="my-3"></div>
+                                </div>
                             `;
 
-                            let settings_chart = new Function(`
-        
-                            let data = google.visualization.arrayToDataTable([
-                                ["Year", "${res.data.data[0].dispositivos[device].sensores[s].measurement}"],
-                                [0, 0]
-                            ]);
-                                            
-                                        
-                            let options = {
-                                title: "sensor de ${res.data.data[0].dispositivos[device].sensores[s].variable}",
-                                hAxis: {
-                                    title: ""
-                                },
-                                vAxis: {
-                                    title: "${res.data.data[0].dispositivos[device].sensores[s].variable}"
-                                }
-                            };
-                        
-                            // draw chart on load
-                            let chart = new google.visualization.LineChart(
-                                document.getElementById("grafico_${s}")
-                            );
-                            
-                            chart.draw(data, options);
-                                            
-                            let index = 0;
-                            socket.on("${res.data.data[0].dispositivos[device].sensores[s].name}", sensores => {
-                              
-                                data.addRow([index, sensores.${res.data.data[0].dispositivos[device].sensores[s].id_variable}]);
-                                chart.draw(data, options);
-                                index++;
-                            });           
-                        `);
+                            chart_apex = new Function(`
 
-                        google.charts.setOnLoadCallback(settings_chart);
-                           
+                                let data = [];
+                    
+                                let options = {
+                                    chart: {
+                                        height: 350,
+                                        type: 'area',
+                                        animations: {
+                                            enabled: true,
+                                            easing: 'linear',
+                                            dynamicAnimation: {
+                                                speed: 500
+                                            }
+                                        },
+                                        toolbar: {
+                                            show: false
+                                        },
+                                        zoom: {
+                                            enabled: false
+                                        }
+                                    },
+                                    tooltip: {
+                                        
+                                    },
+                                    dataLabels: {
+                                        enabled: true
+                                    },
+                                    stroke: {
+                                        curve: 'straight'
+                                    },
+                                    series: [{
+                                        data: data
+                                    }],
+                                    title: {
+                                        text: 'sensor de ${resultados.data[0].dispositivos[device].sensores[s].variable}',
+                                        align: 'left'
+                                    },
+                                    markers: {
+                                        size: 0
+                                    },
+                                    xaxis: {
+                                        labels: {
+                                            format: 'HH:mm:ss'
+                                        }
+                                        
+                                    },
+                                    yaxis: {
+                                        max: 100,
+                                        min: 0
+                                    },
+                                    legend: {
+                                        show: true
+                                    },
+                                    colors: ['#FF4D0E'],
+                                };
+
+                                let chart = new ApexCharts(
+                                    document.querySelector("#chart_${s}"),
+                                    options
+                                );
+
+                                chart.render();
+
+                                Date.prototype.addHours= function(h){
+                                  this.setHours(this.getHours()+h);
+                                  return this;
+                                }
+
+                                socket.on("${res.data.data[0].dispositivos[device].sensores[s].name}", sensores => {
+                                    
+                                    
+                                    if(data.length > 10) {
+                                        data.shift();
+                                    }
+                                    data.push({x: sensores.created_at_origin, y: sensores.${res.data.data[0].dispositivos[device].sensores[s].id_variable}});
+                                  
+                                    chart.updateSeries([{
+                                            data: data
+                                    }])
+                                });      
+                            `);
                         }
                         else if(res.data.data[0].dispositivos[device].sensores[s].type == "DO"){
-                            sensors_cards += `
-                            <div class="col-3 rounded shadow p-5" style="background-color: rgb(255,255,255);">
-                                <button class="btn btn-success" onclick="send_command('${res.data.data[0].dispositivos[device].name}', 'rel1')">ON</button>
-                                <button class="btn btn-danger" onclick="send_command('${res.data.data[0].dispositivos[device].name}', 'rel0')">OFF</button>
-                                <p class="float-end text-muted">${res.data.data[0].dispositivos[device].sensores[s].name}</p>
-                            </div>
+                            reles_cards += `
+                                <tr>
+                                    <th scope="row">${res.data.data[0].dispositivos[device].sensores[s].name}</th>
+                                    <td>${res.data.data[0].dispositivos[device].sensores[s].descripcion}</td>
+                                    <td id="${res.data.data[0].dispositivos[device].sensores[s].variable}"> -- </td>
+                                    <td>
+                                        <button class="btn btn-success" onclick="send_command('${res.data.data[0].dispositivos[device].name}', 'rel1')">ON</button>
+                                        <button class="btn btn-danger" onclick="send_command('${res.data.data[0].dispositivos[device].name}', 'rel0')">OFF</button>
+                                    </td>
+                                </tr>
                             `;
+                          
+                            rele_socket = new Function(`
+                                socket.on("${res.data.data[0].dispositivos[device].name}", sensores => {
+                                    
+                                    if(sensores.${res.data.data[0].dispositivos[device].sensores[s].variable} == 0) {
+                                        document.getElementById('${res.data.data[0].dispositivos[device].sensores[s].variable}').innerHTML = "<span class='badge rounded-pill bg-danger'>Desactivado</span>";
+                                    }
+                                    else if(sensores.${res.data.data[0].dispositivos[device].sensores[s].variable} == 1){
+                                        document.getElementById('${res.data.data[0].dispositivos[device].sensores[s].variable}').innerHTML = "<span class='badge rounded-pill bg-success'>Activado</span>";
+                                    }
+                                });      
+                            `);
+
+                            
                         }
                         else if(res.data.data[0].dispositivos[device].sensores[s].type == "DI"){
                             sensors_cards += `<div class="col-12"> ENTRADA DIGITAL </div>`;
                         }
+
+
+
+
+                        
                     }
 
-                    document.getElementById('sensors_cards').innerHTML = sensors_cards;
-                     let settings_chart = new Function(`
-        
-                             var lastDate = 0;
-  var data = []
-  var TICKINTERVAL = 86400000
-  let XAXISRANGE = 777600000
-  function getDayWiseTimeSeries(baseval, count, yrange) {
-    var i = 0;
-    while (i < count) {
-      var x = baseval;
-      var y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-  
-      data.push({
-        x, y
-      });
-      lastDate = baseval
-      baseval += TICKINTERVAL;
-      i++;
-    }
-  }
-  
-  getDayWiseTimeSeries(new Date('11 Feb 2017 GMT').getTime(), 10, {
-    min: 10,
-    max: 90
-  })
-  
-  function getNewSeries(baseval, yrange) {
-    var newDate = baseval + TICKINTERVAL;
-    lastDate = newDate
-  
-    for(var i = 0; i< data.length - 10; i++) {
-      // IMPORTANT
-      // we reset the x and y of the data which is out of drawing area
-      // to prevent memory leaks
-      data[i].x = newDate - XAXISRANGE - TICKINTERVAL
-      data[i].y = 0
-    }
-  
-    data.push({
-      x: newDate,
-      y: Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min
-    })
-  }
-  
-  function resetData(){
-    // Alternatively, you can also reset the data at certain intervals to prevent creating a huge series 
-    data = data.slice(data.length - 10, data.length);
-  }
-  
-
-
-
-    var options = {
-          series: [{
-          data: data.slice()
-        }],
-          chart: {
-          id: 'realtime',
-          height: 350,
-          type: 'line',
-          animations: {
-            enabled: true,
-            easing: 'linear',
-            dynamicAnimation: {
-              speed: 1000
-            }
-          },
-          toolbar: {
-            show: false
-          },
-          zoom: {
-            enabled: false
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'smooth'
-        },
-        title: {
-          text: 'Dynamic Updating Chart',
-          align: 'left'
-        },
-        markers: {
-          size: 0
-        },
-        xaxis: {
-          type: 'datetime',
-          range: XAXISRANGE,
-        },
-        yaxis: {
-          max: 100
-        },
-        legend: {
-          show: false
-        },
-        };
-
-        var chart = new ApexCharts(document.querySelector("#chart-rt"), options);
-        chart.render();
-      
-      
-        window.setInterval(function () {
-        getNewSeries(lastDate, {
-          min: 10,
-          max: 90
-        })
-      
-        chart.updateSeries([{
-          data: data
-        }])
-      }, 1000);
-                `);
+                   
+                    reles_cards += `
+                                    <tr>
+                                        <th scope="row">Señal Wi-fi</th>
+                                        <td> -- </td>
+                                        <td id="k">
+                                            <span class='badge rounded-pill text-dark bg-warning'>Regular</span>
+                                        </td>
+                                        <td> -78 dbm  [VALOR ESTATICO]</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Estado Bateria</th>
+                                        <td> -- </td>
+                                        <td id="k">
+                                            <span class='badge rounded-pill bg-danger'>Descargandose</span>
+                                        </td>
+                                        <td> 73%  [VALOR ESTATICO]</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    document.getElementById('sensors_cards').innerHTML = sensors_cards+reles_cards;
+                    chart_apex();
+                    rele_socket();
+                     
                 }
             }
         }
@@ -382,7 +264,3 @@
       
     
 </script>
-
-{{id_device}}
-
-{{id_machine}}
