@@ -972,7 +972,7 @@ router.post('/find_datadevicetracker', async (req, res) =>{
     { 
       name: name
     },{
-      data: { $slice: -100 }
+      data: { $slice: -1000 }
     }
   ).sort(
     {
