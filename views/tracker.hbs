@@ -290,7 +290,8 @@
                         console.log(data, " metros");
 
                         // puntos entre dos metros
-                        if(data > 3) {
+              
+                        if(data > 10 ) {
                           trazar.push({
                               lat: info_ordenado[o].lat, 
                               lng: info_ordenado[o].lng
@@ -311,7 +312,7 @@
                       
 
 
-                      if(o >= info_ordenado.length - 60){
+                      if(o >= info_ordenado.length - 500){
                           data_wifi.push(info_ordenado[o].wifi);
                           data_battery.push(info_ordenado[o].bat);
                           data_fechas.push(moment(info_ordenado[o].time).subtract(4, 'hours').format('YYYY-MM-DD HH:mm:ss'));
