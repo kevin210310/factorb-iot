@@ -28,6 +28,9 @@ var server = net.createServer(function(socket) {
 	socket.on('data', function(data){
         let data2 = Buffer.from(data, 'base64').toString('ascii');
 		console.log(data2);
+		var string = data2.split(",");
+      
+    	console.log(string);
 		//textChunk = data.toString('base64');
 		//console.log(textChunk);
 		socket.write(textChunk);
