@@ -29,10 +29,14 @@ var server = net.createServer(function(socket) {
         let data2 = Buffer.from(data, 'base64').toString('ascii');
 		console.log(data2);
 		var string = data2.split(",");
-      
-    	console.log(string);
-		//textChunk = data.toString('base64');
-		//console.log(textChunk);
+		if(string[0] == "+BUFF:GTFRI") {
+			
+			console.log("NOMBRE: ", string[2]);
+			console.log("LAT: ", string[10]);
+			console.log("LNG: ", string[9]);
+
+		}
+    	
 		socket.write(textChunk);
 	});
 });
