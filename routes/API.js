@@ -937,8 +937,7 @@ router.post('/gps_multiple_send', (req, res) => {
           patente: "KAU123"
       });
     }
-
-    console.log(data);
+    send_repeat_multiple(datos_f);
     devices.updateMany(
       {name: name_device },
       {$push: {'data': data}},
@@ -948,7 +947,7 @@ router.post('/gps_multiple_send', (req, res) => {
         }
         else {
           console.log(response3);
-          send_repeat_multiple(datos_f);
+          
           res.json({msg: "ok", data: response3});
           
         }
