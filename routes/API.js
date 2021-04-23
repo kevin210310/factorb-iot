@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const iot = require('@google-cloud/iot');
 const passport = require('passport');
-
 const { verify } = require('../lib/verify_user');
 
 const bcrypt = require('bcrypt');
@@ -15,6 +14,38 @@ const multer = require('multer');
 const upload = multer({dest: './archivos'});
 const machines = require('../config/mongoose/maquinas');
 const devices = require('../config/mongoose/device');
+const https = require('https');
+
+async function send_repeat(datos_f) {
+  const data = JSON.stringify(datos_f);
+  
+  const options = {
+    hostname: 'traklok.kausana.cl',
+    port: 443,
+    method: 'POST',
+    path: '/api/restapp/trip_data/',
+    headers: {
+      'Content-Type': 'application/json',
+      'Username': "gpsplq1",
+      'Password': "p4ss.gps1"
+    }
+  }
+  
+  const req = https.request(options, res => {
+    console.log(`statusCode: ${res.statusCode}`)
+  
+    res.on('data', d => {
+      process.stdout.write(d)
+    })
+  })
+  
+  req.on('error', error => {
+    console.error(error)
+  })
+  
+  req.write(data)
+  req.end()
+}
 
 router.post('/historicos', async (req, res) => {
   const { fecha_desde, fecha_hasta} = req.body;
@@ -889,6 +920,17 @@ router.post('/gps_multiple_send', (req, res) => {
           status_gps: data_nodemcu[i].status_gps,
           time: data_nodemcu[i].time 
       });
+
+      let datos_f = {
+        longitud: data_nodemcu[i].longitude,
+        latitud: data_nodemcu[i].latitude,
+        fecha: data_nodemcu[i].time,
+        direccion: data_nodemcu[i].grade,
+        ignicion: 0, 
+        velocidad: data_nodemcu[i].speed,
+        patente: "KAU123"
+    }
+      send_repeat(datos_f);
     }
 
     console.log(data);
@@ -938,6 +980,16 @@ router.post('/gps_send', async (req, res) => {
       }
       else {
         console.log(response3);
+        let datos_fu = {
+          longitud: longitude,
+          latitud: latitude,
+          fecha: time,
+          direccion: grade,
+          ignicion: 0, 
+          velocidad: speed,
+          patente: "KAU123"
+        }
+        send_repeat(datos_fu);
         res.json({msg: "ok", data: response3});
       }
     }
