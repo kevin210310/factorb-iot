@@ -1,5 +1,5 @@
 require('./config/mongoose/index');
-
+console.log(Date.UTC(Date.now()));
 /* Or use this example tcp client written in node.js.  (Originated with 
 example code from 
 http://www.hacksparrow.com/tcp-socket-programming-in-node-js.html.) */
