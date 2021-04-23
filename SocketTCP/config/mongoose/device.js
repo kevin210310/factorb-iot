@@ -14,6 +14,7 @@ const dataSchema = new Schema({
 
 const deviceSchema = new Schema({
     name: {type: String},
+    imei: {type: Number},
     data: [dataSchema]
 });
 
