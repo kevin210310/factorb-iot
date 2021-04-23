@@ -15,7 +15,12 @@ const upload = multer({dest: './archivos'});
 const machines = require('../config/mongoose/maquinas');
 const devices = require('../config/mongoose/device');
 const https = require('https');
-
+async function send_repeat_multiple(datos_f) {
+  
+  for(let i = 0 ; i < datos_f.length ; i ++){
+    send_repeat(datos_f[i]);
+  }
+}
 async function send_repeat(datos_f) {
   const data = JSON.stringify(datos_f);
   
@@ -909,6 +914,7 @@ router.post('/gps_multiple_send', (req, res) => {
     let data_nodemcu = req.body.data;
     let name_device = req.body.name_device;
     let data = [];
+    let datos_f = [];
     for(let i = 0 ; i < data_nodemcu.length-1 ; i ++){
       data.push({
           lat: data_nodemcu[i].latitude,
@@ -921,16 +927,15 @@ router.post('/gps_multiple_send', (req, res) => {
           time: data_nodemcu[i].time 
       });
 
-      let datos_f = {
-        longitud: data_nodemcu[i].longitude,
-        latitud: data_nodemcu[i].latitude,
-        fecha: data_nodemcu[i].time,
-        direccion: data_nodemcu[i].grade,
-        ignicion: 0, 
-        velocidad: data_nodemcu[i].speed,
-        patente: "KAU123"
-    }
-      send_repeat(datos_f);
+      datos_f.push({
+          longitud: data_nodemcu[i].longitude,
+          latitud: data_nodemcu[i].latitude,
+          fecha: data_nodemcu[i].time,
+          direccion: data_nodemcu[i].grade,
+          ignicion: 0, 
+          velocidad: data_nodemcu[i].speed,
+          patente: "KAU123"
+      });
     }
 
     console.log(data);
@@ -943,7 +948,9 @@ router.post('/gps_multiple_send', (req, res) => {
         }
         else {
           console.log(response3);
+          send_repeat_multiple(datos_f);
           res.json({msg: "ok", data: response3});
+          
         }
       }
     );
