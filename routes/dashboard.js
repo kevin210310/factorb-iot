@@ -145,7 +145,7 @@ router.get('/datadevice/:id_device/:id_machine', async (req,res) =>{
 
 
 router.get('/rfid', function(req, res, next) {
-    res.render('rfid', {layout: 'dashboard_template'});
+    res.render('rfid', {layout: 'template_dashboard'});
 });
 
 module.exports = router;

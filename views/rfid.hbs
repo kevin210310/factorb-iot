@@ -1,9 +1,6 @@
 <!-- SCRIPTS NECESARIOS -->
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-<h1>sdfsdf</h1>
-
-<div id="chart" style="height: 300px; width: 300px;">
+<div id="chart" >
 
 </div>
 
@@ -12,7 +9,7 @@
      var options = {
           series: [{
           name: 'Series 1',
-          data: [20, 100, 40, 30, 50, 80, 33],
+          data: [0, 0, 0, 0, 0, 0],
         }],
           chart: {
           height: 350,
@@ -68,4 +65,13 @@
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
+
+
+
+
+
+        chart.updateSeries([{
+          name: 'Sales',
+          data: [1,1,1,1,1,1,1]
+        }])
 </script>
