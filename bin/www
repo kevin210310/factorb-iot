@@ -95,7 +95,7 @@ io.on('connection', socket => {
           
             let obj = JSON.parse(data);
             //console.log(obj);
-            console.log("publicando en el topic: /", message.attributes.deviceId);
+            console.log(message.attributes.deviceId, obj,"  ", moment().format('MMMM Do YYYY, h:mm:ss a'))
             socket.emit(message.attributes.deviceId, obj);
         }
         catch(error) {

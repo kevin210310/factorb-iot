@@ -101,7 +101,7 @@ router.get('/device/:id/:socket_name', async (req, res) => {
 
 
 
-router.get('/d', async (req, res) => {
+router.get('/d', verify, async (req, res) => {
     res.render('dashboard', {
         layout: 'template_dashboard'
     });
@@ -141,6 +141,11 @@ router.get('/datadevice/:id_device/:id_machine', async (req,res) =>{
         id_machine: req.params.id_machine,
         id_device: req.params.id_device
     });
+});
+
+
+router.get('/rfid', function(req, res, next) {
+    res.render('rfid', {layout: 'dashboard_template'});
 });
 
 module.exports = router;

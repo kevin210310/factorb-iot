@@ -976,7 +976,7 @@ router.post('/gps_send', async (req, res) => {
     status_gps: status_gps,
     time: time
   };
-
+  
   devices.updateOne(
     {name: name_device },
     {$push: {'data': data_gps}},
@@ -995,7 +995,7 @@ router.post('/gps_send', async (req, res) => {
           velocidad: speed,
           patente: "KAU123"
         }
-        send_repeat(datos_fu);
+        //send_repeat(datos_fu);
         res.json({msg: "ok", data: response3});
       }
     }
@@ -1030,7 +1030,7 @@ router.post('/find_datadevicetracker', async (req, res) =>{
     { 
       name: name
     },{
-      data: { $slice: -1000 }
+      data: { $slice: -8000 }
     }
   ).sort(
     {

@@ -286,12 +286,13 @@
                         var lngB = info_ordenado[o].lng;
                         data = R * Math.acos( ( Math.sin(latA) * Math.sin(latB) ) + ( Math.cos(latA) * Math.cos(latB) * Math.cos(lngA-lngB) ) );
                         data = ((data * Math.PI)/180) * 1000;
-
+                        console.log(latB, " LAT");
+                        console.log(lngB, " LNG");
                         console.log(data, " metros");
 
                         // puntos entre dos metros
-              
-                        if(data > 10 ) {
+
+                        if(data > 1 && data < 5000) {
                           trazar.push({
                               lat: info_ordenado[o].lat, 
                               lng: info_ordenado[o].lng
@@ -312,13 +313,13 @@
                       
 
 
-                      if(o >= info_ordenado.length - 500){
+                      //if(o >= info_ordenado.length){
                           data_wifi.push(info_ordenado[o].wifi);
                           data_battery.push(info_ordenado[o].bat);
                           data_fechas.push(moment(info_ordenado[o].time).subtract(4, 'hours').format('YYYY-MM-DD HH:mm:ss'));
                           data_speed.push({x: (moment(info_ordenado[o].time).subtract(4, 'hours').format('YYYY-MM-DD HH:mm:ss')), y: info_ordenado[o].speed});
 
-                      }
+                      //}
                   }
                 }
 
