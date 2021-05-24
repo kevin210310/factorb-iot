@@ -67,7 +67,22 @@
         chart.render();
 
         socket.on("rfid", sensores => {
-           console.log(sensores);                         
+           console.log(sensores);
+           let card1 = 0;
+           let card2 = 0;
+
+           if(sensores.rfid == "42-55-77-01"){
+               card1+=1;
+           }
+           else if(sensores.rfid == "41-FD-EC-2E"){
+               card2+=1;
+           }     
+
+           chart.updateSeries([{
+             name: 'Sales',
+             data: [card1, card2, 0, 0, 0, 0, 0]
+           }])
+
         });
 
 
