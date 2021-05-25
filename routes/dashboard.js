@@ -6,7 +6,7 @@ const { verify } = require('../lib/verify_user');
 
 
 //dashboard
-router.get('/', verify, (req, res) => {
+router.get('/', (req, res) => {
     if(req.user.user.rol == "administrador") {
         res.render('dashboard/admin/dashboard_admin', {
             layout: 'dashboard_template', 
@@ -101,7 +101,7 @@ router.get('/device/:id/:socket_name', async (req, res) => {
 
 
 
-router.get('/d', verify, async (req, res) => {
+router.get('/d', async (req, res) => {
     res.render('dashboard', {
         layout: 'template_dashboard'
     });
