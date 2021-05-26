@@ -1,0 +1,107 @@
+<div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
+    <div class="row mt-3 mx-0 mx-md-3">
+        <div class="col-12 rounded py-auto shadow-sm bg-body">
+            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+                <ol class="breadcrumb my-3">
+                    <li class="breadcrumb-item"><a href="/dashboard">INICIO</a></li>
+                    <li class="breadcrumb-item"><a href="/dashboard/usuarios">USUARIOS</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">AGREGAR NUEVO USUARIO</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <style>
+        .form-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+    <div class="row mt-3 mx-0 mx-md-3 px-5 py-5 border" style="background-color: #fff; width: 50em;" id="form-center">
+        <div class="col-12 align-self-center">
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">nombre</label>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">apellidos</label>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">correo electrónico</label>
+            </div>
+        </div>
+        <div class="form-floating mb-3">
+            <select class="form-select" id="floatingSelect" aria-label="Area ">
+                <option selected>seleccione un área</option>
+                <option value="tecnica">Técnica</option>
+                <option value="ingenieria">Ingeniería</option>
+                <option value="gerencia">Gerencia</option>
+                <option value="prevencion">Prevención</option>
+                <option value="mantenimiento">Mantenimiento</option>
+            </select>
+            <label for="floatingSelect">Rol del Usuario</label>
+        </div>
+        <div class="col-12">
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="nombre_usuario" placeholder="name@example.com">
+                <label for="floatingInput">contraseña</label>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">confirmar contraseña</label>
+            </div>
+        </div>
+
+        <div class="d-grid gap-2" id="crear_usuario">
+            <button class="btn btn-primary btn-lg" type="button" onclick="crear_usuario()" >Crear perfil de usuario</button>
+        </div>
+        
+<!--<div class="form-floating">
+  <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+  <label for="floatingPassword">Password</label>
+</div>-->
+    </div>
+</div>
+
+
+<script>
+    function crear_usuario(){
+        let boton = document.getElementById('crear_usuario');
+        boton.innerHTML = `
+            <button class="btn btn-primary btn-lg" type="button" disabled>
+                <div class="spinner-border pr-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                Creando perfil de usuario
+            </button>`;
+        
+        let nombre = document.getElementById('nombre_usuario');
+
+        let apellidos = document.getElementById('crear_usuario').value;
+        let correo = document.getElementById('crear_usuario').value;
+        let rol = document.getElementById('crear_usuario').value;
+        let password = document.getElementById('crear_usuario').value;
+        let passwordConfirm = document.getElementById('crear_usuario').value;
+
+
+        if(nombre.value == ""){
+            nombre.addClass
+
+ //is-invalid
+        } else {
+ //is-valid
+        }
+
+
+
+            
+    }
+</script>

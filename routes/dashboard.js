@@ -6,27 +6,91 @@ const { verify } = require('../lib/verify_user');
 
 
 //dashboard
-router.get('/', (req, res) => {
+router.get('/', verify, (req, res) => {
+
     if(req.user.user.rol == "administrador") {
-        res.render('dashboard/admin/dashboard_admin', {
-            layout: 'dashboard_template', 
+
+        res.render('dashboard', {
+            layout: 'template_dashboard', 
             value: false, 
             nombre: req.user.user.nombre,
             rol: req.user.user.rol,
+            permisos: {ingenieria: true, prevencion: true, tecnico: true, gerencia: true},
             url: process.env.URL
         });
-    }
-    else if(req.user.user.rol == "cliente iot") {
-        res.render('dashboard/users/dashboard_users', {
-            layout: 'dashboard_template', 
-            value: false,
+
+    } else if(req.user.user.rol == "ingenieria") {
+
+        res.render('dashboard', {
+            layout: 'template_dashboard', 
+            value: false, 
             nombre: req.user.user.nombre,
             rol: req.user.user.rol,
+            permisos: {ingenieria: true, prevencion: false, tecnico: false, gerencia: false},
             url: process.env.URL
         });
+
+    } else if(req.user.user.rol == "prevencion") {
+
+        res.render('dashboard', {
+            layout: 'template_dashboard', 
+            value: false, 
+            nombre: req.user.user.nombre,
+            rol: req.user.user.rol,
+            permisos: {ingenieria: false, prevencion: true, tecnico: false, gerencia: false},
+            url: process.env.URL
+        });
+
+    } else if(req.user.user.rol == "tecnico") {
+
+        res.render('dashboard', {
+            layout: 'template_dashboard', 
+            value: false, 
+            nombre: req.user.user.nombre,
+            rol: req.user.user.rol,
+            permisos: {ingenieria: false, prevencion: false, tecnico: true, gerencia: false},
+            url: process.env.URL
+        });
+    } else if(req.user.user.rol == "gerencia") {
+
+        res.render('dashboard', {
+            layout: 'template_dashboard', 
+            value: false, 
+            nombre: req.user.user.nombre,
+            rol: req.user.user.rol,
+            permisos: {ingenieria: false, prevencion: false, tecnico: false, gerencia: true},
+            url: process.env.URL
+        });
+    } else {
+        res.render('error');
     }
 });
+//USUARIOS
+router.get('/usuarios', (req, res) => {
 
+    res.render('usuarios/usuarios', {
+        layout: 'template_dashboard', 
+        value: false, 
+        nombre: "estatico",
+        rol: "administrador",
+        permisos: {ingenieria: true, prevencion: true, tecnico: true, gerencia: true},
+        url: process.env.URL
+    });
+
+});
+
+router.get('/usuarios/crear', (req, res) => {
+
+    res.render('usuarios/crear_usuarios', {
+        layout: 'template_dashboard', 
+        value: false, 
+        nombre: "estatico",
+        rol: "administrador",
+        permisos: {ingenieria: true, prevencion: true, tecnico: true, gerencia: true},
+        url: process.env.URL
+    });
+
+});
 
 //users
 router.get('/users', (req, res) => {

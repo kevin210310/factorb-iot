@@ -1,219 +1,345 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="icon" href="/images/favicon.png" type="image/png" sizes="16x16">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BSCADA - FACTORB</title>
 
-    <!-- BOOTSTRAP 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+        <!-- DATATABLES -->
+        <link rel="stylesheet" href="/libs/DataTables/datatables.min.css">
+        <script src="/libs/DataTables/datatables.min.js"></script>
 
-    <!-- FONTAWESOME -->
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-    
-    <!-- GOOGLE FONTS-->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap" rel="stylesheet">
+        <!-- BOOTSTRAP 5 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 
-    <!-- APEXCHARTS.JS-->
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
-    <!-- AXIOS JS-->
-    <script src="/axios/axios.min.js"></script>
-    <!-- BOOTSTRAP 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-    <script src="/jquery/jquery.min.js"></script>
-     <!-- Toasts Js -->
-    <link rel="stylesheet" href="/toastr/toastr.css">
-    <script src="/toastr/toastr.min.js"></script>
-    <script src="/javascripts/notifications.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js" integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4=" crossorigin="anonymous"></script>
-    <script src="/client-socket/socket.io.js"></script>
-    <script>
-        const { username, room } = Qs.parse(location.search, {
-                ignoreQueryPrefix: true
-        });
-            
-        const socket = io();
+        <!-- FONTAWESOME -->
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
         
-        socket.emit('joinRoom', { username: "Hola", rol: "Mundo", room: "alertas-mimbral" });
-    </script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            align-self: top;
-            font-family: 'Oswald', sans-serif;
-        }
+        <!-- GOOGLE FONTS-->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap" rel="stylesheet">
 
-        html, body {
-            width: 100vw;
-            height: 100vh;
-            background-color:rgb(247, 247, 247);
-            overflow-x: auto;
-        }
+        <!-- APEXCHARTS.JS-->
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
+        <!-- AXIOS JS-->
+        <script src="/axios/axios.min.js"></script>
+        <!-- BOOTSTRAP 5 JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+        <script src="/jquery/jquery.min.js"></script>
+        <!-- Toasts Js -->
+        <link rel="stylesheet" href="/toastr/toastr.css">
+        <script src="/toastr/toastr.min.js"></script>
+        <script src="/javascripts/notifications.js"></script>
 
-        .container-nav {
-            display: grid;
-            grid-template-columns: 50px 1fr 1fr;
-            grid-template-rows: 1;
-            width: 100%;
-            align-items: center;
-        }
-
-        .container-nav__button {
-            grid-column: 1;
-            grid-row: 1;
-            margin-left: 1em;
-            justify-self: center;
-            
-        }
-        .container-nav__logo {
-            grid-column: 2;
-            grid-row: 1;
-            margin-left: 2em;
-        }
-        .logo_2 {
-            justify-self: flex-end;
-        }
-        .container-nav__user {
-            grid-column: 3;
-            grid-row: 1;
-            justify-self: flex-end;
-            margin-right: 1em;
-
-            display: grid;
-            grid-template-columns: auto 50px;
-            grid-template-rows: 1fr 1fr;
-
-        }
-
-        .user_rol {
-            grid-column: 1;
-            grid-row: 1;
-            margin: 0px;
-            padding: 0em 1em 0em 0em;
-            font-size: 1em;
-            justify-self: flex-end;
-            align-self: flex-end;
-            font-family: 'Oswald', sans-serif;
-
-        }
-        .user_name {
-            grid-column: 1;
-            grid-row: 2;
-            margin: 0px;
-            padding: 0em 1em 0em 0em;
-            font-size: 1em;
-            justify-self: flex-end;
-            align-self: top;
-            font-family: 'Oswald', sans-serif;
-        }
-        .user_image {
-            grid-column: 2;
-            grid-row: span 2;
-            align-self: center;
-            
-        }
-
-        .sparkline-body {
-            display: grid;
-            grid-template-columns: auto 120px;
-            grid-template-rows: 1fr auto;
-            /*padding: 1em 1em 0em 1em;*/
-        }
-        .sparkline-body__text {
-            grid-column: 1;
-            grid-row: 1;
-            /*padding: 1em;*/
-        }
-        .sparkline-body__icon {
-            grid-column: 2;
-            grid-row: 1;
-            align-self: center;
-            justify-self: center;
-        }
-        .sparkline-body__chart {
-            grid-column: span 2;
-            grid-row: 2;
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-light bg-light shadow py-1 py-md-0" id="navbar-example2">
-        <div class="container-nav">
-            <div class="container-nav__button">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js" integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4=" crossorigin="anonymous"></script>
+        <script src="/client-socket/socket.io.js"></script>
+        <script>
+            const { username, room } = Qs.parse(location.search, {
+                    ignoreQueryPrefix: true
+            });
                 
-                <!-- BOTON MENU DESPLEGABLE-->
-                <i class="fas fa-bars btn btn-transparent" style="font-size: 1.5em;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"></i>
+            const socket = io();
+            
+            socket.emit('joinRoom', { username: "Hola", rol: "Mundo", room: "alertas-mimbral" });
+        </script>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                align-self: top;
+                font-family: 'Oswald', sans-serif;
+            }
 
-                <!-- MENU DESPLEGABLE-->
-                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasExampleLabel">MENU PRINCIPAL</h5>
-                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            html, body {
+                width: 100vw;
+                height: 100vh;
+                background-color:rgb(247, 247, 247);
+                overflow-x: auto;
+            }
+
+            body.dark {
+
+                /**background-color: #979da3;**/
+            }
+
+            body.dark .container-nav {
+                background-color: #242F3A;
+                color: #fff;
+            }
+
+            body.dark #offcanvasExample {
+                background-color: #242F3A;
+            }
+
+            body.dark .texto-iconos {
+                color: #fff;
+            }
+
+            body.dark .iconos {
+                color: #fff;
+            }
+
+            .container-nav {
+                display: grid;
+                grid-template-columns: 50px 1fr 1fr;
+                grid-template-rows: 1;
+                width: 100%;
+                align-items: center;
+            }
+
+            .container-nav__button {
+                grid-column: 1;
+                grid-row: 1;
+                margin-left: 1em;
+                justify-self: center;
+                
+            }
+            .container-nav__logo {
+                grid-column: 2;
+                grid-row: 1;
+                margin-left: 2em;
+            }
+            .logo_2 {
+                justify-self: flex-end;
+            }
+            .container-nav__user {
+                grid-column: 3;
+                grid-row: 1;
+                justify-self: flex-end;
+                margin-right: 1em;
+
+                display: grid;
+                grid-template-columns: auto 50px;
+                grid-template-rows: 1fr 1fr;
+
+            }
+
+            .user_rol {
+                grid-column: 1;
+                grid-row: 1;
+                margin: 0px;
+                padding: 0em 1em 0em 0em;
+                font-size: 1em;
+                justify-self: flex-end;
+                align-self: flex-end;
+                font-family: 'Oswald', sans-serif;
+
+            }
+            .user_name {
+                grid-column: 1;
+                grid-row: 2;
+                margin: 0px;
+                padding: 0em 1em 0em 0em;
+                font-size: 1em;
+                justify-self: flex-end;
+                align-self: top;
+                font-family: 'Oswald', sans-serif;
+            }
+            .user_image {
+                grid-column: 2;
+                grid-row: span 2;
+                align-self: center;
+                
+            }
+
+            .sparkline-body {
+                display: grid;
+                grid-template-columns: auto 120px;
+                grid-template-rows: 1fr auto;
+                /*padding: 1em 1em 0em 1em;*/
+            }
+            .sparkline-body__text {
+                grid-column: 1;
+                grid-row: 1;
+                /*padding: 1em;*/
+            }
+            .sparkline-body__icon {
+                grid-column: 2;
+                grid-row: 1;
+                align-self: center;
+                justify-self: center;
+            }
+            .sparkline-body__chart {
+                grid-column: span 2;
+                grid-row: 2;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-light bg-light shadow py-1 py-md-0" id="navbar-example2">
+            <div class="container-nav">
+                <div class="container-nav__button">
+                    
+                    <!-- BOTON MENU DESPLEGABLE-->
+                    <i class="fas fa-bars btn btn-transparent" style="font-size: 1.5em;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"></i>
+
+                    <!-- MENU DESPLEGABLE-->
+                    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasExampleLabel">MENU PRINCIPAL</h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <div class="list-group list-group-flush" id="list-content">
+                                
+                                <!-- DASHBOARD -->
+                                <a href="/dashboard/d" class="list-group-item list-group-item-action bg-transparent my-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="currentColor" class="bi bi-speedometer iconos" viewBox="0 0 16 16">
+                                        <path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2zM3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"/>
+                                        <path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"/>
+                                    </svg>
+                                    <b class="texto-iconos my-auto" style="font-size: 1.2em; margin-left: 0.8em;"> Tablero Principal</b>
+                                </a>
+
+                                <!-- MAQUINAS -->
+                                <a href="/dashboard/maquinas" class="list-group-item list-group-item-action bg-transparent my-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="currentColor" class="bi bi-tools mr-3 iconos" viewBox="0 0 16 16">
+                                        <path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.356 3.356a1 1 0 0 0 1.414 0l1.586-1.586a1 1 0 0 0 0-1.414l-3.356-3.356a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3c0-.269-.035-.53-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814L1 0zm9.646 10.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708zM3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026L3 11z"/>
+                                    </svg>
+                                    <b class="texto-iconos my-auto" style="font-size: 1.2em; margin-left: 0.8em;"> Maquinas</b>
+                                </a>
+
+                                <!-- MI PERFIL -->
+                                <a href="/dashboard/maquinas" class="list-group-item list-group-item-action bg-transparent my-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="currentColor" class="bi bi-person-fill mr-3 iconos" viewBox="0 0 16 16">
+                                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                    </svg>
+                                    <b class="texto-iconos my-auto" style="font-size: 1.2em; margin-left: 0.8em;"> Mi Perfil</b>
+                                </a>
+                                <!-- USUARIOS -->
+                                <a href="/dashboard/usuarios" class="list-group-item list-group-item-action bg-transparent my-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="currentColor" class="bi bi-person-fill mr-3 iconos" viewBox="0 0 16 16">
+                                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                    </svg>
+                                    <b class="texto-iconos my-auto" style="font-size: 1.2em; margin-left: 0.8em;"> Usuarios</b>
+                                </a>
+
+
+                           
+
+                                {{#if permisos.tecnico}}
+                                <!-- MAQUINAS -->
+                                <a href="/dashboard/maquinas" class="list-group-item list-group-item-action bg-transparent my-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="currentColor" class="bi bi-tools mr-3 iconos" viewBox="0 0 16 16">
+                                        <path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.356 3.356a1 1 0 0 0 1.414 0l1.586-1.586a1 1 0 0 0 0-1.414l-3.356-3.356a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3c0-.269-.035-.53-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814L1 0zm9.646 10.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708zM3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026L3 11z"/>
+                                    </svg>
+                                    <b class="texto-iconos my-auto" style="font-size: 1.2em; margin-left: 0.8em;"> TECNICO</b>
+                                </a>
+
+                                {{/if}}
+
+                                {{#if permisos.ingenieria}}
+                                <!-- MAQUINAS -->
+                                <a href="/dashboard/maquinas" class="list-group-item list-group-item-action bg-transparent my-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="currentColor" class="bi bi-tools mr-3 iconos" viewBox="0 0 16 16">
+                                        <path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.356 3.356a1 1 0 0 0 1.414 0l1.586-1.586a1 1 0 0 0 0-1.414l-3.356-3.356a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3c0-.269-.035-.53-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814L1 0zm9.646 10.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708zM3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026L3 11z"/>
+                                    </svg>
+                                    <b class="texto-iconos my-auto" style="font-size: 1.2em; margin-left: 0.8em;"> INGENIERIA</b>
+                                </a>
+                                {{/if}}
+
+                                {{#if permisos.prevencion}}
+                                <!-- MAQUINAS -->
+                                <a href="/dashboard/maquinas" class="list-group-item list-group-item-action bg-transparent my-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="currentColor" class="bi bi-tools mr-3 iconos" viewBox="0 0 16 16">
+                                        <path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.356 3.356a1 1 0 0 0 1.414 0l1.586-1.586a1 1 0 0 0 0-1.414l-3.356-3.356a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3c0-.269-.035-.53-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814L1 0zm9.646 10.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708zM3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026L3 11z"/>
+                                    </svg>
+                                    <b class="texto-iconos my-auto" style="font-size: 1.2em; margin-left: 0.8em;"> PREVENCION</b>
+                                </a>
+                                {{/if}}
+
+                                {{#if permisos.gerencia}}
+                                <!-- MAQUINAS -->
+                                <a href="/dashboard/maquinas" class="list-group-item list-group-item-action bg-transparent my-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="currentColor" class="bi bi-tools mr-3 iconos" viewBox="0 0 16 16">
+                                        <path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.356 3.356a1 1 0 0 0 1.414 0l1.586-1.586a1 1 0 0 0 0-1.414l-3.356-3.356a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3c0-.269-.035-.53-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814L1 0zm9.646 10.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708zM3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026L3 11z"/>
+                                    </svg>
+                                    <b class="texto-iconos my-auto" style="font-size: 1.2em; margin-left: 0.8em;"> GERENCIA</b>
+                                </a>
+                                {{/if}}
+                                
+                            </div>
+                        </div>
                     </div>
-                    <div class="offcanvas-body">
-                        <div class="list-group list-group-flush" id="list-content">
-                            
-                            <!-- DASHBOARD -->
-                            <a href="/dashboard/d" class="list-group-item list-group-item-action bg-transparent my-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="currentColor" class="bi bi-speedometer" viewBox="0 0 16 16">
-                                    <path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2zM3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"/>
-                                    <path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"/>
-                                </svg>
-                                <b class="texto-iconos my-auto" style="font-size: 1.2em; margin-left: 0.8em;"> Tablero Principal</b>
-                            </a>
-
-                            <!-- MAQUINAS -->
-                            <a href="/dashboard/maquinas" class="list-group-item list-group-item-action bg-transparent my-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="currentColor" class="bi bi-tools mr-3" viewBox="0 0 16 16">
-                                    <path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.356 3.356a1 1 0 0 0 1.414 0l1.586-1.586a1 1 0 0 0 0-1.414l-3.356-3.356a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3c0-.269-.035-.53-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814L1 0zm9.646 10.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708zM3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026L3 11z"/>
-                                </svg>
-                                <b class="texto-iconos my-auto" style="font-size: 1.2em; margin-left: 0.8em;"> Maquinas</b>
-                            </a>
-                            
+                </div>
+                <div class="container-nav__logo d-none d-sm-block">
+                    <img src="/images/logo.png" alt="" height="45px" class="">
+                </div>
+                <div class="container-nav__logo logo_2 d-block d-sm-none">
+                    <img src="/images/favicon.png" alt="" height="45px" class="">
+                </div>
+                <div class="container-nav__user ">
+                    <div class="user_rol d-none d-sm-block">
+                        <b style="text-transform: uppercase;">
+                            ESPECIALIDAD {{rol}}
+                        </b>
+                    </div>
+                    <div class="user_name d-none d-sm-block">
+                        <p style="text-transform: capitalize;">
+                            {{nombre}}
+                        </p>
+                    </div>
+                    <div class="user_image">
+                        <div class="btn-group">
+                            <img src="/images/user.png" alt="" class="dropdown-toggle" height="45px" data-bs-toggle="dropdown" aria-expanded="false">
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><button class="darkModeSwitch" id="switch">Dark mode switch</button></li>
+                                <li><div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" onclick="cambiarModo()">
+    <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label>
+    </div></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><button class="dropdown-item" type="button" onclick="close_session()">Cerrar Sesión</button></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="container-nav__logo d-none d-sm-block">
-                <img src="/images/logo.png" alt="" height="45px" class="">
-            </div>
-            <div class="container-nav__logo logo_2 d-block d-sm-none">
-                <img src="/images/favicon.png" alt="" height="45px" class="">
-            </div>
-            <div class="container-nav__user ">
-                <div class="user_rol d-none d-sm-block">
-                    <b style="text-transform: uppercase;">
-                        tecnico de Operaciones
-                    </b>
-                </div>
-                <div class="user_name d-none d-sm-block">
-                    <p style="text-transform: capitalize;">
-                        kevin abarca gracia
-                    </p>
-                </div>
-                <div class="user_image">
-                    <div class="btn-group">
-                        <img src="/images/user.png" alt="" class="dropdown-toggle" height="45px" data-bs-toggle="dropdown" aria-expanded="false">
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><button class="dropdown-item" type="button">Action</button></li>
-                            <li><button class="dropdown-item" type="button">Another action</button></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><button class="dropdown-item" type="button">Cerrar Sesión</button></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-    {{{body}}}
-</body>
-
-    
+        </nav>
+        {{{body}}}
+    </body>    
 </html>
+<!-- ARCHIVOS JS -->
+    <script src="/javascripts/dashboard_template.js"></script>
+    <script src="/javascripts/tablas.js"></script>
+<script>
+    const switchButton = document.getElementById('switch');
+ 
+switchButton.addEventListener('click', () => {
+    document.body.classList.toggle('dark'); //toggle the HTML body the class 'dark'
+    switchButton.classList.toggle('active');//toggle the HTML button with the id='switch' with the class 'active'
+});
+    
+    
+    function close_session(){
+    console.log("cerrando sesion");
+
+    axios({ 
+        
+        method: 'POST',   
+        url: '{{url}}/logout', 
+        headers: {
+            Authorization: "Bearer Token"
+        }, 
+        data: { }
+    
+    }).then((res) => {
+        console.log(res.data);
+        window.location.href = "{{url}}";
+
+    }).catch((err) => {
+
+    });
+    
+    }
+    
+    
+    function cambiarModo() { 
+        var cuerpoweb = document.body; 
+        cuerpoweb.classList.toggle("oscuro"); 
+    }
+</script>

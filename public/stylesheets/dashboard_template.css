@@ -39,7 +39,7 @@ html, body {
 .main-content__content {
     grid-column: 2;
     grid-row: 2;
-    background-color: rgb(221, 221, 221);
+    background-color: #E2E2E2;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 50px auto;

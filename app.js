@@ -14,7 +14,7 @@ const session = require('express-session');
 const cors = require('cors');
 require('./config/mongoose/index');
 const user = require('./config/mongoose/users');
-
+var authentication = require('./lib/authentication');
 var indexRouter = require('./routes/index');
 var APIRouter = require('./routes/API');
 var dashboardRouter = require('./routes/dashboard');
@@ -40,57 +40,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new PassportLocal(async function (username, password, done){
-  console.log(username, password);  
-  pool.query(
-        {
-          sql: "SELECT id, password, nombre, apellidos rol FROM users WHERE email=?",
-          timeout: 30000,
-        },
-        [username],
-        (error, results, fields) => {
-            if(error) {
-              return done(null, false);
-            }
-            else {
-                if(results.length == 0){
-
-                  return done(null, false);
-                }
-                else {
-                    bcrypt.compare(password, results[0].password, function(err, result) {
-                      
-                        if(result) {
-                          console.log("no hay problemas");
-                            return done(null, {id: results[0].id, nombre: results[0].nombre + " " + results[0].apellidos, rol: results[0].rol});
-                        }
-                        else {
-                            return done(null, false);
-                        }                
-                    });
-                }
-            } 
-        }
-    );
-}));
-
-passport.serializeUser(function(user, done){
-  done(null, user.id);
-});
-
-passport.deserializeUser(async function(id, done){
-    pool.query(
-        {
-          sql: "SELECT nombre, apellidos, rol FROM users WHERE id=?",
-          timeout: 30000,
-        },
-        [id],
-        (error, results, fields) => {
-            console.log("aqui tampoco");
-            done(null, {user: {nombre: results[0].nombre + " " + results[0].apellidos, rol: results[0].rol}});
-        }
-    );
-});
+require('./lib/authentication');
 
 
 
