@@ -115,6 +115,21 @@ router.get('/maquinas/crear', async (req, res) => {
     });
 });
 
+//DISPOSITIVOS
+router.get('/dispositivos/crear/:id_machine', (req, res) => {
+    res.render('dispositivos/crear_dispositivos', {
+        layout: 'template_dashboard', 
+        value: false, 
+        nombre: "estatico",
+        rol: "administrador",
+        permisos: {ingenieria: true, prevencion: true, tecnico: true, gerencia: true},
+        url: process.env.URL,
+        id_user: "606db3fa1282c834d0c9651d",
+        id_machine: req.params.id_machine,
+        hola: "hola mundo"
+    });
+});
+
 //users
 router.get('/users', (req, res) => {
     res.render('dashboard/admin/users/users', {layout: 'dashboard_template'});

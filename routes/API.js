@@ -9,6 +9,8 @@ const pool = require('../connection/database');
 const { suppressDeprecationWarnings } = require('moment');
 
 const saltRounds = 10;
+const path = require("path");
+const fs = require("fs");
 
 const multer = require('multer');
 const upload = multer({dest: './archivos'});
