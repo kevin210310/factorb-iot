@@ -1,31 +1,171 @@
 <div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
-    <div class="row mt-3 mx-0 mx-md-3">
-        <div class="col-6 rounded py-auto shadow-sm bg-body">
-            <nav aria-label="breadcrumb">
+    <div class="row mt-3 mx-0 mx-md-3 bg-body shadow-sm">
+        <div class="col-6 rounded py-auto">
+            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
                 <ol class="breadcrumb my-3">
                     <li class="breadcrumb-item"><a href="/dashboard">INICIO</a></li>
                     <li class="breadcrumb-item active" aria-current="page">USUARIOS</li>
                 </ol>
             </nav>
         </div>
-        <div class="col-6 rounded py-auto shadow-sm bg-body">
+        <div class="col-6 rounded py-auto" style="display:flex;justify-content: flex-end;">
             <div class="col-4 float-right d-grid gap-2 my-auto">
-  <button class="btn btn-primary my-auto" type="button">Button</button>
-</div>
+                <a class="btn btn-primary my-auto float-end" type="button" href="/dashboard/usuarios/crear">Crear Usuario</a>
+            </div>
         </div>
     </div>
-    <link rel="stylesheet" href="/libs/a/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="/libs/a/bootstrap.min.css">
+    
+    
     <script src="/libs/a/jquery-3.5.1.js"></script>
-    <script src="/libs/a/dataTables.bootstrap5.min.js"></script>
     <script src="/libs/a/jquery.dataTables.min.js"></script>
-    <script>
+    <script src="/libs/a/dataTables.bootstrap5.min.js"></script>
+    <script src="/libs/a/dataTables.select.min.js"></script>
+<script>
+    let espanol = {
+    "processing": "Procesando...",
+    "lengthMenu": "Mostrar _MENU_ registros",
+    "zeroRecords": "No se encontraron resultados",
+    "emptyTable": "Ningún dato disponible en esta tabla",
+    "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+    "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+    "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+    "search": "Buscar:",
+    "infoThousands": ",",
+    "loadingRecords": "Cargando...",
+    "paginate": {
+        "first": "Primero",
+        "last": "Último",
+        "next": "Siguiente",
+        "previous": "Anterior"
+    },
+    "aria": {
+        "sortAscending": ": Activar para ordenar la columna de manera ascendente",
+        "sortDescending": ": Activar para ordenar la columna de manera descendente"
+    },
+    "buttons": {
+        "copy": "Copiar",
+        "colvis": "Visibilidad",
+        "collection": "Colección",
+        "colvisRestore": "Restaurar visibilidad",
+        "copyKeys": "Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br \/> <br \/> Para cancelar, haga clic en este mensaje o presione escape.",
+        "copySuccess": {
+            "1": "Copiada 1 fila al portapapeles",
+            "_": "Copiadas %d fila al portapapeles"
+        },
+        "copyTitle": "Copiar al portapapeles",
+        "csv": "CSV",
+        "excel": "Excel",
+        "pageLength": {
+            "-1": "Mostrar todas las filas",
+            "1": "Mostrar 1 fila",
+            "_": "Mostrar %d filas"
+        },
+        "pdf": "PDF",
+        "print": "Imprimir"
+    },
+    "autoFill": {
+        "cancel": "Cancelar",
+        "fill": "Rellene todas las celdas con <i>%d<\/i>",
+        "fillHorizontal": "Rellenar celdas horizontalmente",
+        "fillVertical": "Rellenar celdas verticalmentemente"
+    },
+    "decimal": ",",
+    "searchBuilder": {
+        "add": "Añadir condición",
+        "button": {
+            "0": "Constructor de búsqueda",
+            "_": "Constructor de búsqueda (%d)"
+        },
+        "clearAll": "Borrar todo",
+        "condition": "Condición",
+        "conditions": {
+            "date": {
+                "after": "Despues",
+                "before": "Antes",
+                "between": "Entre",
+                "empty": "Vacío",
+                "equals": "Igual a",
+                "not": "No",
+                "notBetween": "No entre",
+                "notEmpty": "No Vacio"
+            },
+            "number": {
+                "between": "Entre",
+                "empty": "Vacio",
+                "equals": "Igual a",
+                "gt": "Mayor a",
+                "gte": "Mayor o igual a",
+                "lt": "Menor que",
+                "lte": "Menor o igual que",
+                "not": "No",
+                "notBetween": "No entre",
+                "notEmpty": "No vacío"
+            },
+            "string": {
+                "contains": "Contiene",
+                "empty": "Vacío",
+                "endsWith": "Termina en",
+                "equals": "Igual a",
+                "not": "No",
+                "notEmpty": "No Vacio",
+                "startsWith": "Empieza con"
+            }
+        },
+        "data": "Data",
+        "deleteTitle": "Eliminar regla de filtrado",
+        "leftTitle": "Criterios anulados",
+        "logicAnd": "Y",
+        "logicOr": "O",
+        "rightTitle": "Criterios de sangría",
+        "title": {
+            "0": "Constructor de búsqueda",
+            "_": "Constructor de búsqueda (%d)"
+        },
+        "value": "Valor"
+    },
+    "searchPanes": {
+        "clearMessage": "Borrar todo",
+        "collapse": {
+            "0": "Paneles de búsqueda",
+            "_": "Paneles de búsqueda (%d)"
+        },
+        "count": "{total}",
+        "countFiltered": "{shown} ({total})",
+        "emptyPanes": "Sin paneles de búsqueda",
+        "loadMessage": "Cargando paneles de búsqueda",
+        "title": "Filtros Activos - %d"
+    },
+    "select": {
+        "1": "%d fila seleccionada",
+        "_": "%d filas seleccionadas",
+        "cells": {
+            "1": "1 celda seleccionada",
+            "_": "$d celdas seleccionadas"
+        },
+        "columns": {
+            "1": "1 columna seleccionada",
+            "_": "%d columnas seleccionadas"
+        }
+    },
+    "thousands": ".",
+    "datetime": {
+        "previous": "Anterior",
+        "next": "Proximo",
+        "hours": "Horas"
+    }
+};
         $(document).ready(function() {
-            $('#example2').DataTable();
+            $('#example2').DataTable({
+                "language": espanol,
+                buttons: [
+        'copy', 'excel', 'pdf'
+    ]
+            });
         } );
     </script>
-    <div class="row mt-3 mx-0 mx-md-3" style="border: 1px solid blue;">
-       <table id="example2" class="table table-striped" style="width:100%">
+    
+    <div class="row mt-3 mx-0 mx-md-3 rounded p-3" style="background-color: #fff;">
+       <table id="example2" class="table table-sm" style="width:100%">
         <thead>
             <tr>
                 <th>Nombre</th>

@@ -1,0 +1,128 @@
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <style type="text/css">
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map2 {
+        height: 300px;
+      }
+
+      /* Optional: Makes the sample page fill the window. */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script>
+      function initMap() {
+        const myLatLng = { lat: -25.363, lng: 131.044 };
+        const map = new google.maps.Map(document.getElementById("map2"), {
+          zoom: 4,
+          center: myLatLng,
+        });
+        new google.maps.Marker({
+          position: myLatLng,
+          map,
+          title: "Hello World!",
+        });
+      }
+    </script>
+<div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
+    <div class="row mt-3 mx-0 mx-md-3 bg-body shadow-sm">
+        <div class="col-12 rounded py-auto">
+            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+                <ol class="breadcrumb my-3">
+                    <li class="breadcrumb-item"><a href="/dashboard">INICIO</a></li>
+                    <li class="breadcrumb-item"><a href="/dashboard/maquinas">MAQUINAS</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">AGREGAR NUEVA MAQUINA</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mt-3 mx-0 mx-md-3 px-5 d-flex justify-content-center">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active btn-lg" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">1. Datos generales</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link btn-lg" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">2. Localización</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link btn-lg" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">3. paso</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                            <div class="container border bg-light">
+                                <div class="row py-5">
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="floatingInput2" placeholder="name@example.com">
+                                            <label for="floatingInput">Nombre</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+                                            <label for="floatingTextarea">Descripción</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                                                <option value="0" selected>Seleccionar usuario</option>
+                                                <option value="1">Usuario 1</option>
+                                                <option value="2">Usuario 2</option>
+                                                <option value="3">Usuario 3</option>
+                                            </select>
+                                            <label for="floatingSelect">Asociar al usuario:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="formFile" class="form-label">Imagen Maquina</label>
+                                            <input class="form-control" type="file" id="formFile">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container px-0">
+                                <div class="row mx-0 mt-3">
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" class="btn btn-secondary" disabled>atras</button>
+                                            <button type="button" class="btn btn-primary">siguiente</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+
+                        </div>
+                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                            <div class="container border bg-light">
+                                <div class="row py-5">
+                                    <div class="col-12">
+                                        <div id="map2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi_GipB4VPaAcH_U0YSvypCM5VqQv69x4&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
