@@ -78,7 +78,6 @@ router.get('/usuarios', (req, res) => {
     });
 
 });
-
 router.get('/usuarios/crear', (req, res) => {
 
     res.render('usuarios/crear_usuarios', {
@@ -90,6 +89,30 @@ router.get('/usuarios/crear', (req, res) => {
         url: process.env.URL
     });
 
+});
+
+//MAQUINAS
+router.get('/maquinas', async (req, res) => {
+    res.render('maquinas/maquinas', {
+        layout: 'template_dashboard', 
+        value: false, 
+        nombre: "estatico",
+        rol: "administrador",
+        permisos: {ingenieria: true, prevencion: true, tecnico: true, gerencia: true},
+        url: process.env.URL,
+        id_user: "606db3fa1282c834d0c9651d"
+    });
+});
+router.get('/maquinas/crear', async (req, res) => {
+    res.render('maquinas/crear_maquinas', {
+        layout: 'template_dashboard', 
+        value: false, 
+        nombre: "estatico",
+        rol: "administrador",
+        permisos: {ingenieria: true, prevencion: true, tecnico: true, gerencia: true},
+        url: process.env.URL,
+        id_user: "606db3fa1282c834d0c9651d"
+    });
 });
 
 //users
@@ -170,13 +193,7 @@ router.get('/d', async (req, res) => {
         layout: 'template_dashboard'
     });
 });
-router.get('/maquinas', async (req, res) => {
-    res.render('maquinas', {
-        layout: 'template_dashboard',
-        url: process.env.URL,
-        id_user: "606db3fa1282c834d0c9651d"
-    });
-});
+
 
 router.get('/dispositivos/:id_machine', (req, res) => {
     res.render('dispositivos', {

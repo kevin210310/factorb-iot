@@ -1,16 +1,21 @@
 <div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
-    <div class="row mt-3 mx-0 mx-md-3">
-        <div class="col-12 rounded py-auto shadow-sm bg-body">
+    <div class="row mt-3 mx-0 mx-md-3 shadow-sm bg-body">
+        <div class="col-6 rounded py-auto">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-3">
-                    <li class="breadcrumb-item"><a href="#">INICIO</a></li>
+                    <li class="breadcrumb-item"><a href="/dashboard">INICIO</a></li>
                     <li class="breadcrumb-item active" aria-current="page">MAQUINAS</li>
                 </ol>
             </nav>
         </div>
+        <div class="col-6 rounded py-auto" style="display:flex;justify-content: flex-end;">
+            <div class="col-4 float-right d-grid gap-2 my-auto">
+                <a class="btn btn-primary my-auto float-end" type="button" href="/dashboard/maquinas/crear">Crear Maquina</a>
+            </div>
+        </div>
     </div>
-    <div class="row mt-3 px-3">
-    </div>
+    
+   
     <a class="btn btn-dark" href="/dashboard/rfid">rfid</a>
     <div class="row mt-3 px-3" id="machine_cards">
 
