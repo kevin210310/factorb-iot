@@ -28,6 +28,8 @@
         });
       }
     </script>
+
+
 <div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
     <div class="row mt-3 mx-0 mx-md-3 bg-body shadow-sm">
         <div class="col-12 rounded py-auto">
@@ -60,7 +62,7 @@
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                             <div class="container border bg-light">
                                 <div class="row py-5">
-                                    <div class="col-12 mb-3">
+                                    <!--<div class="col-12 mb-3">
                                         <img id="blah" src="\images\machines\machine-image.svg" class="img-thumbnail rounded mx-auto d-block" alt="Tu imagen" width="200px" height="200px">
                                        
                                     </div>
@@ -69,22 +71,23 @@
                                         
                                             <input class="form-control" type="file" id="formFile1">
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-12">
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="floatingInput2" placeholder="name@example.com">
-                                            <label for="floatingInput">Nombre</label>
+                                            <input type="text" class="form-control" id="nameMachine" placeholder="name@example.com" onchange="nameMachine()">
+                                            <label for="floatingInput">Nombre de la maquina</label>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-floating mb-3">
-                                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+                                            <textarea class="form-control" placeholder="Leave a comment here" id="descriptionMachine" style="height: 100px" onchange="descriptionMachine()"></textarea>
                                             <label for="floatingTextarea">Descripción</label>
+                                            <small class="text-muted" id="msj-dm"> maximo 50 caracteres</small>
                                         </div>
                                     </div>
-                                    <div class="col-12">
+                                    <!--<div class="col-12">
                                         <div class="form-floating mb-3">
-                                            <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                                            <select class="form-select" id="floatingSelect" style="height: 70px" aria-label="Floating label select example">
                                                 <option value="0" selected>Seleccionar usuario</option>
                                                 <option value="1">Usuario 1</option>
                                                 <option value="2">Usuario 2</option>
@@ -92,18 +95,28 @@
                                             </select>
                                             <label for="floatingSelect">Asociar al usuario:</label>
                                         </div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                            <div class="container px-0">
-                                <div class="row mx-0 mt-3">
-                                    <div class="col-12 d-flex justify-content-end">
-                                        <div class="btn-group" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-secondary" disabled>atras</button>
-                                            <button type="button" class="btn btn-primary">siguiente</button>
+                                    </div>-->
+
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select" id="region" aria-label="Floating label select example" style="height: 70px" onchange="region()">        
+                                            </select>
+                                            <label for="floatingSelect">region</label>
                                         </div>
                                     </div>
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select" id="comuna" style="height: 70px" aria-label="Floating label select example">
+                                            </select>
+                                            <label for="floatingSelect">comuna</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="d-grid" id="buttonNewMachine">
+                                            <button class="btn btn-primary" type="button" onclick="newMachine()">Crear maquina</button>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
                             
@@ -126,7 +139,26 @@
         </div>
     </div>
 </div>
+ <!--  SINGLE FILE -->
+<form action="/uploadfile" enctype="multipart/form-data" method="POST"> 
+   <input type="file" name="myFile" />
+   <input type="submit" value="Upload a file"/>
+</form>
+<button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
 
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
+  <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="..." class="rounded me-2" alt="...">
+      <strong class="me-auto">Bootstrap</strong>
+      <small>11 mins ago</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+  </div>
+</div>
 <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi_GipB4VPaAcH_U0YSvypCM5VqQv69x4&callback=initMap&libraries=&v=weekly"
       async
@@ -149,4 +181,152 @@
     // Código a ejecutar cuando se detecta un cambio de archivO
     readImage(this);
   });
+
+
+
+  function nameMachine() {
+      let name = document.getElementById('nameMachine');
+
+      if(name.value.length > 7) {
+            $("#nameMachine").addClass("is-valid");
+            $("#nameMachine").removeClass("is-invalid");
+            return true;
+      } else {
+            $("#nameMachine").addClass("is-invalid");
+            $("#nameMachine").removeClass("is-valid");
+            return false;
+      }
+  }
+  function descriptionMachine() {
+      let name = document.getElementById('descriptionMachine');
+      if(name.value.length == 0){
+          return true;
+
+      } else if(name.value.length < 50) {
+          $("#descriptionMachine").addClass("is-valid");
+          $("#descriptionMachine").removeClass("is-invalid"); 
+          return true;
+      } else {
+          $("#descriptionMachine").addClass("is-invalid");
+          $("#descriptionMachine").removeClass("is-valid");
+          return false;
+      }
+
+  }
+  let administracion;
+  axios({
+      method: 'POST',
+      url: '{{url}}/api/administracion'
+  }).then((res) => {
+    
+      console.log(res.data);
+      let regiones = document.getElementById('region');
+      let region = `<option value="0" selected>Seleccionar region</option>`;
+      administracion = res.data.regions;
+      for(let i = 0; i < res.data.regions.length; i++) {
+          region += `
+            <option value=${res.data.regions[i].number}>${res.data.regions[i].name}</option>
+          `;
+      }
+
+      regiones.innerHTML = region;
+   
+
+  }).catch((err) => {
+
+      console.log(err);
+  });
+
+  function region(){
+      let region = document.getElementById('region');
+      let comuna = document.getElementById('comuna');
+      console.log(region);
+      let comunas = `<option value="0" selected>Seleccionar Comuna</option>`;
+      if(region.value == 0){
+
+      } else {
+          for(let i = 0 ; i < administracion.length ; i ++){
+              if(region.value == administracion[i].number) {
+                  console.log(administracion[i].communes);
+                  for(j = 0 ; j < administracion[i].communes.length ; j++) {
+                      comunas += `<option value="${administracion[i].communes[j].name}">${administracion[i].communes[j].name}</option>`;
+                  }
+                  
+              }
+          }
+          comuna.innerHTML = comunas;
+      }
+  }
+
+  function newMachine(){
+      let button  = document.getElementById('buttonNewMachine');
+      let region = document.getElementById('region');
+      let comuna = document.getElementById('comuna');
+      let name = document.getElementById('nameMachine');
+      let description = document.getElementById('descriptionMachine');
+      let send = true;
+      
+      button.innerHTML = `
+          <button class="btn btn-primary btn-lg" type="button" disabled>
+              <span class="spinner-border spinner-border-md" role="status" aria-hidden="true"></span>
+              Creando nueva maquina
+          </button>`;
+
+      if(region.value != 0){
+          $("#region").addClass("is-valid");
+          $("#region").removeClass("is-invalid"); 
+      }
+      else {
+          $("#region").addClass("is-invalid");
+          $("#region").removeClass("is-valid");
+          send = false;
+
+      }
+
+      if(comuna.value != 0){
+          $("#comuna").addClass("is-valid");
+          $("#comuna").removeClass("is-invalid"); 
+      }
+      else {
+          $("#comuna").addClass("is-invalid");
+          $("#comuna").removeClass("is-valid");
+          send = false;
+
+      }
+
+      if(!nameMachine()) {
+          send = false;
+      }
+      if(!descriptionMachine()) {
+          send = false;
+      }
+
+      if(send) {
+          axios({
+              method: 'POST',
+              url: '{{url}}/api/createMachine',
+              headers: {
+                  Authorization: "Bearer Token"
+              }, 
+              data: { 
+                  nameMachine: name.value,
+                  descriptionMachine: description.value,
+                  location: comuna.value,
+                  usuarios_permitidos: ["606db3fa1282c834d0c9651d"]
+              }
+          }).then((res) => {
+    
+              console.log(res.data);
+              if(res.data.create) {
+                  notificacion("error", "error");
+              }
+
+          }).catch((err) => {
+
+              console.log(err);
+          });
+      } else {
+          button.innerHTML = `<button class="btn btn-primary" type="button" onclick="newMachine()">Crear maquina</button>`;
+      }
+  }
 </script>

@@ -2,6 +2,8 @@ if(process.env.NODE_ENV !== 'production'){
   require('dotenv').config();
 }
 
+
+const serveIndex = require('serve-index');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -44,7 +46,7 @@ require('./lib/authentication');
 
 
 
-
+// SET STORAGE
 
 
 
@@ -62,7 +64,10 @@ app.use('/materialize', express.static(__dirname + '/node_modules/materialize-cs
 app.use('/client-socket', express.static(__dirname + '/node_modules/socket.io-client/dist/'));
 app.use('/toastr', express.static(__dirname + '/node_modules/toastr/build/'));
 app.use('/gridstack', express.static(__dirname + '/node_modules/gridstack/dist/'));
+app.use(bodyParser.urlencoded({extended: true}))
 
+
+app.use('/ftp', express.static('public'), serveIndex('public/images', {icons: true}))
 app.use('/', indexRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/api', APIRouter);

@@ -1,5 +1,8 @@
 var express = require('express');
 var router = express.Router();
+
+var validator = require('validator');
+
 const iot = require('@google-cloud/iot');
 const passport = require('passport');
 const { verify } = require('../lib/verify_user');
@@ -16,7 +19,13 @@ const multer = require('multer');
 const upload = multer({dest: './archivos'});
 const machines = require('../config/mongoose/maquinas');
 const devices = require('../config/mongoose/device');
+const users = require('../config/mongoose/users');
 const https = require('https');
+
+
+
+
+
 async function send_repeat_multiple(datos_f) {
   
   for(let i = 0 ; i < datos_f.length ; i ++){
@@ -1051,5 +1060,87 @@ router.post('/find_datadevicetracker', async (req, res) =>{
         } 
     }});
 
+});
+
+
+router.post('/administracion', async (req, res) => {
+  let rawdata = fs.readFileSync('./public/json/administracion.json');
+  let student = JSON.parse(rawdata);
+  res.json(student);
+});
+
+router.post('/createMachine', async (req, res) => {
+
+
+  var fecha = (new Date).getTime();
+  console.log(req.body);
+  let params = {
+    nombre: req.body.nameMachine,
+    descripcion: req.body.descriptionMachine,
+    ubicacion: req.body.location,
+    creado: fecha,
+    usuarios_permitidos: req.body.usuarios_permitidos
+  }
+  let machine = new machines(params);
+  machine.save().then(savedDoc => {
+    console.log(savedDoc);
+    res.json({create: true, msg: savedDoc.nombre + ", ha sido creada exitosamente", id: savedDoc._id});
+  });
+    /*var params = {
+        nodename: req.body.nodename,
+        marca: req.body.marca,
+        modelo: req.body.modelo,
+        patente: req.body.patente,
+        fcreate: fecha
+    };*/
+    //const Node = new node(params);
+   // await Node.save();
+  
+
+});
+
+
+
+router.post('/createUser', async (req, res) => {
+    //validar datos
+    const {name, lastnames, email, password} = req.body;
+    let valid = true;
+    let msgError = "";
+
+    /*if(!validator.isEmail(email)) {
+        valid = false;
+        msgError = "email no valido"
+    }
+
+    if(!validator.isAlphanumeric(name)) {
+
+    }*/
+
+
+
+    
+      
+      //res.json({create: false, msg: "error, datos no validos"});
+    
+    
+    //existe un usuario o nombre parecidos?
+
+
+    //crear
+ console.log(req.body);
+ let creacion = (new Date).getTime();
+  console.log(req.body);
+  let params = {
+    nombre: req.body.name,
+    apellidos: req.body.lastnames,
+    email: req.body.email,
+    pwd: req.body.password,
+    creado: creacion
+  }
+  let user = new users(params);
+  user.save().then(savedDoc => {
+    console.log(savedDoc);
+    res.json({create: true, msg: savedDoc.nombre + ", ha sido creada exitosamente", id: savedDoc._id});
+  });
 });
 module.exports = router;
