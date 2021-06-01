@@ -64,6 +64,7 @@ app.use('/materialize', express.static(__dirname + '/node_modules/materialize-cs
 app.use('/client-socket', express.static(__dirname + '/node_modules/socket.io-client/dist/'));
 app.use('/toastr', express.static(__dirname + '/node_modules/toastr/build/'));
 app.use('/gridstack', express.static(__dirname + '/node_modules/gridstack/dist/'));
+app.use('/validator', express.static(__dirname + '/node_modules/validator/'));
 app.use(bodyParser.urlencoded({extended: true}))
 
 

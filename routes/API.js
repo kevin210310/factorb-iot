@@ -1103,44 +1103,39 @@ router.post('/createMachine', async (req, res) => {
 
 router.post('/createUser', async (req, res) => {
     //validar datos
-    const {name, lastnames, email, password} = req.body;
-    let valid = true;
-    let msgError = "";
-
-    /*if(!validator.isEmail(email)) {
-        valid = false;
-        msgError = "email no valido"
+    const {name, lastnames, email, password, rol} = req.body;
+    
+    console.log(req.body);
+    let creacion = (new Date).getTime();
+    console.log(req.body);
+    let params = {
+        nombre: name,
+        apellidos: lastnames,
+        email: email,
+        pwd: password,
+        rol: rol,
+        creado: creacion
     }
+    let user = new users(params);
+    user.save().then(savedDoc => {
+        console.log(savedDoc);
+        res.json({create: true, msg: savedDoc.nombre + ", ha sido creada exitosamente", id: savedDoc._id});
+    });
+});
 
-    if(!validator.isAlphanumeric(name)) {
-
-    }*/
-
-
-
-    
-      
-      //res.json({create: false, msg: "error, datos no validos"});
-    
-    
-    //existe un usuario o nombre parecidos?
-
-
-    //crear
- console.log(req.body);
- let creacion = (new Date).getTime();
-  console.log(req.body);
-  let params = {
-    nombre: req.body.name,
-    apellidos: req.body.lastnames,
-    email: req.body.email,
-    pwd: req.body.password,
-    creado: creacion
-  }
-  let user = new users(params);
-  user.save().then(savedDoc => {
-    console.log(savedDoc);
-    res.json({create: true, msg: savedDoc.nombre + ", ha sido creada exitosamente", id: savedDoc._id});
+router.post('/showUsers', async (req, res) => {
+  await users.find(function(err, response) {
+    if(err){
+        res.status(400).json({msg: "error en la peticion", status: false});
+    }
+    else {
+        if(response == null){
+            res.json({ msg: "no hay maquinas asociadas", status: false });
+        }
+        else {
+            res.json({data: response, status: true});
+        } 
+    }
   });
 });
 module.exports = router;

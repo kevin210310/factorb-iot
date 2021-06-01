@@ -20,60 +20,134 @@
                 <div class="card-body">
                     <div class="col-12">
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="nameUser" placeholder="nombre de usuario">
+                            <input type="text" class="form-control" id="nameUser" placeholder="nombre de usuario" onchange="nameUser()" autocomplete="off">
                             <label for="nameUser">nombre</label>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                            <label for="floatingInput">apellidos</label>
+                            <input type="text" class="form-control" id="lastnamesUser" placeholder="name@example.com" onchange="lastnamesUser()" autocomplete="off">
+                            <label for="lastnamesUser">apellidos</label>
                         </div>
                     </div>
-        <div class="col-12">
-            <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingInput">correo electrónico</label>
-            </div>
-        </div>
-        <div class="form-floating mb-3">
-            <select class="form-select" id="floatingSelect" aria-label="Area ">
-                <option selected>seleccione un área</option>
-                <option value="tecnica">Técnica</option>
-                <option value="ingenieria">Ingeniería</option>
-                <option value="gerencia">Gerencia</option>
-                <option value="prevencion">Prevención</option>
-                <option value="mantenimiento">Mantenimiento</option>
-            </select>
-            <label for="floatingSelect">Rol del Usuario</label>
-        </div>
-        <div class="col-12">
-            <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="nombre_usuario" placeholder="name@example.com">
-                <label for="floatingInput">contraseña</label>
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingInput">confirmar contraseña</label>
-            </div>
-        </div>
-
-        <div class="d-grid gap-2" id="crear_usuario">
-            <button class="btn btn-primary btn-lg" type="button" onclick="crear_usuario()" >Crear perfil de usuario</button>
-        </div>
-                    
-                   
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="emailUser" placeholder="name@example.com" onchange="emailUser()">
+                            <label for="emailUser">correo electrónico</label>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="rolUser" aria-label="Area">
+                            <option value="" selected>seleccione un área</option>
+                            <option value="tecnica">Técnica</option>
+                            <option value="ingenieria">Ingeniería</option>
+                            <option value="gerencia">Gerencia</option>
+                            <option value="prevencion">Prevención</option>
+                            <option value="mantenimiento">Mantenimiento</option>
+                        </select>
+                        <label for="rolUser">Rol del Usuario</label>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="passUser" placeholder="name@example.com" onchange="passUser()">
+                            <label for="passUser">contraseña</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="confirmPassUser" placeholder="name@example.com" onchange="confirmPassUser()">
+                            <label for="comfirmPassUser">confirmar contraseña</label>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2" id="crear_usuario">
+                        <button class="btn btn-primary btn-lg" type="button" onclick="crear_usuario()" >Crear perfil de usuario</button>
+                    </div> 
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+<script type="text/javascript" src="/validator/validator.min.js"></script>
 <script>
+
+    
+
+    function nameUser() {
+        let name = document.getElementById('nameUser');
+
+        if(name.value.length > 0) {
+                $("#nameUser").addClass("is-valid");
+                $("#nameUser").removeClass("is-invalid");
+                return true;
+        } else {
+                $("#nameUser").addClass("is-invalid");
+                $("#nameUser").removeClass("is-valid");
+                return false;
+        }
+    }
+
+    function lastnamesUser() {
+        let lastnames = document.getElementById('lastnamesUser');
+
+        if(lastnames.value.length > 0) {
+                $("#lastnamesUser").addClass("is-valid");
+                $("#lastnamesUser").removeClass("is-invalid");
+                return true;
+        } else {
+                $("#lastnamesUser").addClass("is-invalid");
+                $("#lastnamesUser").removeClass("is-valid");
+                return false;
+        }
+    }
+
+    function emailUser() {
+        let email = document.getElementById('emailUser');
+
+        if(validator.isEmail(email.value)) {
+                $("#emailUser").addClass("is-valid");
+                $("#emailUser").removeClass("is-invalid");
+                return true;
+        } else {
+                $("#emailUser").addClass("is-invalid");
+                $("#emailUser").removeClass("is-valid");
+                return false;
+        }
+    }
+
+    function passUser() {
+        let pass = document.getElementById('passUser');
+
+        if(pass.value.length >= 4) {
+                $("#passUser").addClass("is-valid");
+                $("#passUser").removeClass("is-invalid");
+                return true;
+        } else {
+                $("#passUser").addClass("is-invalid");
+                $("#passUser").removeClass("is-valid");
+                return false;
+        }
+    }
+
+    function confirmPassUser() {
+        let pass = document.getElementById('passUser');
+        let confirmPass = document.getElementById('confirmPassUser');
+
+        if(confirmPass.value == pass.value) {
+                $("#confirmPassUser").addClass("is-valid");
+                $("#confirmPassUser").removeClass("is-invalid");
+                return true;
+        } else {
+                $("#confirmPassUser").addClass("is-invalid");
+                $("#confirmPassUser").removeClass("is-valid");
+                return false;
+        }
+
+    }
+
+    
     function crear_usuario(){
         let boton = document.getElementById('crear_usuario');
+        let send = true;
         boton.innerHTML = `
             <button class="btn btn-primary btn-lg" type="button" disabled>
                 <div class="spinner-border pr-3" role="status">
@@ -82,25 +156,79 @@
                 Creando perfil de usuario
             </button>`;
         
-        let nombre = document.getElementById('nombre_usuario');
+        let nombre = document.getElementById('nameUser').value;
 
-        let apellidos = document.getElementById('crear_usuario').value;
-        let correo = document.getElementById('crear_usuario').value;
-        let rol = document.getElementById('crear_usuario').value;
-        let password = document.getElementById('crear_usuario').value;
-        let passwordConfirm = document.getElementById('crear_usuario').value;
+        let apellidos = document.getElementById('lastnamesUser').value;
+        let correo = document.getElementById('emailUser').value;
+        let rol = document.getElementById('rolUser').value;
+        let password = document.getElementById('passUser').value;
+        let passwordConfirm = document.getElementById('confirmPassUser').value;
 
+        
 
-        if(nombre.value == ""){
-            nombre.addClass
+        if(!nameUser()){
+            send = false;
+        }
 
- //is-invalid
+        if(!lastnamesUser()){
+            send = false;
+        }
+
+        if(!emailUser()){
+            send = false;
+        }
+
+        if(!passUser()){
+            send = false;
+        }
+
+        if(!confirmPassUser()){
+            send = false;
+        }
+
+        if(rol != "") {
+            $("#rolUser").addClass("is-valid");
+            $("#rolUser").removeClass("is-invalid");
         } else {
- //is-valid
+            $("#rolUser").addClass("is-invalid");
+            $("#rolUser").removeClass("is-valid");
+            send = false;
+        }
+        
+        if(send) {
+            axios({
+                method: 'POST',
+                url: '{{url}}/api/createUser',
+                headers: {
+                    Authorization: "Bearer Token"
+                }, 
+                data: { 
+                    name: nombre, 
+                    lastnames: apellidos, 
+                    email: correo, 
+                    password: passwordConfirm,
+                    rol: rol
+                }
+            }).then((res) => {
+        
+                console.log(res.data);
+                if(res.data.create) {
+                    boton.innerHTML = `<button class="btn btn-primary btn-lg" type="button" onclick="crear_usuario()" >Crear perfil de usuario</button>`;
+                }
+
+            }).catch((err) => {
+
+                console.log(err);
+            });
+       
+        } else {
+            boton.innerHTML = `<button class="btn btn-primary btn-lg" type="button" onclick="crear_usuario()" >Crear perfil de usuario</button>`;
+
         }
 
 
 
             
     }
+     
 </script>
