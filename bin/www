@@ -6,7 +6,7 @@ const moment = require('moment');
 const { PubSub } = require(`@google-cloud/pubsub`);
 const formatMessage = require('../utils/messages');
 const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('../utils/users');
-
+const machines = require('../config/mongoose/maquinas');
 const projectId = 'lukas-lok';
 const stateSubscriber = 'factorb-iot-data';
 
@@ -25,7 +25,22 @@ var server = http.createServer(app);
 
 const io = SocketIO(server);
 const botName = 'Server_factorbiot';
+async function Save_db(device, obj){
+  
+  machines.findOneAndUpdate({
+    "dispositivos.name":device
+},{     
+    $push: {
+      "dispositivos.$.data": obj
+    }
+}).then((result) => {
+    
+    //console.log(result);
+}).catch((err)=> {
+  console.log(err);
+});
 
+}
 // Run when client connects
 io.on('connection', socket => {
 
@@ -90,13 +105,30 @@ io.on('connection', socket => {
     if(message.attributes.subFolder !== "events"){
         
         let data = Buffer.from(message.data, 'base64').toString('ascii');
-        
+        //console.log(data);
         try {
-          
+
             let obj = JSON.parse(data);
+            console.log(obj);
+            let dataf = obj.variables;
+
+
+            dataf.created_at_origin = new Date(obj.created_at_origin);
+
+            console.log(dataf);
+           // dataf.include({created_at_origin: });
+            
+
+         
             //console.log(obj);
-            console.log(message.attributes.deviceId, obj,"  ", moment().format('MMMM Do YYYY, h:mm:ss a'))
-            socket.emit(message.attributes.deviceId, obj);
+            //console.log(message.attributes.deviceId, obj,"  ", moment().format('MMMM Do YYYY, h:mm:ss a'));
+
+            //save into db
+            socket.emit(message.attributes.deviceId, dataf);
+            Save_db(message.attributes.deviceId, dataf);
+
+            //=========================================
+            
         }
         catch(error) {
           console.log("el paquete no es un json");
@@ -109,7 +141,6 @@ io.on('connection', socket => {
     }
 };
 subscription.on('message', messageHandler);
-
 
 });
 

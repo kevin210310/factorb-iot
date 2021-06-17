@@ -1,0 +1,260 @@
+<div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
+
+    <!-- BREADCRUMB -->
+    <div class="row mt-3 mx-0 mx-md-3 bg-body shadow-sm">
+        <div class="col-12 rounded py-auto">
+            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+                <ol class="breadcrumb my-3">
+                    <li class="breadcrumb-item"><a href="/dashboard">INICIO</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">HISTORICOS</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mt-3 mx-0 mx-md-3 bg-body shadow-sm border">
+
+        <form class="p-3 bg-light rounded">
+
+        
+        <div class="row">
+            <div class="col">
+                <div class="form-floating">
+                    <select class="form-select" id="selectVariable" style="height: 60px"></select>
+                    <label for="selectVariable">Seleccionar Variable</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating">
+                    <input type="date" class="form-control" style="height: 60px" id="inicio" placeholder="">
+                    <label for="inicio">Fecha inicio</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating">
+                    <input type="date" class="form-control" style="height: 60px" id="fin" placeholder="">
+                    <label for="fin">Fecha fin</label>
+                </div>
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-primary btn-lg" style="height: 60px" onclick="sendQuery()">Consultar datos</button>
+            <!--    <label for="consulta_historico" style="visibility:hidden">Label for button</label>
+                <button type="button" class="btn btn-primary d-block btn-lg my-auto" id="consulta_historico">Consultar datos</button>
+            --></div>
+            
+        </div>
+    </form>
+    </div>
+    <div class="row mt-3 mx-0 mx-md-3 px-0 d-flex justify-content-center" id="boxHistoricos">
+        {{idDevice}} - {{idMachine}}
+    </div>
+</div>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+
+
+<div class="contenido-principal px-3">
+    
+    
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        function sendQuery(){
+            let inicio = document.getElementById('inicio').value;
+            let fin = document.getElementById('fin').value;
+
+            console.log(inicio, fin);
+
+
+
+            axios({
+                method: 'POST',
+                url: '{{url}}/api/find_datavariable',
+                headers: {
+                    Authorization: 'Bearer token'
+                },
+                data: {
+                    inicio,
+                    fin
+                }
+            }).then((res) => {
+                let resultado = res.data;
+                console.log(resultado);
+            }).catch((err) => {
+                console.log(err);
+            });
+
+
+            document.getElementById('boxHistoricos').innerHTML = `
+                <div class="col-12 mx-0 px-0" >
+                    <div class="p-3 border" style="background-color: #fff;">
+                        <div id="chartHistorico"></div>
+                    </div>
+                </div>
+            
+            `;
+            let functionChart = new Function(`
+                var options = {
+          series: [{
+            name: "Desktops",
+            data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        title: {
+          text: 'Product Trends by Month',
+          align: 'left'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          },
+        },
+        xaxis: {
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chartHistorico"), options);
+        chart.render();
+      
+            
+            `);
+
+            functionChart();
+        }
+        axios({ 
+        
+            method: 'POST',   
+            url: '{{url}}/api/find_variables', 
+            headers: {
+                Authorization: "Bearer Token"
+            }, 
+            data: { 
+                idMachine: "{{idMachine}}",
+                idDevice: "{{idDevice}}"
+            }
+
+        }).then((res) => {
+            let resultado = res.data.data;
+            let selector = `<option value='{"id": "", "nombre": ""}' selected>Seleccionar variable</option>`;
+          
+            let dispositivos = resultado[0].dispositivos;
+            for(let d = 0 ; d < dispositivos.length ; d++ ) {
+                 
+                let sensores = dispositivos[d].sensores;
+                if(dispositivos[d].id_device == "{{idDevice}}") {
+
+                    for(s = 0 ; s < sensores.length ; s++ ){
+
+                        console.log(sensores[s].name);
+
+                        if(sensores[s].type == "AI"){
+                            selector += `<option value='{"id": "${sensores[s]._id}", "nombre": "${sensores[s].name}"}'>${sensores[s].name}</option>`;
+                        }
+                    }
+                }
+            }
+
+            document.getElementById('selectVariable').innerHTML = selector;
+        });
+
+
+
+            
+      
+      
+      function query_data(){
+            let fecha_desde = document.getElementById('desde').value;
+            let fecha_hasta = document.getElementById('hasta').value;
+            //let fecha_desde = moment(fecha_desde2, 'YYYY-MM-DD hh:mm:ss');
+            //let fecha_hasta = moment(fecha_hasta2, 'YYYY-MM-DD hh:mm:ss');
+
+            //let fecha_desde = document.getElementById('desde').value;
+            //let fecha_hasta = document.getElementById('hasta').value;
+            //let fecha_desde1 = "2021-04-01 15:00:00";
+            //let fecha_hasta1 = "2021-04-01 16:30:00";
+
+            let ejemplo2 = [];
+            console.log(fecha_desde, fecha_hasta);
+            
+            axios(
+                { 
+                    method: 'POST', 
+                    url: 'http://localhost:3000/api/historicos', 
+                    headers: {
+                        Authorization: "Bearer Token"
+                    }, 
+                    data: { 
+                        fecha_desde,
+                        fecha_hasta
+                    }
+                }
+            ).then((res) => {
+                
+                console.log(res.data.data[0].temp);
+                for(let i = 0; i < res.data.data.length; i ++){
+                    ejemplo2.push([new Date(res.data.data[i].time), res.data.data[i].temp]);
+                }
+                console.log(ejemplo2);
+                google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('datetime', 'X');
+                    data.addColumn('number', 'Temperatura');
+                    var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        
+      
+
+                    var options = {
+                    title: '',
+                    hAxis: {title: 'tiempo',  titleTextStyle: {color: '#333'}},
+                    vAxis: {
+                        minValue: 0,
+                        scaleType: 'log'
+                    }
+                    };
+
+                    data.addRows(ejemplo2);
+                    chart.draw(data, options);
+
+                    }
+        
+
+            }).catch((err) => {
+                
+                console.log(err);
+            });
+        };
+
+
+
+      
+        
+    </script>
+    <div id="chart_div" class="mt-3 bg-light rounded" style="width: 100%; height: 400px;"></div>
+</div>
+<script type="text/javascript">
+            
+            
+
+
+            
+</script>

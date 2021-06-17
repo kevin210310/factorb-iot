@@ -1,0 +1,135 @@
+<div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
+
+    <!-- BREADCRUMB -->
+    <div class="row mt-3 mx-0 mx-md-3 bg-body shadow-sm">
+        <div class="col-12 rounded py-auto">
+            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+                <ol class="breadcrumb my-3">
+                    <li class="breadcrumb-item"><a href="/dashboard">INICIO</a></li>
+                    <li class="breadcrumb-item"><a href="/dashboard/maquinas">MAQUINAS</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">EDITAR MAQUINA</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mt-3 mx-0 mx-md-3 px-5 d-flex justify-content-center" id="editForm">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-12 mb-3">
+                        <img id="blah" src="\images\insertImage.svg" class="img-thumbnail rounded mx-auto d-block" alt="Tu imagen" width="250px" height="250px">
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="nameUser" placeholder="nombre de usuario" onchange="nameUser()" autocomplete="off">
+                            <label for="nameUser">nombre</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="lastnamesUser" placeholder="name@example.com" onchange="lastnamesUser()" autocomplete="off">
+                            <label for="lastnamesUser">apellidos</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="emailUser" placeholder="name@example.com" onchange="emailUser()">
+                            <label for="emailUser">correo electrónico</label>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="rolUser" aria-label="Area">
+                            <option value="" selected>seleccione un área</option>
+                            <option value="tecnica">Técnica</option>
+                            <option value="ingenieria">Ingeniería</option>
+                            <option value="gerencia">Gerencia</option>
+                            <option value="prevencion">Prevención</option>
+                            <option value="mantenimiento">Mantenimiento</option>
+                        </select>
+                        <label for="rolUser">Rol del Usuario</label>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="passUser" placeholder="name@example.com" onchange="passUser()">
+                            <label for="passUser">contraseña</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="confirmPassUser" placeholder="name@example.com" onchange="confirmPassUser()">
+                            <label for="comfirmPassUser">confirmar contraseña</label>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2" id="crear_usuario">
+                        <button class="btn btn-primary btn-lg" type="button" onclick="crear_usuario()" >Crear perfil de usuario</button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    axios({
+        method: 'POST',
+        url: '{{url}}/api/editMachine',
+        headers: {
+            Authorization: 'Bearer token'
+        },
+        data: {
+            id: "{{id_machine}}"
+        }
+    }).then((res) => {
+        let resultado = res.data.data[0];
+        console.log(resultado);
+
+        let form = document.getElementById('editForm');
+
+        form.innerHTML = `
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-12 mb-3">
+                            <img id="blah" src="/images/machines/${resultado.url}" class="img-thumbnail rounded mx-auto d-block" alt="Tu imagen" width="250px" height="250px">
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="nameMachine" value="${resultado.nombre}" placeholder="nombre de usuario" autocomplete="off">
+                                <label for="nameMachine">nombre maquina</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" placeholder="Leave a comment here" id="descriptionMachine" style="height: 100px">${resultado.descripcion}</textarea>
+                                <label for="floatingTextarea">Descripción</label>
+                                <small class="text-muted" id="msj-dm"> maximo 50 caracteres</small>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="region" aria-label="Floating label select example" style="height: 70px" onchange="region()">        
+                                </select>
+                                <label for="floatingSelect">region</label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="comuna" style="height: 70px" aria-label="Floating label select example">
+                                </select>
+                                <label for="floatingSelect">comuna</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        `;
+    }).catch((err) =>{
+        console.log(err);
+    });
+</script>

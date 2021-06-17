@@ -20,7 +20,6 @@ var authentication = require('./lib/authentication');
 var indexRouter = require('./routes/index');
 var APIRouter = require('./routes/API');
 var dashboardRouter = require('./routes/dashboard');
-var testRouter = require('./routes/test');
 const bcrypt = require('bcrypt');
 const pool = require('./connection/database');
 
@@ -72,7 +71,6 @@ app.use('/ftp', express.static('public'), serveIndex('public/images', {icons: tr
 app.use('/', indexRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/api', APIRouter);
-app.use('/test', testRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

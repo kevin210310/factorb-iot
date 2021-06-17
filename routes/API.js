@@ -16,15 +16,28 @@ const path = require("path");
 const fs = require("fs");
 
 const multer = require('multer');
-const upload = multer({dest: './archivos'});
 const machines = require('../config/mongoose/maquinas');
 const devices = require('../config/mongoose/device');
 const users = require('../config/mongoose/users');
 const https = require('https');
 
 
+const machineController = require('../controllers/machines');
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/images/machines/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+ 
+var upload = multer({ storage: storage })
 
 
+// API MAQUINAS
+router.post('/deleteMachine', machineController.deleteMachine);
+router.post('/editMachine', machineController.editMachine);
 
 async function send_repeat_multiple(datos_f) {
   
@@ -233,13 +246,7 @@ router.post('/create_device', async (req, res) => {
     );
 });
 
-router.post('/edit_device', async (req, res) => {
 
-});
-
-router.post('/delete_device', async (req, res) => {
-
-});
 
 
 router.post('/search_devices', async (req, res) => {
@@ -277,484 +284,6 @@ router.post('/search_sensors', async (req, res) => {
             }
             else {
                 res.json({status: true, msg: "sensores recuperados", data: results});
-            }
-        }
-    );
-});
-
-router.get('/get_users', async (req, res) => {
-    pool.query(
-        {
-            sql: "SELECT id, nombre, apellidos, email FROM users",
-            timeout: 30000,
-        },
-        [],
-        (error, results, fields) => {
-            if(error) {
-                res.json({status: false, msg: "petición hacia la base de datos erronea."});
-            }
-            else {
-                let datos = {
-                    "data": [
-                      [
-                        "Tiger Nixon",
-                        "System Architect",
-                        "Edinburgh",
-                        "5421",
-                        "2011/04/25",
-                        "$320,800"
-                      ],
-                      [
-                        "Garrett Winters",
-                        "Accountant",
-                        "Tokyo",
-                        "8422",
-                        "2011/07/25",
-                        "$170,750"
-                      ],
-                      [
-                        "Ashton Cox",
-                        "Junior Technical Author",
-                        "San Francisco",
-                        "1562",
-                        "2009/01/12",
-                        "$86,000"
-                      ],
-                      [
-                        "Cedric Kelly",
-                        "Senior Javascript Developer",
-                        "Edinburgh",
-                        "6224",
-                        "2012/03/29",
-                        "$433,060"
-                      ],
-                      [
-                        "Airi Satou",
-                        "Accountant",
-                        "Tokyo",
-                        "5407",
-                        "2008/11/28",
-                        "$162,700"
-                      ],
-                      [
-                        "Brielle Williamson",
-                        "Integration Specialist",
-                        "New York",
-                        "4804",
-                        "2012/12/02",
-                        "$372,000"
-                      ],
-                      [
-                        "Herrod Chandler",
-                        "Sales Assistant",
-                        "San Francisco",
-                        "9608",
-                        "2012/08/06",
-                        "$137,500"
-                      ],
-                      [
-                        "Rhona Davidson",
-                        "Integration Specialist",
-                        "Tokyo",
-                        "6200",
-                        "2010/10/14",
-                        "$327,900"
-                      ],
-                      [
-                        "Colleen Hurst",
-                        "Javascript Developer",
-                        "San Francisco",
-                        "2360",
-                        "2009/09/15",
-                        "$205,500"
-                      ],
-                      [
-                        "Sonya Frost",
-                        "Software Engineer",
-                        "Edinburgh",
-                        "1667",
-                        "2008/12/13",
-                        "$103,600"
-                      ],
-                      [
-                        "Jena Gaines",
-                        "Office Manager",
-                        "London",
-                        "3814",
-                        "2008/12/19",
-                        "$90,560"
-                      ],
-                      [
-                        "Quinn Flynn",
-                        "Support Lead",
-                        "Edinburgh",
-                        "9497",
-                        "2013/03/03",
-                        "$342,000"
-                      ],
-                      [
-                        "Charde Marshall",
-                        "Regional Director",
-                        "San Francisco",
-                        "6741",
-                        "2008/10/16",
-                        "$470,600"
-                      ],
-                      [
-                        "Haley Kennedy",
-                        "Senior Marketing Designer",
-                        "London",
-                        "3597",
-                        "2012/12/18",
-                        "$313,500"
-                      ],
-                      [
-                        "Tatyana Fitzpatrick",
-                        "Regional Director",
-                        "London",
-                        "1965",
-                        "2010/03/17",
-                        "$385,750"
-                      ],
-                      [
-                        "Michael Silva",
-                        "Marketing Designer",
-                        "London",
-                        "1581",
-                        "2012/11/27",
-                        "$198,500"
-                      ],
-                      [
-                        "Paul Byrd",
-                        "Chief Financial Officer (CFO)",
-                        "New York",
-                        "3059",
-                        "2010/06/09",
-                        "$725,000"
-                      ],
-                      [
-                        "Gloria Little",
-                        "Systems Administrator",
-                        "New York",
-                        "1721",
-                        "2009/04/10",
-                        "$237,500"
-                      ],
-                      [
-                        "Bradley Greer",
-                        "Software Engineer",
-                        "London",
-                        "2558",
-                        "2012/10/13",
-                        "$132,000"
-                      ],
-                      [
-                        "Dai Rios",
-                        "Personnel Lead",
-                        "Edinburgh",
-                        "2290",
-                        "2012/09/26",
-                        "$217,500"
-                      ],
-                      [
-                        "Jenette Caldwell",
-                        "Development Lead",
-                        "New York",
-                        "1937",
-                        "2011/09/03",
-                        "$345,000"
-                      ],
-                      [
-                        "Yuri Berry",
-                        "Chief Marketing Officer (CMO)",
-                        "New York",
-                        "6154",
-                        "2009/06/25",
-                        "$675,000"
-                      ],
-                      [
-                        "Caesar Vance",
-                        "Pre-Sales Support",
-                        "New York",
-                        "8330",
-                        "2011/12/12",
-                        "$106,450"
-                      ],
-                      [
-                        "Doris Wilder",
-                        "Sales Assistant",
-                        "Sydney",
-                        "3023",
-                        "2010/09/20",
-                        "$85,600"
-                      ],
-                      [
-                        "Angelica Ramos",
-                        "Chief Executive Officer (CEO)",
-                        "London",
-                        "5797",
-                        "2009/10/09",
-                        "$1,200,000"
-                      ],
-                      [
-                        "Gavin Joyce",
-                        "Developer",
-                        "Edinburgh",
-                        "8822",
-                        "2010/12/22",
-                        "$92,575"
-                      ],
-                      [
-                        "Jennifer Chang",
-                        "Regional Director",
-                        "Singapore",
-                        "9239",
-                        "2010/11/14",
-                        "$357,650"
-                      ],
-                      [
-                        "Brenden Wagner",
-                        "Software Engineer",
-                        "San Francisco",
-                        "1314",
-                        "2011/06/07",
-                        "$206,850"
-                      ],
-                      [
-                        "Fiona Green",
-                        "Chief Operating Officer (COO)",
-                        "San Francisco",
-                        "2947",
-                        "2010/03/11",
-                        "$850,000"
-                      ],
-                      [
-                        "Shou Itou",
-                        "Regional Marketing",
-                        "Tokyo",
-                        "8899",
-                        "2011/08/14",
-                        "$163,000"
-                      ],
-                      [
-                        "Michelle House",
-                        "Integration Specialist",
-                        "Sydney",
-                        "2769",
-                        "2011/06/02",
-                        "$95,400"
-                      ],
-                      [
-                        "Suki Burks",
-                        "Developer",
-                        "London",
-                        "6832",
-                        "2009/10/22",
-                        "$114,500"
-                      ],
-                      [
-                        "Prescott Bartlett",
-                        "Technical Author",
-                        "London",
-                        "3606",
-                        "2011/05/07",
-                        "$145,000"
-                      ],
-                      [
-                        "Gavin Cortez",
-                        "Team Leader",
-                        "San Francisco",
-                        "2860",
-                        "2008/10/26",
-                        "$235,500"
-                      ],
-                      [
-                        "Martena Mccray",
-                        "Post-Sales support",
-                        "Edinburgh",
-                        "8240",
-                        "2011/03/09",
-                        "$324,050"
-                      ],
-                      [
-                        "Unity Butler",
-                        "Marketing Designer",
-                        "San Francisco",
-                        "5384",
-                        "2009/12/09",
-                        "$85,675"
-                      ],
-                      [
-                        "Howard Hatfield",
-                        "Office Manager",
-                        "San Francisco",
-                        "7031",
-                        "2008/12/16",
-                        "$164,500"
-                      ],
-                      [
-                        "Hope Fuentes",
-                        "Secretary",
-                        "San Francisco",
-                        "6318",
-                        "2010/02/12",
-                        "$109,850"
-                      ],
-                      [
-                        "Vivian Harrell",
-                        "Financial Controller",
-                        "San Francisco",
-                        "9422",
-                        "2009/02/14",
-                        "$452,500"
-                      ],
-                      [
-                        "Timothy Mooney",
-                        "Office Manager",
-                        "London",
-                        "7580",
-                        "2008/12/11",
-                        "$136,200"
-                      ],
-                      [
-                        "Jackson Bradshaw",
-                        "Director",
-                        "New York",
-                        "1042",
-                        "2008/09/26",
-                        "$645,750"
-                      ],
-                      [
-                        "Olivia Liang",
-                        "Support Engineer",
-                        "Singapore",
-                        "2120",
-                        "2011/02/03",
-                        "$234,500"
-                      ],
-                      [
-                        "Bruno Nash",
-                        "Software Engineer",
-                        "London",
-                        "6222",
-                        "2011/05/03",
-                        "$163,500"
-                      ],
-                      [
-                        "Sakura Yamamoto",
-                        "Support Engineer",
-                        "Tokyo",
-                        "9383",
-                        "2009/08/19",
-                        "$139,575"
-                      ],
-                      [
-                        "Thor Walton",
-                        "Developer",
-                        "New York",
-                        "8327",
-                        "2013/08/11",
-                        "$98,540"
-                      ],
-                      [
-                        "Finn Camacho",
-                        "Support Engineer",
-                        "San Francisco",
-                        "2927",
-                        "2009/07/07",
-                        "$87,500"
-                      ],
-                      [
-                        "Serge Baldwin",
-                        "Data Coordinator",
-                        "Singapore",
-                        "8352",
-                        "2012/04/09",
-                        "$138,575"
-                      ],
-                      [
-                        "Zenaida Frank",
-                        "Software Engineer",
-                        "New York",
-                        "7439",
-                        "2010/01/04",
-                        "$125,250"
-                      ],
-                      [
-                        "Zorita Serrano",
-                        "Software Engineer",
-                        "San Francisco",
-                        "4389",
-                        "2012/06/01",
-                        "$115,000"
-                      ],
-                      [
-                        "Jennifer Acosta",
-                        "Junior Javascript Developer",
-                        "Edinburgh",
-                        "3431",
-                        "2013/02/01",
-                        "$75,650"
-                      ],
-                      [
-                        "Cara Stevens",
-                        "Sales Assistant",
-                        "New York",
-                        "3990",
-                        "2011/12/06",
-                        "$145,600"
-                      ],
-                      [
-                        "Hermione Butler",
-                        "Regional Director",
-                        "London",
-                        "1016",
-                        "2011/03/21",
-                        "$356,250"
-                      ],
-                      [
-                        "Lael Greer",
-                        "Systems Administrator",
-                        "London",
-                        "6733",
-                        "2009/02/27",
-                        "$103,500"
-                      ],
-                      [
-                        "Jonas Alexander",
-                        "Developer",
-                        "San Francisco",
-                        "8196",
-                        "2010/07/14",
-                        "$86,500"
-                      ],
-                      [
-                        "Shad Decker",
-                        "Regional Director",
-                        "Edinburgh",
-                        "6373",
-                        "2008/11/13",
-                        "$183,000"
-                      ],
-                      [
-                        "Michael Bruce",
-                        "Javascript Developer",
-                        "Singapore",
-                        "5384",
-                        "2011/06/27",
-                        "$183,000"
-                      ],
-                      [
-                        "Donna Snider",
-                        "Customer Support",
-                        "New York",
-                        "4226",
-                        "2011/01/25",
-                        "$112,000"
-                      ]
-                    ]
-                  };
-                res.json(datos);
             }
         }
     );
@@ -820,21 +349,13 @@ router.post('/send_command', async (req, res)=>{
 
 
 
-router.post('/send_file', upload.single('archivo'), (req, res) => {
-  console.log(req.file);
-  res.send("archivo recibido");
-});
-
-
-
-
-
 
 //PROYECTO USANDO MONGO
 
 router.post('/find_machines', async (req, res) =>{
   const { id } = req.body;
-  await machines.find({usuarios_permitidos: id}, function(err, response) {
+  //await machines.find({usuarios_permitidos: id}, function(err, response) {
+    await machines.find(function(err, response) {
     if(err){
         res.status(400).json({msg: "error en la peticion", status: false});
     }
@@ -867,11 +388,20 @@ router.post('/find_OneMachine', async (req, res) =>{
 });
 
 router.post('/find_OneDevice', async (req, res) =>{
-  const { id_machine, id_device } = req.body;
-  await machines.find({_id: id_machine, 'dispositivos.id_device': id_device}, "dispositivos", function(err, response) {
-    if(err){
-        res.status(400).json({msg: "error en la peticion", status: false});
-    }
+
+    const { id_machine, id_device } = req.body;
+  
+    await machines.find(
+    {
+        _id: id_machine, 
+        'dispositivos.id_device': id_device
+    }, 
+    "dispositivos", 
+    function(err, response) {
+        if(err){
+            
+            res.json({ msg: "Error, no se pudo completar la solicitud", status: false });
+        }
     else {
         if(response == null){
             res.json({ msg: "no hay maquinas asociadas", status: false });
@@ -882,6 +412,60 @@ router.post('/find_OneDevice', async (req, res) =>{
         } 
     }
   });
+});
+
+router.post('/find_variables', async (req, res) =>{
+
+  const { idMachine, idDevice } = req.body;
+
+  await machines.find(
+  {
+      _id: idMachine, 
+      'dispositivos.id_device': idDevice
+  }, 
+  "dispositivos.sensores dispositivos.id_device dispositivos._id", 
+  function(err, response) {
+      if(err){
+          
+          res.json({ msg: "Error, no se pudo completar la solicitud", status: false });
+      }
+  else {
+      if(response == null){
+          res.json({ msg: "no hay maquinas asociadas", status: false });
+      }
+      else {
+          console.log(response);
+          res.json({data: response, status: true});
+      } 
+  }
+});
+});
+
+router.post('/find_datavariable', async (req, res) =>{
+  const { inicio, fin } = req.body;
+  await machines.find(
+  {
+    //'dispositivos.id_device': "60c0dd965ac07d4e743376f0",
+     'dispositivos.data.created_at_origin': {
+        $gte: new Date(inicio),
+        $lt: new Date(fin)
+    }
+  },
+  function(err, response) {
+      if(err){
+          
+          res.json({ msg: "Error, no se pudo completar la solicitud", status: false });
+      }
+  else {
+      if(response == null){
+          res.json({ msg: "no hay maquinas asociadas", status: false });
+      }
+      else {
+          console.log(response);
+          res.json({data: response, status: true});
+      } 
+  }
+});
 });
 
 router.post('/find_machinestracker', async (req, res) =>{
@@ -1137,5 +721,181 @@ router.post('/showUsers', async (req, res) => {
         } 
     }
   });
+});
+
+
+router.post('/uploadfile/:idMachine', upload.single('myFile'), (req, res, next) => {
+  const file = req.file
+  console.log(file);
+
+  machines.updateOne(
+    {_id: req.params.idMachine },
+    {url: file.originalname},
+    (err, response3) => {
+      if(err) {
+        console.log(err);
+      }
+      else {
+        console.log(response3);
+        if (!file) {
+          console.log("failed");
+          const error = new Error('Please upload a file')
+          error.httpStatusCode = 400
+          return next(error)
+        }
+        console.log("ok");
+        
+        res.redirect('/dashboard/maquinas');
+
+      }
+    }
+  );
+});
+
+
+router.post('/createDevice', async (req, res) => {
+    const { idMachine, nameDevice, idDevice, descriptionDevice } = req.body;
+
+    
+    let device = new devices({name: nameDevice, data: []});
+    
+    device.save().then( savedDoc1 => {
+      machines.updateOne(
+        {_id: idMachine },
+        {
+          $push: {
+            'dispositivos': {
+              id_device: savedDoc1._id,
+              name: nameDevice
+            }
+          }
+        }).then( savedDoc => {
+          console.log(savedDoc);
+          res.json({create: true, msg: savedDoc1.name + ", ha sido creada exitosamente", id: savedDoc1._id});
+        });
+  });
+});
+
+router.post('/createSensor', async (req, res) => {
+    const {idMachine, nameSensor, idSensor, idDevice, typeDevice, color, typeVariable, data} = req.body;
+    let subdata = {};
+
+    //, typeDevice, data, color 
+    console.log(req.body);
+
+    //variables
+    if(typeDevice == 0) {
+      
+        //analoga
+        if(data.typeVariable == 1) {
+
+          const { measurementSensor, variable, minSensor, maxSensor, setpoint } = data;
+          subdata = {
+            type: "AI",
+            name: nameSensor,
+            id_variable: idSensor,
+            measurement: measurementSensor,
+            variable: nameSensor,
+            minSensor,
+            maxSensor,
+            color: color,
+            controlable: setpoint
+          };
+          //const { measurementSensor, minSensor, maxSensor, setpoint } = data;
+
+        }
+
+        //entrada digital
+        else if(data.typeVariable == 2) {
+          subdata = {
+            type: "DI"
+          };
+        } 
+        
+        //salida digital
+        else if(data.typeVariable == 3) {
+          subdata = {
+            type: "DO", 
+            name: nameSensor,
+            descripcion: "descripcion",
+            variable: idSensor
+          };
+        }
+
+
+
+        machines.findOneAndUpdate({ 
+            _id:idMachine, 
+            "dispositivos.id_device":idDevice
+        },{     
+            $push: {
+              "dispositivos.$.sensores": subdata
+            }
+        }).then((result) => {
+            
+            console.log(result);
+            res.json({aaa: "adasdasd"});
+        }); 
+    }
+              /*  machines.updateOne(
+            {_id:idMachine, dispositivos: {id_device: idDevice} },
+            {url: file.originalname},
+            (err, response3) => {
+              if(err) {
+                console.log(err);
+              }
+              else {
+                console.log(response3);
+                if (!file) {
+                  console.log("failed");
+                  const error = new Error('Please upload a file')
+                  error.httpStatusCode = 400
+                  return next(error)
+                }
+                console.log("ok");
+                
+                res.redirect('/dashboard/maquinas');
+        
+              }
+            }
+          );*/
+
+          /*Folder.findOneAndUpdate(
+    { "_id": folderId, "permissions._id": permission._id },
+    { 
+        "$set": {
+            "permissions.$.role": permission.role
+        }
+    },
+    function(err,doc) {
+
+    }
+); */
+
+       // }
+        
+        //entrada digital
+     //   else if(data.typeVariable == 2) {
+
+     //   } 
+        
+        //salida digital
+      //  else if(data.typeVariable == 3) {
+
+     //   }
+   // } 
+    //gps
+   // else if(typeDevice == 1) {
+
+   // } 
+    //video en vivo
+   // else if(typeDevice == 2) {
+      
+   // } 
+    //rfid
+   // else if(typeDevice == 3) {
+      
+   // }
+ //res.json({msg:"ok"});
 });
 module.exports = router;

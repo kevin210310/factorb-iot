@@ -1,19 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const multer = require('multer');
 const passport = require('passport');
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
-  }
-})
- 
-var upload = multer({ storage: storage })
-
-//var upload = multer({ dest: 'uploads/' })
 
 
 router.get('/', function(req, res, next) {
@@ -30,20 +17,6 @@ router.post('/login', passport.authenticate('local'),function(req, res) {
 router.post('/logout', function(req, res){
   req.logout();
   res.render('login');
-});
-
-router.post('/uploadfile', upload.single('myFile'), (req, res, next) => {
-  const file = req.file
-  console.log(file);
-  if (!file) {
-    console.log("failed");
-    const error = new Error('Please upload a file')
-    error.httpStatusCode = 400
-    return next(error)
-  }
-  console.log("ok");
-    res.json({msg: "ok"});
-  
 });
 
 module.exports = router;

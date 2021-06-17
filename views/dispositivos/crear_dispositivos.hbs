@@ -17,20 +17,30 @@
                 <div class="card-body">
                     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link  btn-lg" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">1. Datos generales</button>
+                            <button class="nav-link active btn-lg" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Datos generales</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link btn-lg" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">2. Localización</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active btn-lg" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">3. Agregar sensores</button>
+                            <button class="nav-link btn-lg" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Agregar sensores</button>
                         </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                             <div class="container border bg-light">
                                 <div class="row py-5">
-                                    <div class="col-12 mb-3">
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="idMachine" value="{{id_machine}}" placeholder="name@example.com" disabled>
+                                            <label for="nameDevice">Identificador maquina</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="nameMachine" value="{{name_machine}}" placeholder="name@example.com" disabled>
+                                            <label for="nameDevice">Maquina a asociar</label>
+                                        </div>
+                                    </div>
+                                   <!-- <div class="col-12 mb-3">
                                         <img id="blah" src="\images\machines\machine-image.svg" class="img-thumbnail rounded mx-auto d-block" alt="Tu imagen" width="200px" height="200px">
                                        
                                     </div>
@@ -39,60 +49,40 @@
                                         
                                             <input class="form-control" type="file" id="formFile1">
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-12">
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="floatingInput2" placeholder="name@example.com">
-                                            <label for="floatingInput">Nombre</label>
+                                            <input type="text" class="form-control" id="nameDevice" placeholder="name@example.com">
+                                            <label for="nameDevice">Nombre dispositivo</label>
                                         </div>
                                     </div>
-                                    <div class="col-12">
-                                        <div class="form-floating mb-3">
-                                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
-                                            <label for="floatingTextarea">Descripción</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                                                <option value="0" selected>Seleccionar usuario</option>
-                                                <option value="1">Usuario 1</option>
-                                                <option value="2">Usuario 2</option>
-                                                <option value="3">Usuario 3</option>
-                                            </select>
-                                            <label for="floatingSelect">Asociar al usuario:</label>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                            <div class="container px-0">
-                                <div class="row mx-0 mt-3">
-                                    <div class="col-12 d-flex justify-content-end">
-                                        <div class="btn-group" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-secondary" disabled>atras</button>
-                                            <button type="button" class="btn btn-primary">siguiente</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
 
-
-                        </div>
-                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                            <div class="container border bg-light">
-                                <div class="row py-5">
                                     <div class="col-12">
-                                        <div id="map2"></div>
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="idDevice" placeholder="name@example.com">
+                                            <label for="nameDevice">Identificador</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <textarea class="form-control" placeholder="Leave a comment here" id="descriptionDevice" style="height: 100px" onchange="descriptionMachine()"></textarea>
+                                            <label for="descriptionDevice">Descripción</label>
+                                            <small class="text-muted" id="msj-dm"> maximo 50 caracteres</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="d-grid" id="buttonNewMachine">
+                                            <button class="btn btn-primary" type="button" onclick="newDevice()">Crear dispositivo</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade show active" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                             <div class="container border bg-light">
                                 <div class="row py-5" id="sensores_creados">
-                                    <div class="col-12">
+                                    <!--<div class="col-12">
                                         <p class="text-center fs-5">
                                             Si deseas crear un sensor para este dispositivo, haz click aquí.
                                         </p>
@@ -101,7 +91,63 @@
                                         <button class="btn btn-primary text-center" onclick="crear_sensor()">
                                             Crear Sensor
                                         </button>
-                                    </div>
+                                    </div>-->
+                                    <div class="col-12">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="nameSensor" placeholder="name@example.com">
+                    <label for="nameSensor">Nombre sensor</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="idSensor" placeholder="name@example.com">
+                    <label for="idSensor">Identificador de la variable</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="idDevice2" placeholder="name@example.com" disabled>
+                    <label for="idDevice2">Identificador dispositivo</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    <select class="form-select" id="typeDevice" style="height: 70px" aria-label="Floating label select example" onchange="typeDevice()">
+                        <option value="0" selected>Variable</option>
+                        <option value="1">Seguimiento GPS</option>
+                        <option value="2">Video en vivo</option>
+                        <option value="3">RFID (inventario)</option>
+            
+                    </select>
+                    <label for="typeDevice">Tipo de dispositivo</label>
+                </div>
+            </div>
+            <div class="col-12" id="selectTypeDevice">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" style="height: 70px" aria-label="Floating label select example" id="typeVariable" onchange="cambio_sensor()">
+                                <option value="0" selected>Seleccionar variable</option>
+                                <option value="1">Entrada Analoga</option>
+                                <option value="2">Entrada Digital</option>
+                                <option value="3">Salida Digital</option>
+                            </select>
+                            <label for="typeVariable">Tipo de variable</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row" id="variable">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="d-grid" id="buttonNewSensor">
+                    <button class="btn btn-primary" type="button" onclick="newSensor()">Crear sensor</button>
+                </div>
+            </div>
                                 </div>
                             </div>
                             
@@ -115,46 +161,242 @@
 
 
 <script>
-    function crear_sensor(){
-        let camposSensores = document.getElementById('sensores_creados');
+
+    function newSensor() {
+        let typeDevice = document.getElementById('typeDevice').value;
+        let nameSensor = document.getElementById('nameSensor').value;
+        let idSensor = document.getElementById('idSensor').value;
+        let idDevice = document.getElementById('idDevice2').value;
+        
+        
+        //variables
+        if(typeDevice == 0) {
+
+            let typeVariable = document.getElementById('typeVariable').value;
+            let color = document.getElementById('color').value;
+            let subdata = {};
+
+            if(typeVariable == 1) {
+
+                let measurementSensor = document.getElementById('measurementSensor').value;
+                let minSensor = document.getElementById('minSensor').value;
+                let maxSensor = document.getElementById('maxSensor').value;
+                
+                let setpoint = document.getElementById('setpoint').checked;
+
+                subdata = {
+                    typeVariable,
+                    measurementSensor,
+                    minSensor,
+                    maxSensor,
+                    setpoint
+                }
+
+            }
+            else if(typeVariable == 2){
+                subdata = {
+                    typeVariable
+                }
+
+            }
+            else if(typeVariable == 3){
+                subdata = {
+                    typeVariable
+                }
+            }
+
+            axios({
+                method: 'POST',
+                url: '{{url}}/api/createSensor',
+                headers: {
+                    Authorization: 'Bearer token'
+                },
+                data: {
+                    idMachine: "{{id_machine}}",
+                    idDevice,
+                    nameSensor,
+                    idSensor,
+                    typeDevice,
+                    color,
+                    data: subdata
+                }
+                }).then((res) => {
+                    console.log(res.data);
+
+                }).catch((err) =>{
+                    console.log(err);
+                });
 
 
-        camposSensores.innerHTML = `
+
+
+        } 
+        //gps
+        else if(typeDevice == 1){
+
+        }
+        //video en vivo
+        else if(typeDevice == 2){
+
+        }
+        //rfid
+        else if(typeDevice == 3){
+
+        }
+
+        
+    }
+
+    function newDevice() {
+        let idMachine = document.getElementById('idMachine').value;
+        let nameDevice = document.getElementById('nameDevice').value;
+        let idDevice = document.getElementById('idDevice').value;
+        let descriptionDevice = document.getElementById('descriptionDevice').value;
+
+
+        axios({
+        method: 'POST',
+        url: '{{url}}/api/createDevice',
+        headers: {
+            Authorization: 'Bearer token'
+        },
+        data: {
+            idMachine,
+            nameDevice,
+            idDevice,
+            descriptionDevice
+        }
+    }).then((res) => {
+        console.log(res.data.id);
+
+        document.getElementById('idDevice2').value = res.data.id;
+
+
+
+
+    }).catch((err) =>{
+        console.log(err);
+    });
+
+    }
+    function typeDevice() {
+        let typeDevice = document.getElementById('typeDevice').value;
+        let formTypeDevice = `<div class="row">`;
+
+        if(typeDevice == 0) {
+
+            formTypeDevice = `
+            
             <div class="col-12">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput5" placeholder="name@example.com">
-                    <label for="floatingInput">Nombre sensor</label>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput6" placeholder="name@example.com">
-                    <label for="floatingInput">Identificador de la variable</label>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form-floating mb-3">
-                    <select class="form-select" aria-label="Floating label select example" id="select-1" onchange="cambio_sensor()">
+                    <select class="form-select" style="height: 70px" aria-label="Floating label select example" id="typeVariable" onchange="cambio_sensor()">
                         <option value="0" selected>Seleccionar variable</option>
                         <option value="1">Entrada Analoga</option>
                         <option value="2">Entrada Digital</option>
                         <option value="3">Salida Digital</option>
                     </select>
-                    <label for="floatingSelect">Tipo de variable</label>
+                    <label for="typeVariable">Tipo de variable</label>
                 </div>
             </div>
             <div class="col-12">
                 <div class="row" id="variable">
                     
                 </div>
-            </div>`;
+            </div>
+            
+            `;
+
+        } else if(typeDevice == 1) {
+
+            formTypeDevice = ``;
+
+        } else if(typeDevice == 2) {
+
+            
+            formTypeDevice = `
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="urlLiveStream" placeholder="name@example.com">
+                        <label for="floatingInput">Url livestream</label>
+                    </div>
+                </div>
+            `;
+
+        } else if(typeDevice == 3) {
+
+        }
+
+        document.getElementById('selectTypeDevice').innerHTML = formTypeDevice + "</div>";
+    }
+    function crear_sensor() {
+        let camposSensores = document.getElementById('sensores_creados');
+
+
+        camposSensores.innerHTML = `
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="nameSensor" placeholder="name@example.com">
+                    <label for="nameSensor">Nombre sensor</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="idSensor" placeholder="name@example.com">
+                    <label for="idSensor">Identificador de la variable</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="idDevice2" placeholder="name@example.com" disabled>
+                    <label for="idDevice2">Identificador dispositivo</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    <select class="form-select" id="typeDevice" style="height: 70px" aria-label="Floating label select example" onchange="typeDevice()">
+                        <option value="0" selected>Variable</option>
+                        <option value="1">Seguimiento GPS</option>
+                        <option value="2">Video en vivo</option>
+                        <option value="3">RFID (inventario)</option>
+            
+                    </select>
+                    <label for="typeDevice">Tipo de dispositivo</label>
+                </div>
+            </div>
+            <div class="col-12" id="selectTypeDevice">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" style="height: 70px" aria-label="Floating label select example" id="typeVariable" onchange="cambio_sensor()">
+                                <option value="0" selected>Seleccionar variable</option>
+                                <option value="1">Entrada Analoga</option>
+                                <option value="2">Entrada Digital</option>
+                                <option value="3">Salida Digital</option>
+                            </select>
+                            <label for="typeVariable">Tipo de variable</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row" id="variable">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="d-grid" id="buttonNewSensor">
+                    <button class="btn btn-primary" type="button" onclick="newSensor()">Crear sensor</button>
+                </div>
+            </div>
+        `;
 
     }
 
 
     function cambio_sensor(){
     // Código a ejecutar cuando se detecta un cambio de archivO
-        let valor = document.getElementById('select-1').value;
+        let valor = document.getElementById('typeVariable').value;
         let formulario_variable;
 
         if(valor == 0){
@@ -168,41 +410,35 @@
                 formulario_variable = `
                     <div class="col-12">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingInput9" placeholder="name@example.com">
-                            <label for="floatingInput">Variable de medición</label>
+                            <input type="text" class="form-control" id="measurementSensor" placeholder="name@example.com">
+                            <label for="measurementSensor">Variable de medición</label>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="form-floating mb-3">
-                            <input type="number" class="form-control" id="floatingInput9" placeholder="name@example.com">
-                            <label for="floatingInput">Medición minima</label>
+                            <input type="number" class="form-control" id="minSensor" placeholder="name@example.com">
+                            <label for="minSensor">Medición minima</label>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="form-floating mb-3">
-                            <input type="number" class="form-control" id="floatingInput9" placeholder="name@example.com">
-                            <label for="floatingInput">Medición maxima</label>
+                            <input type="number" class="form-control" id="maxSensor" placeholder="name@example.com">
+                            <label for="maxSensor">Medición maxima</label>
                         </div>
                     </div>
                     <div class="col-6 mb-3">
-                        <label for="exampleColorInput" class="form-label">Color de diseño</label>
-                        <input type="color" class="form-control form-control-color" id="exampleColorInput" value="#563d7c" title="Choose your color">
+                        <label for="color" class="form-label">Color de diseño</label>
+                        <input type="color" class="form-control form-control-color" id="color" value="#563d7c" title="Choose your color">
                     </div>
                     <div class="col-6 mb-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
+                            <input class="form-check-input" type="checkbox" value="off" id="setpoint">
+                            <label class="form-check-label" for="setpoint">
                                 ¿Controlable?
                             </label>
                         </div>
                     </div>
-                    
-                    <div class="col-12">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingInput9" placeholder="name@example.com">
-                            <label for="floatingInput">Variable de medición</label>
-                        </div>
-                    </div>`;
+                    `;
                 
             } 
             
@@ -210,12 +446,11 @@
             else if(valor == 2) {
                 
                 formulario_variable = `
-                    <div class="col-12">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingInput9" placeholder="name@example.com">
-                            <label for="floatingInput">Variable de medición</label>
-                        </div>
-                    </div>`;
+                    <div class="col-6 mb-3">
+                        <label for="color" class="form-label">Color de diseño</label>
+                        <input type="color" class="form-control form-control-color" id="color" value="#563d7c" title="Choose your color">
+                    </div>
+                    `;
 
             } 
             
@@ -223,11 +458,9 @@
             else if(valor == 3) {
 
                 formulario_variable = `
-                    <div class="col-12">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingInput9" placeholder="name@example.com">
-                            <label for="floatingInput">Variable de medición</label>
-                        </div>
+                    <div class="col-6 mb-3">
+                        <label for="color" class="form-label">Color de diseño</label>
+                        <input type="color" class="form-control form-control-color" id="color" value="#563d7c" title="Choose your color">
                     </div>`;
 
             }

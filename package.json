@@ -1,5 +1,6 @@
 {
   "name": "factorb-iot",
+  "author": "Kevin Abarca Gracia",
   "version": "0.0.0",
   "private": true,
   "scripts": {

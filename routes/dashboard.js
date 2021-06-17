@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const { verify } = require('../lib/verify_user');
 
 
-//dashboard
+//      DASHBOARD
 router.get('/', verify, (req, res) => {
 
     if(req.user.user.rol == "administrador") {
@@ -51,6 +51,7 @@ router.get('/', verify, (req, res) => {
             permisos: {ingenieria: false, prevencion: false, tecnico: true, gerencia: false},
             url: process.env.URL
         });
+
     } else if(req.user.user.rol == "gerencia") {
 
         res.render('dashboard', {
@@ -61,11 +62,14 @@ router.get('/', verify, (req, res) => {
             permisos: {ingenieria: false, prevencion: false, tecnico: false, gerencia: true},
             url: process.env.URL
         });
+
     } else {
         res.render('error');
     }
 });
-//USUARIOS
+
+
+//      USUARIOS
 router.get('/usuarios', (req, res) => {
 
     res.render('usuarios/usuarios', {
@@ -78,6 +82,7 @@ router.get('/usuarios', (req, res) => {
     });
 
 });
+
 router.get('/usuarios/crear', (req, res) => {
 
     res.render('usuarios/crear_usuarios', {
@@ -91,8 +96,12 @@ router.get('/usuarios/crear', (req, res) => {
 
 });
 
-//MAQUINAS
+//FALTA EDITAR
+
+
+//      MAQUINAS
 router.get('/maquinas', async (req, res) => {
+    
     res.render('maquinas/maquinas', {
         layout: 'template_dashboard', 
         value: false, 
@@ -102,8 +111,11 @@ router.get('/maquinas', async (req, res) => {
         url: process.env.URL,
         id_user: "606db3fa1282c834d0c9651d"
     });
+
 });
+
 router.get('/maquinas/crear', async (req, res) => {
+
     res.render('maquinas/crear_maquinas', {
         layout: 'template_dashboard', 
         value: false, 
@@ -113,10 +125,27 @@ router.get('/maquinas/crear', async (req, res) => {
         url: process.env.URL,
         id_user: "606db3fa1282c834d0c9651d"
     });
+
 });
 
-//DISPOSITIVOS
-router.get('/dispositivos/crear/:id_machine', (req, res) => {
+router.get('/maquinas/editar/:id', async (req, res) => {
+    res.render('maquinas/editar_maquinas', {
+        layout: 'template_dashboard', 
+        value: false, 
+        nombre: "estatico",
+        rol: "administrador",
+        permisos: {ingenieria: true, prevencion: true, tecnico: true, gerencia: true},
+        url: process.env.URL,
+        id_user: "606db3fa1282c834d0c9651d",
+        id_machine: req.params.id
+    });
+});
+//FALTA EDITAR
+
+
+//      DISPOSITIVOS
+router.get('/dispositivos/crear/:id_machine/:name_machine', (req, res) => {
+
     res.render('dispositivos/crear_dispositivos', {
         layout: 'template_dashboard', 
         value: false, 
@@ -126,39 +155,27 @@ router.get('/dispositivos/crear/:id_machine', (req, res) => {
         url: process.env.URL,
         id_user: "606db3fa1282c834d0c9651d",
         id_machine: req.params.id_machine,
+        name_machine: req.params.name_machine,
         hola: "hola mundo"
     });
+
 });
 
-//users
-router.get('/users', (req, res) => {
-    res.render('dashboard/admin/users/users', {layout: 'dashboard_template'});
-});
-//create_user
-router.get('/create_user_web', (req, res) => {
-    res.render('dashboard/admin/users/create_user_web', {layout: 'dashboard_template'});
-});
-
-router.get('/create_user_mobile', (req, res) => {
-    res.render('dashboard/admin/users/create_user_mobile', {layout: 'dashboard_template'});
-});
-
-//edit_user
-router.get('/edit_user_web', (req, res) => {
-    res.render('dashboard/admin/users/edit_user_web', {layout: 'dashboard_template'});
-});
-
-router.get('/edit_user_mobile', (req, res) => {
-    res.render('dashboard/admin/users/edit_user_mobile', {layout: 'dashboard_template'});
-});
-
-router.get('/test', function(req, res, next) {
-    res.render('test', {layout: 'dashboard_template'});
-});
+//FALTA EDITAR
 
 
-router.get('/historicos', function(req, res, next) {
-    res.render('dashboard/users/historicos', {layout: 'dashboard_template'});
+router.get('/historicos/:idDevice/:idMachine', function(req, res, next) {
+
+    res.render('historicos/historicos', {
+        layout: 'template_dashboard',
+        value: false, 
+        nombre: "estatico",
+        rol: "administrador",
+        idDevice: req.params.idDevice,
+        idMachine: req.params.idMachine,
+        permisos: {ingenieria: true, prevencion: true, tecnico: true, gerencia: true},
+        url: process.env.URL
+    });
 });
 
 router.get('/control', function(req, res, next) {
@@ -233,6 +250,8 @@ router.get('/datadevice/:id_device/:id_machine', async (req,res) =>{
     res.render('datadevice', {
         layout: 'template_dashboard',
         url: process.env.URL,
+        nombre: "estatico",
+        rol: "administrador",
         id_user: "606db3fa1282c834d0c9651d",
         id_machine: req.params.id_machine,
         id_device: req.params.id_device

@@ -1,10 +1,13 @@
-
 <!-- SCRIPTS NECESARIOS -->
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+<script src="/libs/a/jquery-3.5.1.js"></script>
+<script src="/libs/a/jquery.dataTables.min.js"></script>
+<script src="/libs/a/dataTables.bootstrap5.min.js"></script>
+<script src="/libs/a/dataTables.select.min.js"></script>
 <div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
-    <div class="row mt-3 mx-0 mx-md-3">
-        <div class="col-12 rounded py-auto shadow-sm bg-body">
+    <div class="row mt-3 mx-0 mx-md-3 shadow-sm bg-body">
+        <!-- BREADCRUMB -->
+        <div class="col-6 rounded py-auto">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-3">
                     <li class="breadcrumb-item"><a href="#">INICIO</a></li>
@@ -13,16 +16,31 @@
                 </ol>
             </nav>
         </div>
-    </div>
-    <div class="row gx-2 m-3" id="sensors_cards">
+        <!-- BOTON ALARMAS -->
+        <div class="col-6 rounded py-auto" style="display:flex;justify-content: flex-end;">
+            <div class="col-1 float-right d-grid gap-2 my-auto">
+                <button class="btn btn-warning my-auto float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">   
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                        <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                        <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+                    </svg>
+                </button>
 
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                    <div class="offcanvas-header">
+                        <h5 id="offcanvasRightLabel">CONFIGURACIONES</h5>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        ...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row g-3 m-2" id="tarjeta_sensores">
     </div>
 </div>
-
-
-
-
-
 
 <script>
     axios({ 
@@ -43,10 +61,426 @@
     }).then((res) => {
         
 
-        var resultados = res.data;
+        let resultados = res.data;
+        let variableAnaloga = ``;
+        let variableDigital = `
+            <div class="col-6">
+                <div class="p-3 border" style="background-color: #fff;height: 350px;">
+                    <div>
+                        <table class="table table-hover text-center" id="data_device">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col">Controles</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+        `;
+        let bateria = `
+            <div class="col-3">
+                <div class="p-3 border" style="background-color: #fff;height: 350px;">
+                    <div id="battery_gauge"></div>
+                </div>
+            </div>
+        `;
+        let wifi = `
+            <div class="col-3">
+                <div class="p-3 border" style="background-color: #fff;height: 350px;">
+                    <div id="wifi_gauge"></div>
+                </div>
+            </div>
+        `;
         let chart_apex;
+
         if(resultados.status) {
+
+            let dispositivos = resultados.data[0].dispositivos;
+            let functionRealTime;
+            let socket = ``;
             
+            for(let d = 0 ; d < dispositivos.length ; d++) {
+                
+                if(dispositivos[d].id_device == "{{id_device}}") {
+                    console.log(dispositivos[d].name);
+                    socket += `socket.on("${dispositivos[d].name}", sensores => {`;
+                    let sensores = dispositivos[d].sensores;
+                    console.log(sensores.length, "sensores recuperados");
+
+                    for(let s = 0 ; s < sensores.length ; s++) {
+                        
+                        if(sensores[s].type == "DO") {
+
+                            variableDigital += `
+                                <tr>
+                                    <th>${sensores[s].name}</th>
+                                    <td>${sensores[s].descripcion}</td>
+                                    <td id="DO${sensores[s]._id}">
+                                        <span class='badge rounded-pill bg-light'>no data</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success" onclick="send_command('factorb-iot-0015', 'rel1')">ON</button>
+                                        <button class="btn btn-danger" onclick="send_command('factorb-iot-0015', 'rel0')">OFF</button>
+                                    </td>
+                                </tr>
+                            `;
+
+                            socket += `
+                                
+                                if(sensores.${sensores[s].variable} == 1) {
+                                    document.getElementById('DO${sensores[s]._id}').innerHTML = "<span class='badge rounded-pill bg-success'>activado</span>";
+                                } else if(sensores.${sensores[s].variable} == 0) {
+                                    document.getElementById('DO${sensores[s]._id}').innerHTML = "<span class='badge rounded-pill bg-danger'>desactivado</span>";
+                                }`;
+
+
+                        } 
+                        else if(sensores[s].type == "AI") {
+                            
+                            variableAnaloga += `
+                                <div class="col-9">
+                                    <div class="p-3 border" style="background-color: #fff;">
+                                        <div id="realtime${sensores[s]._id}"></div>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div div class="p-3 border d-flex flex-column justify-content-center align-items-center" style="height: 300px;background-color: #fff;">
+                                        <div id="gauge${sensores[s]._id}"></div>
+                                        <p class="mt-3">Ultima actualización: 07-06-2021 16:28:32</p>
+                                    </div>
+                                </div>
+                            `;
+
+                            socket += `
+                                if(data${sensores[s]._id}.length > 30) {
+                                    data${sensores[s]._id}.shift();
+                                }
+                                data${sensores[s]._id}.push({x: sensores.created_at_origin, y: sensores.${sensores[s].id_variable}});
+                                  
+                                chart${sensores[s]._id}.updateSeries([{
+                                        data: data${sensores[s]._id}
+                                }])
+
+                                chartgauge${sensores[s]._id}.updateSeries([sensores.${sensores[s].id_variable}])
+                            
+                            
+                            `;
+
+                            functionRealTime += `
+
+                                let data${sensores[s]._id} = [
+                
+                                ];
+                                let options${sensores[s]._id} = {
+                                    series: [{
+                                        name: "${sensores[s].name}",
+                                        data: data${sensores[s]._id}.slice()
+                                    }],
+                                    chart: {
+                                        id: 'realtime${sensores[s]._id}',
+                                        height: 250,
+                                        type: 'area',
+                                        animations: {
+                                            enabled: true,
+                                            easing: 'linear',
+                                            dynamicAnimation: {
+                                                speed: 1000
+                                            }
+                                        },
+                                        toolbar: {
+                                            show: false
+                                        },
+                                        zoom: {
+                                            enabled: false
+                                        }
+                                    },
+                                    dataLabels: {
+                                        enabled: false
+                                    },
+                                    stroke: {
+                                        curve: 'smooth'
+                                    },
+                                    title: {
+                                        text: 'SENSOR DE ${sensores[s].name} [ ${sensores[s].measurement} ]',
+                                        align: 'left'
+                                    },
+                                    markers: {
+                                        size: 0
+                                    },
+                                    xaxis: {
+                                        type: 'datetime',
+                                    },
+       
+                                    legend: {
+                                        show: false
+                                    },
+                                    colors: ['${sensores[s].color}'],
+                                    noData: {
+                                        text: 'Cargando datos...'
+                                    }
+                                };
+
+                                var chart${sensores[s]._id} = new ApexCharts(document.querySelector("#realtime${sensores[s]._id}"), options${sensores[s]._id});
+                                chart${sensores[s]._id}.render();
+
+                                var optionsgauge${sensores[s]._id} = {
+                                    series: [0],
+                                    chart: {
+                                        height: 300,
+                                        type: 'radialBar',
+                                        toolbar: {
+                                            show: false
+                                        }
+                                    },
+                                    plotOptions: {
+                                        radialBar: {
+                                            startAngle: -90,
+                                            endAngle: 90,
+                                            track: {
+                                                background: '#fff',
+                                                strokeWidth: '97%',
+                                                margin: 10, // margin is in pixels
+                                                dropShadow: {
+                                                    enabled: true,
+                                                    top: 2,
+                                                    left: 0,
+                                                    color: '${sensores[s].color}',
+                                                    opacity: 1,
+                                                    blur: 2
+                                            }
+                                        },
+                                        dataLabels: {
+                                            show: true,
+                                            name: {
+                                                offsetY: -10,
+                                                show: true,
+                                                color: '#FFF',
+                                                fontSize: '12px'
+                                            },
+                                            value: {
+                                                formatter: function(val) {
+                                                    return parseInt(val);
+                                                },
+                                                color: '#111',
+                                                fontSize: '20px',
+                                                show: true,
+                                            }
+                                        }
+                                    }
+                                    },
+        fill: {
+          type: 'gradient',
+          gradient: {
+                            shade: 'light',
+                            shadeIntensity: 0.4,
+                            inverseColors: false,
+                            opacityFrom: 1,
+                            opacityTo: 1,
+                            stops: [0, 50, 53, 91]
+                        },
+        },
+        stroke: {
+         // lineCap: 'round'
+        },
+        colors: ['${sensores[s].color}'],
+        labels: ['${sensores[s].name}'],
+        };
+
+        var chartgauge${sensores[s]._id} = new ApexCharts(document.querySelector("#gauge${sensores[s]._id}"), optionsgauge${sensores[s]._id});
+        chartgauge${sensores[s]._id}.render();
+
+                            
+                            
+                            
+                            `
+
+                            if(sensores[s].controlable) {
+                                variableDigital += `
+                                    <tr>
+                                        <th>${sensores[s].name}</th>
+                                        <td>[ DESCRIPCION_SENSOR ]</td>
+                                        <td><span class='badge rounded-pill bg-warning text-dark'>27.6</span></td>
+                                        <td>
+                                            <button class="btn btn-warning" onclick="send_command('factorb-iot-0015', 'rel1')">set-point</button>
+                                        </td>
+                                    </tr>    
+                                `;
+                            }
+
+                        } 
+                        else if(sensores[s].type == "DI") {
+                            variableDigital += `
+                                <tr>
+                                      <th>${sensores[s].name}</th>
+                                      <td>${sensores[s].descripcion}</td>
+                                       <td id="DI${sensores[s]._id}">
+                                        <span class='badge rounded-pill bg-light'>no data</span>
+                                       </td>
+                                      <td></td>
+                                </tr>      
+                            `;
+
+                            socket += `
+                                
+                                if(sensores.${sensores[s].variable} == 1) {
+                                    document.getElementById('DI${sensores[s]._id}').innerHTML = "<span class='badge rounded-pill bg-success'>activado</span>";
+                                } else if(sensores.${sensores[s].variable} == 0) {
+                                    document.getElementById('DI${sensores[s]._id}').innerHTML = "<span class='badge rounded-pill bg-danger'>desactivado</span>";
+                                }`;
+
+
+                        } else {
+
+                            console.log("sensor no reconocido");
+                        }
+
+                    }
+
+                    functionRealTime += `
+                        var optionsbattery = {
+                            series: [0],
+                            chart: {
+                                height: 350,
+                                type: 'radialBar',
+                                offsetY: -10
+                            },
+                            plotOptions: {
+                                radialBar: {
+                                    startAngle: -135,
+                                    endAngle: 135,
+                                    dataLabels: {
+                                        name: {
+                                            fontSize: '16px',
+                                            color: undefined,
+                                            offsetY: 120
+                                        },
+                                        value: {
+                                            offsetY: 76,
+                                            fontSize: '22px',
+                                            color: undefined,
+                                            formatter: function (val) {
+                                                return val + "%";
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            fill: {
+                                type: 'gradient',
+                                gradient: {
+                                    shade: 'dark',
+                                    shadeIntensity: 0.15,
+                                    inverseColors: false,
+                                    opacityFrom: 1,
+                                    opacityTo: 1,
+                                    stops: [0, 50, 65, 91]
+                                },
+                            },
+                            stroke: {
+                                dashArray: 4
+                            },
+                            labels: ['Nivel Batería'],
+                            colors: ['#09A001']
+                        };
+
+                        var chartbattery = new ApexCharts(document.querySelector("#battery_gauge"), optionsbattery);
+                        chartbattery.render();
+
+
+                        var optionswifi = {
+                            series: [0],
+                            chart: {
+                                height: 350,
+                                type: 'radialBar',
+                                offsetY: -10
+                            },
+                            plotOptions: {
+                                radialBar: {
+                                    startAngle: -135,
+                                    endAngle: 135,
+                                    dataLabels: {
+                                        name: {
+                                            fontSize: '16px',
+                                            color: undefined,
+                                            offsetY: 120
+                                        },
+                                        value: {
+                                            offsetY: 76,
+                                            fontSize: '22px',
+                                            color: undefined,
+                                            formatter: function (val) {
+                                                return val + "%";
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            fill: {
+                            type: 'gradient',
+                            gradient: {
+                                shade: 'dark',
+                                shadeIntensity: 0.15,
+                                inverseColors: false,
+                                opacityFrom: 1,
+                                opacityTo: 1,
+                                stops: [0, 50, 65, 91]
+                            },
+                        },
+                        stroke: {
+                            dashArray: 4
+                        },
+                        labels: ['Señal Wi-fi'],
+                        colors: ['#dbee1b']
+                    };
+
+                    var chartwifi = new ApexCharts(document.querySelector("#wifi_gauge"), optionswifi);
+                    chartwifi.render();
+                        
+                        `;
+                        socket += `
+
+
+                            chartwifi.updateSeries([parseInt(100 * sensores.signal_level)])
+                            chartbattery.updateSeries([parseInt(100 * sensores.battery_level)])
+                        `;
+
+
+                }
+            }
+
+            variableDigital += ` 
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            
+            
+            `;
+            document.getElementById('tarjeta_sensores').innerHTML = variableAnaloga + bateria + variableDigital + wifi;
+            socket += `
+            
+            
+            
+            
+            console.log(sensores);});`;
+            let ai = new Function(functionRealTime+socket);
+            let batterywifi = new Function(`
+            
+                
+
+         
+            
+            `);
+            //batterywifi();
+            ai();
+
+
+
+
+
+
             for(let device = 0 ; device < resultados.data[0].dispositivos.length ; device++){
                 
                 if(resultados.data[0].dispositivos[device].id_device == "{{id_device}}") {
@@ -74,12 +508,15 @@
                         if(resultados.data[0].dispositivos[device].sensores[s].type == "AI"){
                             
                             sensors_cards += `
-                                <div class="col-12 shadow rounded mb-3" style="background-color: #fff;">
+                                <div class="col-8 shadow rounded mb-3" style="background-color: #fff;">
                                   <div id="chart_${s}" class="my-3"></div>
                                 </div>
+                                
                             `;
 
                             chart_apex = new Function(`
+
+                              
 
                                 let data = [];
                     
@@ -151,9 +588,7 @@
                                 socket.on("${res.data.data[0].dispositivos[device].sensores[s].name}", sensores => {
                                     
                                     
-                                    if(data.length > 10) {
-                                        data.shift();
-                                    }
+                                    
                                     data.push({x: sensores.created_at_origin, y: sensores.${res.data.data[0].dispositivos[device].sensores[s].id_variable}});
                                   
                                     chart.updateSeries([{
@@ -221,15 +656,21 @@
                             </table>
                         </div>
                     `;
-                    document.getElementById('sensors_cards').innerHTML = sensors_cards+reles_cards;
-                    chart_apex();
-                    rele_socket();
+                    //document.getElementById('sensors_cards').innerHTML = sensors_cards+reles_cards;
+                    //chart_apex();
+                    //rele_socket();
                      
                 }
             }
         }
         else {
-            console.log(res.data.msg);
+            /*document.getElementById('tarjeta_sensores_principal').innerHTML = `
+                <div class="col-6 of">
+                    <div class="p-3 border" style="background-color: #E2E2E2;">
+                        <p class="fs-3">${resultados.msg}</p>
+                    </div>
+                </div>
+            `;*/
         }      
     }).catch((err) => {   
         console.log(err);
@@ -261,7 +702,154 @@
         });
 
     }
- 
+  let espanol = {
+    "processing": "Procesando...",
+    "lengthMenu": "Mostrar _MENU_ registros",
+    "zeroRecords": "No se encontraron resultados",
+    "emptyTable": "Ningún dato disponible en esta tabla",
+    "info": "Mostrando _START_ - _END_ de un total de _TOTAL_ registros",
+    "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+    "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+    "search": "Buscar:",
+    "infoThousands": ",",
+    "loadingRecords": "Cargando...",
+    "paginate": {
+        "first": "Primero",
+        "last": "Último",
+        "next": "Siguiente",
+        "previous": "Anterior"
+    },
+    "aria": {
+        "sortAscending": ": Activar para ordenar la columna de manera ascendente",
+        "sortDescending": ": Activar para ordenar la columna de manera descendente"
+    },
+    "buttons": {
+        "copy": "Copiar",
+        "colvis": "Visibilidad",
+        "collection": "Colección",
+        "colvisRestore": "Restaurar visibilidad",
+        "copyKeys": "Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br \/> <br \/> Para cancelar, haga clic en este mensaje o presione escape.",
+        "copySuccess": {
+            "1": "Copiada 1 fila al portapapeles",
+            "_": "Copiadas %d fila al portapapeles"
+        },
+        "copyTitle": "Copiar al portapapeles",
+        "csv": "CSV",
+        "excel": "Excel",
+        "pageLength": {
+            "-1": "Mostrar todas las filas",
+            "1": "Mostrar 1 fila",
+            "_": "Mostrar %d filas"
+        },
+        "pdf": "PDF",
+        "print": "Imprimir"
+    },
+    "autoFill": {
+        "cancel": "Cancelar",
+        "fill": "Rellene todas las celdas con <i>%d<\/i>",
+        "fillHorizontal": "Rellenar celdas horizontalmente",
+        "fillVertical": "Rellenar celdas verticalmentemente"
+    },
+    "decimal": ",",
+    "searchBuilder": {
+        "add": "Añadir condición",
+        "button": {
+            "0": "Constructor de búsqueda",
+            "_": "Constructor de búsqueda (%d)"
+        },
+        "clearAll": "Borrar todo",
+        "condition": "Condición",
+        "conditions": {
+            "date": {
+                "after": "Despues",
+                "before": "Antes",
+                "between": "Entre",
+                "empty": "Vacío",
+                "equals": "Igual a",
+                "not": "No",
+                "notBetween": "No entre",
+                "notEmpty": "No Vacio"
+            },
+            "number": {
+                "between": "Entre",
+                "empty": "Vacio",
+                "equals": "Igual a",
+                "gt": "Mayor a",
+                "gte": "Mayor o igual a",
+                "lt": "Menor que",
+                "lte": "Menor o igual que",
+                "not": "No",
+                "notBetween": "No entre",
+                "notEmpty": "No vacío"
+            },
+            "string": {
+                "contains": "Contiene",
+                "empty": "Vacío",
+                "endsWith": "Termina en",
+                "equals": "Igual a",
+                "not": "No",
+                "notEmpty": "No Vacio",
+                "startsWith": "Empieza con"
+            }
+        },
+        "data": "Data",
+        "deleteTitle": "Eliminar regla de filtrado",
+        "leftTitle": "Criterios anulados",
+        "logicAnd": "Y",
+        "logicOr": "O",
+        "rightTitle": "Criterios de sangría",
+        "title": {
+            "0": "Constructor de búsqueda",
+            "_": "Constructor de búsqueda (%d)"
+        },
+        "value": "Valor"
+    },
+    "searchPanes": {
+        "clearMessage": "Borrar todo",
+        "collapse": {
+            "0": "Paneles de búsqueda",
+            "_": "Paneles de búsqueda (%d)"
+        },
+        "count": "{total}",
+        "countFiltered": "{shown} ({total})",
+        "emptyPanes": "Sin paneles de búsqueda",
+        "loadMessage": "Cargando paneles de búsqueda",
+        "title": "Filtros Activos - %d"
+    },
+    "select": {
+        "1": "%d fila seleccionada",
+        "_": "%d filas seleccionadas",
+        "cells": {
+            "1": "1 celda seleccionada",
+            "_": "$d celdas seleccionadas"
+        },
+        "columns": {
+            "1": "1 columna seleccionada",
+            "_": "%d columnas seleccionadas"
+        }
+    },
+    "thousands": ".",
+    "datetime": {
+        "previous": "Anterior",
+        "next": "Proximo",
+        "hours": "Horas"
+    }
+};
+ $(document).ready(function() {
+            $('#data_device').DataTable({
+                "language": espanol,
+                "pageLength": 3
+            });
+        } );     
+         /*
+        window.setInterval(function () {
+        getNewSeries(lastDate, {
+          min: 10,
+          max: 90
+        })
       
-    
+        chart.updateSeries([{
+          data: data
+        }])
+      }, 1000)*/
 </script>

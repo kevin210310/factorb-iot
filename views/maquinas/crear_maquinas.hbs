@@ -1,34 +1,4 @@
-<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <style type="text/css">
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map2 {
-        height: 300px;
-      }
-
-      /* Optional: Makes the sample page fill the window. */
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-    <script>
-      function initMap() {
-        const myLatLng = { lat: -25.363, lng: 131.044 };
-        const map = new google.maps.Map(document.getElementById("map2"), {
-          zoom: 4,
-          center: myLatLng,
-        });
-        new google.maps.Marker({
-          position: myLatLng,
-          map,
-          title: "Hello World!",
-        });
-      }
-    </script>
-
+<link rel="stylesheet" href="/libs/cropperjs-master/dist/cropper.css">
 
 <div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
 
@@ -39,7 +9,7 @@
                 <ol class="breadcrumb my-3">
                     <li class="breadcrumb-item"><a href="/dashboard">INICIO</a></li>
                     <li class="breadcrumb-item"><a href="/dashboard/maquinas">MAQUINAS</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">AGREGAR NUEVA MAQUINA</li>
+                    <li class="breadcrumb-item active" aria-current="page">AGREGAR MAQUINA</li>
                 </ol>
             </nav>
         </div>
@@ -51,29 +21,16 @@
                 <div class="card-body">
                     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active btn-lg" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">1. Datos generales</button>
+                            <button class="nav-link active btn-lg" id="datosGenerales">Datos generales</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link btn-lg" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">2. Localización</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link btn-lg" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">3. paso</button>
+                        <li class="nav-item" role="presentation" >
+                            <button class="nav-link btn-lg" id="personalizacion">Personalización</button>
                         </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                             <div class="container border bg-light">
                                 <div class="row py-5">
-                                    <!--<div class="col-12 mb-3">
-                                        <img id="blah" src="\images\machines\machine-image.svg" class="img-thumbnail rounded mx-auto d-block" alt="Tu imagen" width="200px" height="200px">
-                                       
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="mb-3">
-                                        
-                                            <input class="form-control" type="file" id="formFile1">
-                                        </div>
-                                    </div> -->
                                     <div class="col-12">
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" id="nameMachine" placeholder="name@example.com" onchange="nameMachine()">
@@ -116,72 +73,178 @@
                                         <div class="d-grid" id="buttonNewMachine">
                                             <button class="btn btn-primary" type="button" onclick="newMachine()">Crear maquina</button>
                                         </div>
-                                    </div>
-                                    
+                                    </div>        
                                 </div>
                             </div>
-                            
-
-
                         </div>
                         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                             <div class="container border bg-light">
-                                <div class="row py-5">
-                                    <div class="col-12">
-                                        <div id="map2"></div>
+                                <form action="/api/uploadfile" enctype="multipart/form-data" method="POST">
+                                    <div class="row py-5 d-flex d-row justify-content-center">
+                                        <div class="col-12 ">
+                                            <h3 class="text-uppercase text-center">asociar imagen a maquina</h3>
+                                            <p class="lead text-uppercase text-center">b-machine-0001</p>
+                                        </div>
+                                        <div class="col-12">
+                                            <img id="blah" src="" class="" style="max-width: 90%;">
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="">      
+                                                <input class="form-control" type="text" name="idMachine" id="idMachine" style="display: none;">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-center mb-3">
+                                            <label class="label">
+                                                <img class="rounded" id="imgInicial" src="\images\machines\add.svg" alt="avatar" width="150px" height="150px">
+                                                <input type="file" class="sr-only" id="inputInicial" name="myFile" accept="image/*">
+                                            </label>
+                                            <!--<img id="blah" class="mx-auto" src="\images\machines\add.svg" alt="" width="150px" height="150px">-->    
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="d-grid" id="buttonNewMachine">
+                                                <button type="button" class="btn btn-primary" id="crop">Subir Imagen</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
- <!--  SINGLE FILE -->
-<form action="/uploadfile" enctype="multipart/form-data" method="POST"> 
-   <input type="file" name="myFile" />
-   <input type="submit" value="Upload a file"/>
-</form>
-<button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
-
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
-  <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-      <img src="..." class="rounded me-2" alt="...">
-      <strong class="me-auto">Bootstrap</strong>
-      <small>11 mins ago</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
-      Hello, world! This is a toast message.
-    </div>
-  </div>
-</div>
-<script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi_GipB4VPaAcH_U0YSvypCM5VqQv69x4&callback=initMap&libraries=&v=weekly"
-      async
-    ></script>
-
-
-
+<script src="/libs/cropperjs-master/dist/cropper.js"></script>
 <script>
-    function readImage (input) {
+    let avatar = document.getElementById('imgInicial');
+    let input = document.getElementById('inputInicial');
+    let nameFile = "";
+
+    
+    window.addEventListener('DOMContentLoaded', function () {
+        console.log("documento listo");
+      
+      let image = document.getElementById('blah');
+      
+      let cropper;
+
+      var filename = "";
+
+      input.addEventListener('change', function (e) {
+
+          var fullPath = document.getElementById('inputInicial').value;
+            if (fullPath) {
+                var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+                filename = fullPath.substring(startIndex);
+                if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                    filename = filename.substring(1);
+                }
+                alert(filename);
+            }
+        var files = e.target.files;
+        console.log("files", files);
+        var done = function (url) {
+            console.log(input.file);
+          input.value = '';
+          image.src = url;
+          cropper = new Cropper(image, {
+            aspectRatio: 1,
+            viewMode: 1,
+          });
+        };
+        var reader;
+        var file;
+        var url;
+
+        if (files && files.length > 0) {
+          file = files[0];
+
+          if (URL) {
+            done(URL.createObjectURL(file));
+          } else if (FileReader) {
+            reader = new FileReader();
+            reader.onload = function (e) {
+              done(reader.result);
+            };
+            reader.readAsDataURL(file);
+          }
+        }
+      });
+
+
+
+
+      document.getElementById('crop').addEventListener('click', function () {
+        var initialAvatarURL;
+        var canvas;
+
+    
+
+        if (cropper) {
+          canvas = cropper.getCroppedCanvas({
+            width: 250,
+            height: 250,
+          });
+          initialAvatarURL = avatar.src;
+          console.log(initialAvatarURL, avatar.src, input.value);
+          avatar.src = canvas.toDataURL();
+         
+       
+          canvas.toBlob(function (blob) {
+            var formData = new FormData();
+
+            formData.append('myFile', blob, filename);
+            
+            let aa = document.getElementById('idMachine').value;
+            
+            console.log(formData);
+            console.log(aa);
+            $.ajax('http://localhost:3000/api/uploadFile/'+aa, {
+              method: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+
+              xhr: function () {
+                var xhr = new XMLHttpRequest();
+                return xhr;
+              },
+
+              success: function () {
+                  window.location.href = "/dashboard/maquinas";
+              },
+
+              error: function () {
+                //avatar.src = initialAvatarURL;
+                //$alert.show().addClass('alert-warning').text('Upload error');
+              },
+
+              complete: function () {
+           
+              },
+            });
+          });
+        }
+      });
+    });
+
+
+    /*function readImage (input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function (e) {
                 $('#blah').attr('src', e.target.result); // Renderizamos la imagen
+               
             }
             reader.readAsDataURL(input.files[0]);
         }
-    }
+    }*/
 
-    $("#formFile1").change(function () {
+    /*$("#inputInicial").change(function () {
         // Código a ejecutar cuando se detecta un cambio de archivO
         readImage(this);
-    });
+    });*/
     
     
     let objeto = [];
@@ -213,6 +276,18 @@
     }).catch((err) =>{
         console.log(err);
     });
+    function deleteUser(id){
+        alert(id);
+        console.log(findUsers);
+
+
+        for(let a = 0 ; a < findUsers.length ; a ++) {
+            if(id == findUsers[a].id) {
+                //findUsers.push({""});
+            }
+        }
+
+    }
   
     function selectUsers() {
         let users = `<div class="row mb-3">`;
@@ -238,7 +313,14 @@
 
         for(let k = 0 ; k < objeto.length ; k ++) {
             users += `
-                <div class="col-4 fs-4"><span class="badge rounded-pill bg-info text-dark mx-auto">${objeto[k].nombre}</span></div>
+                <div class="col-4 fs-4"><span class="badge rounded-pill bg-warning text-dark mx-auto">${objeto[k].nombre}
+                    <button type="button" class="btn btn-transparent m-0 p-0" onclick="deleteUser('${objeto[k].id}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </button>
+                    </div>
+                </span>
             `;
         }
         let arreglo = `<option value='{"id": "", "nombre": ""}' selected>Seleccionar usuario</option>`;
@@ -397,6 +479,14 @@
               console.log(res.data);
               if(res.data.create) {
                   button.innerHTML = `<button class="btn btn-primary" type="button" onclick="newMachine()">Crear maquina</button>`;
+                  alert(res.data.id);
+                  document.getElementById('idMachine').value = res.data.id;
+                  $("#datosGenerales").removeClass("active");
+                  $("#personalizacion").addClass("active");
+                  $("#pills-home").removeClass("show active");
+                  $("#pills-profile").addClass("show active");
+                  //$("#region").removeClass("is-valid");
+
               }
 
           }).catch((err) => {
@@ -407,4 +497,156 @@
           button.innerHTML = `<button class="btn btn-primary" type="button" onclick="newMachine()">Crear maquina</button>`;
       }
   }
+
+
+
+
+
+
+
+
+
+
+  // File Upload
+// 
+function ekUpload(){
+  function Init() {
+
+    console.log("Upload Initialised");
+
+    var fileSelect    = document.getElementById('file-upload'),
+        fileDrag      = document.getElementById('file-drag'),
+        submitButton  = document.getElementById('submit-button');
+
+    fileSelect.addEventListener('change', fileSelectHandler, false);
+
+    // Is XHR2 available?
+    var xhr = new XMLHttpRequest();
+    if (xhr.upload) {
+      // File Drop
+      fileDrag.addEventListener('dragover', fileDragHover, false);
+      fileDrag.addEventListener('dragleave', fileDragHover, false);
+      fileDrag.addEventListener('drop', fileSelectHandler, false);
+    }
+  }
+
+  function fileDragHover(e) {
+    var fileDrag = document.getElementById('file-drag');
+
+    e.stopPropagation();
+    e.preventDefault();
+
+    fileDrag.className = (e.type === 'dragover' ? 'hover' : 'modal-body file-upload');
+  }
+
+  function fileSelectHandler(e) {
+    // Fetch FileList object
+    var files = e.target.files || e.dataTransfer.files;
+
+    // Cancel event and hover styling
+    fileDragHover(e);
+
+    // Process all File objects
+    for (var i = 0, f; f = files[i]; i++) {
+      parseFile(f);
+      uploadFile(f);
+    }
+  }
+
+  // Output
+  function output(msg) {
+    // Response
+    var m = document.getElementById('messages');
+    m.innerHTML = msg;
+  }
+
+  function parseFile(file) {
+
+    console.log(file.name);
+    output(
+      '<strong>' + encodeURI(file.name) + '</strong>'
+    );
+    
+    // var fileType = file.type;
+    // console.log(fileType);
+    var imageName = file.name;
+
+    var isGood = (/\.(?=gif|jpg|png|jpeg)/gi).test(imageName);
+    if (isGood) {
+      document.getElementById('start').classList.add("hidden");
+      document.getElementById('response').classList.remove("hidden");
+      document.getElementById('notimage').classList.add("hidden");
+      // Thumbnail Preview
+      document.getElementById('file-image').classList.remove("hidden");
+      document.getElementById('file-image').src = URL.createObjectURL(file);
+    }
+    else {
+      document.getElementById('file-image').classList.add("hidden");
+      document.getElementById('notimage').classList.remove("hidden");
+      document.getElementById('start').classList.remove("hidden");
+      document.getElementById('response').classList.add("hidden");
+      document.getElementById("file-upload-form").reset();
+    }
+  }
+
+  function setProgressMaxValue(e) {
+    var pBar = document.getElementById('file-progress');
+
+    if (e.lengthComputable) {
+      pBar.max = e.total;
+    }
+  }
+
+  function updateFileProgress(e) {
+    var pBar = document.getElementById('file-progress');
+
+    if (e.lengthComputable) {
+      pBar.value = e.loaded;
+    }
+  }
+
+  function uploadFile(file) {
+
+    var xhr = new XMLHttpRequest(),
+      fileInput = document.getElementById('class-roster-file'),
+      pBar = document.getElementById('file-progress'),
+      fileSizeLimit = 1024; // In MB
+    if (xhr.upload) {
+      // Check if file is less than x MB
+      if (file.size <= fileSizeLimit * 1024 * 1024) {
+        // Progress bar
+        pBar.style.display = 'inline';
+        xhr.upload.addEventListener('loadstart', setProgressMaxValue, false);
+        xhr.upload.addEventListener('progress', updateFileProgress, false);
+
+        // File received / failed
+        xhr.onreadystatechange = function(e) {
+          if (xhr.readyState == 4) {
+            // Everything is good!
+
+            // progress.className = (xhr.status == 200 ? "success" : "failure");
+            // document.location.reload(true);
+          }
+        };
+
+        // Start upload
+        xhr.open('POST', document.getElementById('file-upload-form').action, true);
+        xhr.setRequestHeader('X-File-Name', file.name);
+        xhr.setRequestHeader('X-File-Size', file.size);
+        xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+        xhr.send(file);
+      } else {
+        output('Please upload a smaller file (< ' + fileSizeLimit + ' MB).');
+      }
+    }
+  }
+
+  // Check for the various File API support.
+  if (window.File && window.FileList && window.FileReader) {
+    Init();
+  } else {
+    document.getElementById('file-drag').style.display = 'none';
+  }
+}
+ekUpload();
 </script>
