@@ -1,7 +1,7 @@
 'use strict';
 const mongoose = require('mongoose');
 
-mongoose.connect("mongodb://kevinPC:kevin1234@34.230.28.13:27017/admin", {
+mongoose.connect("mongodb://FactorBDevelopment:FB-15062021@54.236.2.37:27017/admin", {
     /*useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,

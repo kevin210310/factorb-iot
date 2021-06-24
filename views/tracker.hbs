@@ -214,17 +214,17 @@
     axios({ 
         
         method: 'POST',   
-        url: '{{url}}/api/find_machinestracker', 
+        url: 'http://54.236.2.37:3000/api/find_machinestracker', 
         headers: {
             Authorization: "Bearer Token"
         }, 
         data: { 
-            id: "{{id_user}}",
-            id_machine: "{{id_machine}}"
+            id: "34f3f4fef3f3ef",
+            id_machine: "60cd12b32a13dd3e8b7d7d10"
         }
     
     }).then((res) => {
-        
+        console.log(res.data)
 
         document.getElementById('nombre_machine').innerHTML = res.data.data2[0].nombre;
         document.getElementById('nombre_device').innerHTML = res.data.data[0].name;
@@ -238,7 +238,7 @@
                 Authorization: "Bearer Token"
             }, 
             data: { 
-                name: res.data.data[0].name
+                name: 'factorb-iot-0018'
             }
             }).then((res) =>{
 

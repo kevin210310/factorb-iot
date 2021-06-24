@@ -472,7 +472,7 @@ router.post('/find_machinestracker', async (req, res) =>{
 
     const { id, id_machine } = req.body;
 
-    await machines.where({usuarios_permitidos: id, tracker: true, _id: id_machine}).find( async function(err, response) {
+    await machines.where({usuarios_permitidos: '606db3fa1282c834d0c9651d', tracker: true, _id: id_machine}).find( async function(err, response) {
         if(err){
             res.status(400).json({msg: "error en la peticion", status: false});
         }
@@ -481,18 +481,17 @@ router.post('/find_machinestracker', async (req, res) =>{
                 res.json({ msg: "no hay maquinas asociadas", status: false });
             }
             else {
-              
                 let id_device2 = "";
                 for(let i = 0 ; i < response[0].dispositivos.length ; i ++ ){
                     if(response[0].dispositivos[i].gps){
-                        //console.log(response[0].dispositivos[i].id_device);
+                        console.log(response[0].dispositivos[i].id_device);
                         id_device2 = response[0].dispositivos[i].id_device;
                         //console.log(id_device);
                     }
                 }
 
                 console.log(id_device2);
-                await devices.where({_id: id_device2}).find( function(err, response2) {
+                await devices.where({_id: '606dbd4e1282c834d0c9651f'}).find( function(err, response2) {
                   
                     res.json({data: response2, data2: response, status: true});
                 });
