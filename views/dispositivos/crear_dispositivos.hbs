@@ -5,7 +5,7 @@
                 <ol class="breadcrumb my-3">
                     <li class="breadcrumb-item"><a href="/dashboard">INICIO</a></li>
                     <li class="breadcrumb-item"><a href="/dashboard/maquinas">MAQUINAS</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">AGREGAR NUEVO DISPOSITIVO</li>
+                    <li class="breadcrumb-item active" aria-current="page">AGREGAR DISPOSITIVO</li>
                 </ol>
             </nav>
         </div>
@@ -27,7 +27,7 @@
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                             <div class="container border bg-light">
                                 <div class="row py-5">
-                                    <div class="col-12">
+                                    <div class="col-12" style="display: none;">
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" id="idMachine" value="{{id_machine}}" placeholder="name@example.com" disabled>
                                             <label for="nameDevice">Identificador maquina</label>
@@ -66,7 +66,7 @@
 
                                     <div class="col-12">
                                         <div class="form-floating mb-3">
-                                            <textarea class="form-control" placeholder="Leave a comment here" id="descriptionDevice" style="height: 100px" onchange="descriptionMachine()"></textarea>
+                                            <textarea class="form-control" placeholder="Leave a comment here" id="descriptionDevice" style="height: 100px"></textarea>
                                             <label for="descriptionDevice">Descripción</label>
                                             <small class="text-muted" id="msj-dm"> maximo 50 caracteres</small>
                                         </div>
@@ -222,6 +222,8 @@
                 }
                 }).then((res) => {
                     console.log(res.data);
+                    console.log("exito");
+                    notificationToast("success", nameSensor, "dispositivo creado exitosamente");
 
                 }).catch((err) =>{
                     console.log(err);

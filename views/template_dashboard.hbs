@@ -29,34 +29,11 @@
 
         <!-- AXIOS JS-->
         <script src="/axios/axios.min.js"></script>
+        
 
         
-        <!-- TOAST -->
-        <script src="/libs/bootstrap-5-toast-snackbar/src/toast.js"></script>
-        <script>
-            const TYPES = ['info', 'warning', 'success', 'error'],
-                TITLES = {
-                    'info': 'Notice!',
-                    'success': 'Awesome!',
-                    'warning': 'Watch Out!',
-                    'error': 'Doh!'
-                },
-                CONTENT = {
-                    'info': 'Hello, world! This is a toast message.',
-                    'success': 'The action has been completed.',
-                    'warning': 'It\'s all about to go wrong',
-                    'error': 'It all went wrong.'
-                },
-                POSITION = ['top-right', 'top-left', 'top-center', 'bottom-right', 'bottom-left', 'bottom-center'];
+        
 
-                $.toastDefaults.position = 'bottom-center';
-                $.toastDefaults.dismissible = true;
-                $.toastDefaults.stackable = true;
-                $.toastDefaults.pauseDelayOnHover = true;
-                //$.snack('info','Snackbar', 3000);
-
-    
-        </script>
 
         <link rel="stylesheet" href="/libs/a/bootstrap.min.css">
         <link rel="stylesheet" href="/libs/a/dataTables.bootstrap5.min.css">
@@ -64,9 +41,39 @@
         <link rel="stylesheet" href="/libs/a/select.bootstrap5.min.css">
 
 
+        <!-- TOAST -->
+        <link rel="stylesheet" href="/libs/toasts/build/toastr.css">
+        <script src="/libs/toasts/toastr.js"></script>
+        <script>
+            function notificationToast(type, title, msg){
+                toastr.options = {
+                    closeButton: true,
+                    debug: false,
+                    newestOnTop: false,
+                    progressBar: false,
+                    positionClass: 'toast-bottom-right',
+                    preventDuplicates: true,
+                    onclick: null,
+                    showDuration: 300,
+                    hideDuration: 1000,
+                    timeOut: 5000,
+                    extendedTimeOut: 1000,
+                    showEasing: "swing",
+                    hideEasing: "linear",
+                    showMethod: "fadeIn",
+                    hideMethod: "fadeOut",
 
-        <script src="/toastr/toastr.min.js"></script>
-        <script src="/javascripts/notifications.js"></script>
+
+                };
+
+                let $toast = toastr[type](msg, title);
+            };
+        </script>
+
+        <!-- CROPPER -->
+        <link rel="stylesheet" href="/libs/cropperjs-master/dist/cropper.css">
+       
+       
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js" integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4=" crossorigin="anonymous"></script>
         <script src="/client-socket/socket.io.js"></script>
@@ -335,11 +342,14 @@
             </div>
         </nav>
         {{{body}}}
+        <div class="row" style='margin-top: 25px;'>
+            <pre id='toastrOptions'></pre>
+        </div>
     </body>    
 </html>
 <!-- ARCHIVOS JS -->
     <script src="/javascripts/dashboard_template.js"></script>
-    <script src="/javascripts/tablas.js"></script>
+  
 <script>
     const switchButton = document.getElementById('switch');
  

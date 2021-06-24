@@ -61,15 +61,145 @@
     }).then((res) => {
         if(res.data.status) {
             console.log(res.data.data[0].dispositivos);
-            notification("success", `${res.data.data[0].dispositivos.length} dispositivos recuperados`);
+            //notification("success", `${res.data.data[0].dispositivos.length} dispositivos recuperados`);
             let card_devices = "";
+            let chartFunction = "";
             if(res.data.data[0].dispositivos.length > 0) {
 
               for(let d = 0 ; d < res.data.data[0].dispositivos.length ; d ++){
+                let AI = 0;
+                let DI = 0;
+                let DO = 0;
+                let dispositivo = res.data.data[0].dispositivos;
+                let sensor = res.data.data[0].dispositivos[d].sensores;
+                for(let s = 0 ; s < sensor.length; s++) {
+                  
+                  if(sensor[s].type == "AI") {
+                    AI += 1;
+                  }
+                  else if (sensor[s].type == "DI") {
+                    DI += 1;
+                  }
+                  else if(sensor[s].type == "DO"){
+                    DO += 1;
+                  }
+
+
+                }
+                  
+                  
+                chartFunction += `
+                    var options1${dispositivo[d]._id} = {
+                        series: [${parseInt((AI*100)/(AI+DI+DO))}],
+                        chart: {
+                            type: 'radialBar',
+                            width: 50,
+                            height: 50,
+                            sparkline: {
+                                enabled: true
+                            }
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
+                        plotOptions: {
+                            radialBar: {
+                                hollow: {
+                                    margin: 0,
+                                    size: '50%'
+                                },
+                                track: {
+                                    margin: 0
+                                },
+                                dataLabels: {
+                                    show: false
+                                }
+                            }
+                        }
+                    };
+
+                    let chart1${dispositivo[d]._id} = new ApexCharts(document.querySelector("#chart1${dispositivo[d]._id}"), options1${dispositivo[d]._id});
+                    chart1${dispositivo[d]._id}.render();
+
+         var options2${dispositivo[d]._id} = {
+          series: [${parseInt((DI*100)/(AI+DI+DO))}],
+          chart: {
+          type: 'radialBar',
+          width: 50,
+          height: 50,
+          sparkline: {
+            enabled: true
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        plotOptions: {
+          radialBar: {
+            hollow: {
+              margin: 0,
+              size: '50%'
+            },
+            track: {
+              margin: 0
+            },
+            dataLabels: {
+              show: false
+            }
+          }
+        }
+        };
+
+        var chart2${dispositivo[d]._id} = new ApexCharts(document.querySelector("#chart2${dispositivo[d]._id}"), options2${dispositivo[d]._id});
+        chart2${dispositivo[d]._id}.render();
+
+         var options3${dispositivo[d]._id} = {
+          series: [${parseInt((DO*100)/(AI+DI+DO))}],
+          chart: {
+          type: 'radialBar',
+          width: 50,
+          height: 50,
+          sparkline: {
+            enabled: true
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        plotOptions: {
+          radialBar: {
+            hollow: {
+              margin: 0,
+              size: '50%'
+            },
+            track: {
+              margin: 0
+            },
+            dataLabels: {
+              show: false
+            }
+          }
+        }
+        };
+
+        var chart3${dispositivo[d]._id} = new ApexCharts(document.querySelector("#chart3${dispositivo[d]._id}"), options3${dispositivo[d]._id});
+        chart3${dispositivo[d]._id}.render();
+                
+                
+                
+                
+                
+                
+                
+                `;
+                  
                   card_devices += `
                       <div class="col-12 col-sm-3 mb-3">
                           <div class="card bg-dark text-white" >
-                              <img src="/images/machines/${res.data.data[0].url}" class="card-img" alt="..." >
+                            <object data="/images/machines/${res.data.data[0].url}" type="image/png">
+                                        <img src="/images/machines/gear.png" alt="Sin foto">
+                                    </object>
+                              <!--<img src="/images/machines/${res.data.data[0].url}" class="card-img" alt="..." >-->
                               <div class="card-img-overlay" style="background-color: rgba(0,0,0,0.5);">
                                   <h5 class="card-title text-center">${res.data.data[0].dispositivos[d].name}</h5>
                                   <p class="card-title text-center">RENGO</p>
@@ -78,16 +208,16 @@
                                   <div class="card-text text-center mb-3"></div>
                                   <div class="contenedor">
                                       <div class="contenedor-1">
-                                          <div id="chart-77"></div>
-                                          <div class="card-text text-center">4 AI</div>
+                                          <div id="chart1${dispositivo[d]._id}"></div>
+                                          <div class="card-text text-center">${AI} AI</div>
                                       </div>
                                       <div class="contenedor-2">
-                                          <div id="chart-88"></div>
-                                          <div class="card-text text-center">0 DI</div>
+                                          <div id="chart2${dispositivo[d]._id}"></div>
+                                          <div class="card-text text-center">${DI} DI</div>
                                       </div>
                                       <div class="contenedor-3">
-                                          <div id="chart-99"></div>
-                                          <div class="card-text text-center"> 1 DO</div>
+                                          <div id="chart3${dispositivo[d]._id}"></div>
+                                          <div class="card-text text-center">${DO} DO</div>
                                       </div>
                                   </div>
                                   <p class="card-text text-center mt-2"><small class="card-text ">Ultima actualizacion hace 3 minutos.</small></p>
@@ -103,6 +233,11 @@
               }
 
               document.getElementById('devices_cards').innerHTML = card_devices;
+
+
+              let graficos = new Function(chartFunction);
+
+              graficos();
             }
         }
         else {
@@ -120,99 +255,5 @@
 
 
 <!--<script>
-                                    var options77 = {
-          series: [45],
-          chart: {
-          type: 'radialBar',
-          width: 50,
-          height: 50,
-          sparkline: {
-            enabled: true
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        plotOptions: {
-          radialBar: {
-            hollow: {
-              margin: 0,
-              size: '50%'
-            },
-            track: {
-              margin: 0
-            },
-            dataLabels: {
-              show: false
-            }
-          }
-        }
-        };
-
-        var chart77 = new ApexCharts(document.querySelector("#chart-77"), options77);
-        chart77.render();
-
-         var options88 = {
-          series: [45],
-          chart: {
-          type: 'radialBar',
-          width: 50,
-          height: 50,
-          sparkline: {
-            enabled: true
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        plotOptions: {
-          radialBar: {
-            hollow: {
-              margin: 0,
-              size: '50%'
-            },
-            track: {
-              margin: 0
-            },
-            dataLabels: {
-              show: false
-            }
-          }
-        }
-        };
-
-        var chart88 = new ApexCharts(document.querySelector("#chart-88"), options88);
-        chart88.render();
-
-         var options99 = {
-          series: [45],
-          chart: {
-          type: 'radialBar',
-          width: 50,
-          height: 50,
-          sparkline: {
-            enabled: true
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        plotOptions: {
-          radialBar: {
-            hollow: {
-              margin: 0,
-              size: '50%'
-            },
-            track: {
-              margin: 0
-            },
-            dataLabels: {
-              show: false
-            }
-          }
-        }
-        };
-
-        var chart99 = new ApexCharts(document.querySelector("#chart-99"), options99);
-        chart99.render();
+                                    
                         </script>-->

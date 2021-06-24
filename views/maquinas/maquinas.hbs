@@ -1,3 +1,4 @@
+
 <style>
     .thumb {
     display: inline-block;
@@ -94,10 +95,11 @@
         let maquinas = res.data.data;
         let cards_maquinas = [];
 
-        notification("success", `${maquinas.length} maquinas recuperadas`);
+        //notification();
+        notificationToast("success", "",`${maquinas.length} maquinas recuperadas`);
 
         if(maquinas.length == 0) {
-            notification("error", "0 dispositivos asociados");
+            //notification("error", "0 dispositivos asociados");
         } else {
             //notification("success", "Recuperación de Datos Exitosa.");
             let tracker = "";
@@ -122,7 +124,9 @@
                         <div class="card mb-3">
                             <div class="row g-0">
                                 <div class="col-md-4 imgContainer">
-                                    <img src="/images/machines/${maquinas[i].url}" alt="${maquinas[i].nombre}" class="img-fluid imgSource">
+                                    <object data="/images/machines/${maquinas[i].url}" type="image/png">
+                                        <img src="/images/machines/gear.png" alt="Sin foto">
+                                    </object>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">

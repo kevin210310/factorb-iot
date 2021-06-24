@@ -18,6 +18,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="col-12 mb-3">
+                        <object data="/images/machines/${maquinas[i].url}" type="image/png">
+                                        <img src="/images/machines/gear.png" alt="Sin foto">
+                                    </object>
                         <img id="blah" src="\images\insertImage.svg" class="img-thumbnail rounded mx-auto d-block" alt="Tu imagen" width="250px" height="250px">
                     </div>
                     <div class="col-12">
@@ -91,7 +94,15 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="col-12 mb-3">
-                            <img id="blah" src="/images/machines/${resultado.url}" class="img-thumbnail rounded mx-auto d-block" alt="Tu imagen" width="250px" height="250px">
+                            <object data="/images/machines/${resultado.url}" type="image/png" class="img-thumbnail rounded mx-auto d-block">
+                                <img src="/images/machines/gear.png" alt="Sin foto" class="img-thumbnail rounded mx-auto d-block">
+                            </object>
+                        </div>
+                        <div class="col-12">
+                            <div class=" mb-3">
+                                <input type="file" class="form-control" id="nameMachine" placeholder="nombre de usuario">
+                            
+                            </div>
                         </div>
 
                         <div class="col-12">

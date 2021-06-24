@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/libs/cropperjs-master/dist/cropper.css">
+
 
 <div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
 
@@ -80,13 +80,15 @@
                         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                             <div class="container border bg-light">
                                 <form action="/api/uploadfile" enctype="multipart/form-data" method="POST">
-                                    <div class="row py-5 d-flex d-row justify-content-center">
-                                        <div class="col-12 ">
-                                            <h3 class="text-uppercase text-center">asociar imagen a maquina</h3>
-                                            <p class="lead text-uppercase text-center">b-machine-0001</p>
-                                        </div>
+                                    <div class="row mx-0 py-5 d-flex d-row justify-content-center">
                                         <div class="col-12">
-                                            <img id="blah" src="" class="" style="max-width: 90%;">
+                                            <h2 class="lead text-uppercase text-center">Seleccionar archivo maquina</h2>
+                                        </div>
+                                        <div class="col-12 ">
+                                            <p class="lead text-uppercase text-center" id="name_machine"></p>
+                                        </div>
+                                        <div class="col-10 d-flex justify-content-center">
+                                            <img id="blah" src="" class="mx-auto px-0 img-thumbail">
                                         </div>
                                         <div class="col-12">
                                             <div class="">      
@@ -94,15 +96,21 @@
                                             </div>
                                         </div>
                                         <div class="col-12 d-flex justify-content-center mb-3">
-                                            <label class="label">
-                                                <img class="rounded" id="imgInicial" src="\images\machines\add.svg" alt="avatar" width="150px" height="150px">
+                                            <label class="label" style="cursor: pointer;">
+                                                
+                                                <img class="rounded mt-3" id="imgInicial" src="\images\machines\upload.png" alt="avatar" width="100px" height="100px">
                                                 <input type="file" class="sr-only" id="inputInicial" name="myFile" accept="image/*">
                                             </label>
                                             <!--<img id="blah" class="mx-auto" src="\images\machines\add.svg" alt="" width="150px" height="150px">-->    
                                         </div>
-                                        <div class="col-12">
+                                        <div class="col-6">
                                             <div class="d-grid" id="buttonNewMachine">
-                                                <button type="button" class="btn btn-primary" id="crop">Subir Imagen</button>
+                                                <button type="button" class="btn btn-primary" id="crop">Cargar archivo</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="d-grid" id="buttonNewMachine">
+                                                <button type="button" class="btn btn-primary" onclick="window.location.href='/dashboard/maquinas'" id="crop">Cargar archivo después</button>
                                             </div>
                                         </div>
                                     </div>
@@ -129,28 +137,40 @@
       
       let cropper;
 
-      var filename = "";
+      let filename = "";
 
       input.addEventListener('change', function (e) {
 
-          var fullPath = document.getElementById('inputInicial').value;
-            if (fullPath) {
-                var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
-                filename = fullPath.substring(startIndex);
-                if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
-                    filename = filename.substring(1);
-                }
-                alert(filename);
+        
+        //RECUPERAR NOMBRE ARCHIVO
+        let fullPath = document.getElementById('inputInicial').value;
+
+        if (fullPath) {
+            
+            let startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+            filename = fullPath.substring(startIndex);
+            
+            if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                
+                filename = filename.substring(1);
             }
-        var files = e.target.files;
-        console.log("files", files);
+        }
+
+        let files = e.target.files;
+
+
+
         var done = function (url) {
-            console.log(input.file);
+
           input.value = '';
           image.src = url;
+          image.style = "margin: 0px";
+          image.style = "padding: 0px"
+          image.width = 500;
+          image.height = 500;
           cropper = new Cropper(image, {
             aspectRatio: 1,
-            viewMode: 1,
+            viewMode: 2,
           });
         };
         var reader;
@@ -230,21 +250,7 @@
     });
 
 
-    /*function readImage (input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#blah').attr('src', e.target.result); // Renderizamos la imagen
-               
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }*/
-
-    /*$("#inputInicial").change(function () {
-        // Código a ejecutar cuando se detecta un cambio de archivO
-        readImage(this);
-    });*/
+ 
     
     
     let objeto = [];
@@ -479,8 +485,10 @@
               console.log(res.data);
               if(res.data.create) {
                   button.innerHTML = `<button class="btn btn-primary" type="button" onclick="newMachine()">Crear maquina</button>`;
-                  alert(res.data.id);
+                  notificationToast("success", name.value,`se creo exitosamente`);
                   document.getElementById('idMachine').value = res.data.id;
+                  document.getElementById('name_machine').innerText = name.value;
+                  
                   $("#datosGenerales").removeClass("active");
                   $("#personalizacion").addClass("active");
                   $("#pills-home").removeClass("show active");
