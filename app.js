@@ -3,7 +3,7 @@ if(process.env.NODE_ENV !== 'production'){
 }
 
 
-const serveIndex = require('serve-index');
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -67,7 +67,6 @@ app.use('/validator', express.static(__dirname + '/node_modules/validator/'));
 app.use(bodyParser.urlencoded({extended: true}))
 
 
-app.use('/ftp', express.static('public'), serveIndex('public/images', {icons: true}))
 app.use('/', indexRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/api', APIRouter);
