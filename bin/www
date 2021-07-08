@@ -7,8 +7,13 @@ const { PubSub } = require(`@google-cloud/pubsub`);
 const formatMessage = require('../utils/messages');
 const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('../utils/users');
 const machines = require('../config/mongoose/maquinas');
+<<<<<<< Updated upstream
 const projectId = 'lukas-lok';
 const stateSubscriber = 'factorb-iot-data';
+=======
+const projectId = 'desarrollofactorb';
+const stateSubscriber = 'bnode';
+>>>>>>> Stashed changes
 
 var pubsub = new PubSub({
     projectId: projectId,

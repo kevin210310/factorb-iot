@@ -8,7 +8,6 @@ const passport = require('passport');
 const { verify } = require('../lib/verify_user');
 
 const bcrypt = require('bcrypt');
-const pool = require('../connection/database');
 const { suppressDeprecationWarnings } = require('moment');
 
 const saltRounds = 10;
@@ -75,7 +74,7 @@ async function send_repeat(datos_f) {
   req.write(data)
   req.end()
 }
-
+/*
 router.post('/historicos', async (req, res) => {
   const { fecha_desde, fecha_hasta} = req.body;
   console.log(req.body);
@@ -306,15 +305,15 @@ router.post('/get_devices', async (req, res) => {
           }
       }
   );
-});
+});*/
 
 router.post('/send_command', async (req, res)=>{
 
     const { commandMessage, deviceId } = req.body;
     console.log(req.body);
     const cloudRegion = 'us-central1';
-    const projectId = 'lukas-lok';
-    const registryId = 'factorb-iot';
+    const projectId = 'desarrollofactorb';
+    const registryId = 'factorb';
 
     const iotClient = new iot.v1.DeviceManagerClient({
       // optional auth parameters.
