@@ -178,6 +178,42 @@ io.on('connection', socket => {
     });
   });
 
+  var messageHandler = function(message) {
+        
+  message.ack();
+    
+    if(message.attributes.subFolder !== "events"){
+        
+        let data = Buffer.from(message.data, 'base64').toString('ascii');
+        //console.log(data);
+        try {
+
+            let obj = JSON.parse(data);
+            console.log(obj);
+            let dataf = obj.variables;
+
+
+            dataf.created_at_origin = new Date(obj.created_at_origin);
+
+            console.log(dataf);
+          
+            socket.emit(message.attributes.deviceId, dataf);
+            Save_db(message.attributes.deviceId, dataf);
+
+            //=========================================
+            
+        }
+        catch(error) {
+          console.log("el paquete no es un json");
+        }
+        
+
+    }
+    else {
+      console.log("dispositivo conectado ==> ", message.attributes.deviceId);
+    }
+};
+subscription.on('message', messageHandler);
   
   socket.on('chatMessage', msg => {
     const user = getCurrentUser(socket.id);
@@ -207,16 +243,6 @@ io.on('connection', socket => {
       });
     }
   });
-
-  setInterval(async ()=> {
-  
-          socket.emit('message', 'hola mundo');
-        
-     
-  }, 5000);
-
-  
-  
 });
 server.listen(port);
 server.on('error', onError);

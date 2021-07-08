@@ -2,7 +2,7 @@
 <!-- Socket Client -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js" integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4=" crossorigin="anonymous"></script>
     <script src="/client-socket/socket.io.js"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
 
 <script>
     const { username2, room2 } = Qs.parse(location.search, {
@@ -11,6 +11,8 @@
             
             const socketaa = io();
             socketaa.emit('joinRoom', { username: "kevin", rol: "kfksjhsdjkf", room: "alertas-mimbral" });
+
+            
 </script>
 <div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
     <div class="row mt-3 mx-0 mx-md-3 shadow-sm bg-body">
@@ -114,10 +116,10 @@
             for(let d = 0 ; d < dispositivos.length ; d++) {
                 
                 if(dispositivos[d].id_device == "{{id_device}}") {
-                    console.log(dispositivos[d].name);
-                    socket += `socket.on("${dispositivos[d].name}", sensores => {`;
+                   // console.log(dispositivos[d].name);
+                    socket += `socketaa.on("${dispositivos[d].name}", sensores => {`;
                     let sensores = dispositivos[d].sensores;
-                    console.log(sensores.length, "sensores recuperados");
+                   // console.log(sensores.length, "sensores recuperados");
 
                     for(let s = 0 ; s < sensores.length ; s++) {
                         
@@ -343,7 +345,7 @@
 
                         } else {
 
-                            console.log("sensor no reconocido");
+                          //  console.log("sensor no reconocido");
                         }
 
                     }
@@ -475,7 +477,7 @@
             
             
             
-            console.log(sensores);});`;
+            });`;
             let ai = new Function(functionRealTime+socket);
             let batterywifi = new Function(`
             
@@ -496,8 +498,8 @@
                 
                 if(resultados.data[0].dispositivos[device].id_device == "{{id_device}}") {
                     
-                    console.log(resultados.data[0]._id);
-                    notification("success", `${res.data.data[0].dispositivos[device].sensores.length} sensores recuperados`);
+                   // console.log(resultados.data[0]._id);
+                   // notification("success", `${res.data.data[0].dispositivos[device].sensores.length} sensores recuperados`);
                     let rele_socket;
                     let sensors_cards = "";
                     let reles_cards = `
@@ -596,7 +598,7 @@
                                   return this;
                                 }
 
-                                socket.on("${res.data.data[0].dispositivos[device].sensores[s].name}", sensores => {
+                                socketaa.on("${res.data.data[0].dispositivos[device].sensores[s].name}", sensores => {
                                     
                                     
                                     
@@ -622,7 +624,7 @@
                             `;
                           
                             rele_socket = new Function(`
-                                socket.on("${res.data.data[0].dispositivos[device].name}", sensores => {
+                                socketaa.on("${res.data.data[0].dispositivos[device].name}", sensores => {
                                     
                                     if(sensores.${res.data.data[0].dispositivos[device].sensores[s].variable} == 0) {
                                         document.getElementById('${res.data.data[0].dispositivos[device].sensores[s].variable}').innerHTML = "<span class='badge rounded-pill bg-danger'>Desactivado</span>";
@@ -689,7 +691,7 @@
 
 
     function send_command(device, command){
-        console.log(device, command);
+       // console.log(device, command);
        
 
         axios(

@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <link rel="icon" href="/images/favicon.png" type="image/png" sizes="16x16">
+        <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>BSCADA - FACTORB</title>
 
@@ -29,63 +29,13 @@
 
         <!-- AXIOS JS-->
         <script src="/axios/axios.min.js"></script>
-        
-
-        
-        
-
-
-        <link rel="stylesheet" href="/libs/a/bootstrap.min.css">
-        <link rel="stylesheet" href="/libs/a/dataTables.bootstrap5.min.css">
-        <link rel="stylesheet" href="/libs/a/buttons.bootstrap5.min.css">
-        <link rel="stylesheet" href="/libs/a/select.bootstrap5.min.css">
-
-
-        <!-- TOAST -->
-        <link rel="stylesheet" href="/libs/toasts/build/toastr.css">
-        <script src="/libs/toasts/toastr.js"></script>
-        <script>
-            function notificationToast(type, title, msg){
-                toastr.options = {
-                    closeButton: true,
-                    debug: false,
-                    newestOnTop: false,
-                    progressBar: false,
-                    positionClass: 'toast-bottom-right',
-                    preventDuplicates: true,
-                    onclick: null,
-                    showDuration: 300,
-                    hideDuration: 1000,
-                    timeOut: 5000,
-                    extendedTimeOut: 1000,
-                    showEasing: "swing",
-                    hideEasing: "linear",
-                    showMethod: "fadeIn",
-                    hideMethod: "fadeOut",
-
-
-                };
-
-                let $toast = toastr[type](msg, title);
-            };
-        </script>
 
         <!-- CROPPER -->
         <link rel="stylesheet" href="/libs/cropperjs-master/dist/cropper.css">
        
        
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js" integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4=" crossorigin="anonymous"></script>
-        <script src="/client-socket/socket.io.js"></script>
-        <script>
-            const { username, room } = Qs.parse(location.search, {
-                    ignoreQueryPrefix: true
-            });
-                
-            const socket = io();
-            
-            socket.emit('joinRoom', { username: "Hola", rol: "Mundo", room: "alertas-mimbral" });
-        </script>
+     
         <style>
             * {
                 margin: 0;
@@ -347,8 +297,7 @@
         </div>
     </body>    
 </html>
-<!-- ARCHIVOS JS -->
-    <script src="/javascripts/dashboard_template.js"></script>
+
   
 <script>
     const switchButton = document.getElementById('switch');

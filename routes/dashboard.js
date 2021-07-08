@@ -220,16 +220,12 @@ router.get('/device/:id/:socket_name', async (req, res) => {
 
 
 
-router.get('/d', async (req, res) => {
-    res.render('dashboard', {
-        layout: 'template_dashboard'
-    });
-});
-
 
 router.get('/dispositivos/:id_machine', (req, res) => {
     res.render('dispositivos', {
         layout: 'template_dashboard',
+        nombre: "estatico",
+        rol: "administrador",
         url: process.env.URL,
         id_machine: req.params.id_machine,
         hola: "hola mundo"

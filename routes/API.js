@@ -38,7 +38,7 @@ var upload = multer({ storage: storage })
 router.post('/deleteMachine', machineController.deleteMachine);
 router.post('/editMachine', machineController.editMachine);
 
-async function send_repeat_multiple(datos_f) {
+/*async function send_repeat_multiple(datos_f) {
   
   for(let i = 0 ; i < datos_f.length ; i ++){
     send_repeat(datos_f[i]);
@@ -73,7 +73,7 @@ async function send_repeat(datos_f) {
   
   req.write(data)
   req.end()
-}
+}*/
 
 
 

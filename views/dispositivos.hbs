@@ -194,12 +194,12 @@
                 `;
                   
                   card_devices += `
-                      <div class="col-12 col-sm-3 mb-3">
+                      <div class="col-12 col-sm-3 mb-3" style="min-height: 200px;">
                           <div class="card bg-dark text-white" >
-                            <object data="/images/machines/${res.data.data[0].url}" type="image/png">
+                            <object data="/images/machines/${res.data.data[0].url}" type="image/jpg">
                                         <img src="/images/machines/gear.png" alt="Sin foto">
                                     </object>
-                              <!--<img src="/images/machines/${res.data.data[0].url}" class="card-img" alt="..." >-->
+                
                               <div class="card-img-overlay" style="background-color: rgba(0,0,0,0.5);">
                                   <h5 class="card-title text-center">${res.data.data[0].dispositivos[d].name}</h5>
                                   <p class="card-title text-center">RENGO</p>
