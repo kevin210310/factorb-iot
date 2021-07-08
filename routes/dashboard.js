@@ -241,6 +241,8 @@ router.get('/tracker/:id', async (req,res) =>{
     res.render('tracker', {
         layout: 'template_dashboard',
         url: process.env.URL,
+        nombre: "estatico",
+        rol: "administrador",
         id_user: "606db3fa1282c834d0c9651d",
         id_machine: req.params.id
     });

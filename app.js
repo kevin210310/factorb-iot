@@ -21,7 +21,6 @@ var indexRouter = require('./routes/index');
 var APIRouter = require('./routes/API');
 var dashboardRouter = require('./routes/dashboard');
 const bcrypt = require('bcrypt');
-const pool = require('./connection/database');
 
 var app = express();
 require('events').EventEmitter.prototype._maxListeners = 50;

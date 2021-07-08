@@ -1,9 +1,17 @@
 <!-- SCRIPTS NECESARIOS -->
+<!-- Socket Client -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js" integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4=" crossorigin="anonymous"></script>
+    <script src="/client-socket/socket.io.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script src="/libs/a/jquery-3.5.1.js"></script>
-<script src="/libs/a/jquery.dataTables.min.js"></script>
-<script src="/libs/a/dataTables.bootstrap5.min.js"></script>
-<script src="/libs/a/dataTables.select.min.js"></script>
+
+<script>
+    const { username2, room2 } = Qs.parse(location.search, {
+                ignoreQueryPrefix: true
+            });
+            
+            const socketaa = io();
+            socketaa.emit('joinRoom', { username: "kevin", rol: "kfksjhsdjkf", room: "alertas-mimbral" });
+</script>
 <div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
     <div class="row mt-3 mx-0 mx-md-3 shadow-sm bg-body">
         <!-- BREADCRUMB -->
@@ -707,11 +715,4 @@
         });
 
     }
-  
-    $(document).ready(function() {
-        $('#data_device').DataTable({
-            "language": espanol,
-            "pageLength": 3
-        });
-    } );     
 </script>

@@ -225,9 +225,9 @@
     
     }).then((res) => {
         
-
+        console.log("primera busqueda: ", res.data);
         document.getElementById('nombre_machine').innerHTML = res.data.data2[0].nombre;
-        document.getElementById('nombre_device').innerHTML = res.data.data[0].name;
+        document.getElementById('nombre_device').innerHTML = res.data.data2[0].name;
         document.getElementById('descripcion').innerHTML = res.data.data2[0].descripcion;
         
         axios({
@@ -238,11 +238,11 @@
                 Authorization: "Bearer Token"
             }, 
             data: { 
-                name: res.data.data[0].name
+                name: res.data.data2[0].name
             }
             }).then((res) =>{
 
-                console.log(res.data)
+                console.log(res.data);
                 let datos = res.data.data[0].data;
                 let info = [];
                 let trazar = [];
